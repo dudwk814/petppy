@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import petppy.domain.OrderStatus;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +19,6 @@ public class PageRequestDTO {
     private String type;
     private String keyword;
 
-    private OrderStatus orderStatus;
 
     private Integer priceGoe;
     private Integer priceLoe;
