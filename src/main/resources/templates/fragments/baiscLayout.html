@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="setContent(content)">
+    <head>
+        <title>Petppy</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800&display=swap"
+              rel="stylesheet">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" th:href="@{/petppy/css/animate.css}">
+
+        <link rel="stylesheet" th:href="@{/petppy/css/owl.carousel.min.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/owl.theme.default.min.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/magnific-popup.css}">
+
+
+        <link rel="stylesheet" th:href="@{/petppy/css/bootstrap-datepicker.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/jquery.timepicker.css}">
+
+        <link rel="stylesheet" th:href="@{/petppy/css/flaticon.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/style.css}">
+    </head>
+    <body>
+
+    <div class="wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-center">
+                    <p class="mb-0 phone pl-md-2">
+                        <a href="#"><span class="fa fa-paper-plane mr-1"></span> kj99658103@gmail.com</a>
+                    </p>
+                </div>
+                <div class="col-md-6 d-flex justify-content-md-end">
+                    <div class="social-media">
+                        <p class="mb-0 d-flex">
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span
+                                    class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span
+                                    class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span
+                                    class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
+                            <a href="#" class="d-flex align-items-center justify-content-center"><span
+                                    class="fa fa-dribbble"><i class="sr-only">Dribbble</i></span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/"><span class="flaticon-pawprint-1 mr-2"></span>Petppy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                    aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="fa fa-bars"></span> Menu
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+
+                    <!--<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>-->
+                    <li class="nav-item"><a th:href="@{/membership}" class="nav-link">Membership</a></li>
+                    <li class="nav-item"><a th:href="@{/vet}" class="nav-link">Veterinarian</a></li>
+                    <li class="nav-item"><a href="/services" class="nav-link">Services</a></li>
+                    <li class="nav-item"><a th:href="@{/gallery}" class="nav-link">Gallery</a></li>
+                    <li class="nav-item"><a th:href="@{/board}" class="nav-link">Board</a></li>
+                    <!--<li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>-->
+                    <li th:if="${session.user == null}" class="nav-item"><a class="nav-link" data-toggle="modal"
+                                                                            data-target="#loginModal">Login</a></li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-display="static"
+                           aria-expanded="false" aria-haspopup="true">
+                            <img th:src="@{'/petppy/images/simbolLogo.PNG'}">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right px-4 py-3">
+                            <h6 class="dropdown-header">[[${session.user.name}]]님 반갑습니다!</h6>
+                            <h6></h6>
+                            <div class="dropdown-divider"></div>
+                            <!--<a href="#" class="dropdown-item"><h6><i class="fa fa-shopping-cart fa-lg"
+                                                                     aria-hidden="true"></i>&nbsp;&nbsp;장바구니</h6></a>
+
+                            <a href="#" class="dropdown-item"><h6><i class="fa fa-truck fa-lg"
+                                                                     aria-hidden="true"></i>&nbsp;&nbsp;주문조회</h6></a>-->
+                            <form action="/user" method="post">
+                                <input type="hidden" name="email" th:value="${session.user.email}">
+                                <input type="hidden" name="type" th:value="${session.user.type}">
+                                <input type="hidden" name="id" th:value="${session.user.id}">
+                                <button type="submit" id="user-page-btn" class="dropdown-item"><h6><i
+                                        class="fa fa-cog fa-lg"
+                                        aria-hidden="true"></i>&nbsp;&nbsp;회원설정
+                                </h6></button>
+                            </form>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout-btn" href="#"><h6><i class="fa fa-share-square-o fa-lg"
+                                                                                aria-hidden="true"></i>&nbsp;&nbsp;로그아웃
+                            </h6></a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- END nav -->
+
+    <th:block th:replace="${content}">
+
+    </th:block>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4 mb-md-0">
+                    <h2 class="footer-heading">Petsitting</h2>
+                    <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                    <ul class="ftco-footer-social p-0">
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Twitter"><span
+                                class="fa fa-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                                    title="Facebook"><span class="fa fa-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                                    title="Instagram"><span class="fa fa-instagram"></span></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4 mb-md-0">
+                    <h2 class="footer-heading">Latest News</h2>
+                    <div class="block-21 mb-4 d-flex">
+                        <a class="img mr-4 rounded" style="background-image: url('/petppy/images/image_1.jpg');"></a>
+                        <div class="text">
+                            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
+                            <div class="meta">
+                                <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
+                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
+                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-21 mb-4 d-flex">
+                        <a class="img mr-4 rounded" style="background-image: url('/petppy/images/image_2.jpg');"></a>
+                        <div class="text">
+                            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
+                            <div class="meta">
+                                <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
+                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
+                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 pl-lg-5 mb-4 mb-md-0">
+                    <h2 class="footer-heading">Quick Links</h2>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="py-2 d-block">Home</a></li>
+                        <li><a href="#" class="py-2 d-block">About</a></li>
+                        <li><a href="#" class="py-2 d-block">Services</a></li>
+                        <li><a href="#" class="py-2 d-block">Works</a></li>
+                        <li><a href="#" class="py-2 d-block">Blog</a></li>
+                        <li><a href="#" class="py-2 d-block">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4 mb-md-0">
+                    <h2 class="footer-heading">Have a Questions?</h2>
+                    <div class="block-23 mb-3">
+                        <ul>
+                            <li><span class="icon fa fa-map"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span>
+                            </li>
+                            <li><a href="#"><span class="icon fa fa-phone"></span><span
+                                    class="text">+2 392 3929 210</span></a></li>
+                            <li><a href="#"><span class="icon fa fa-paper-plane"></span><span class="text">info@yourdomain.com</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12 text-center">
+
+                    <p class="copyright">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                        All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i>
+                        by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 로그인 모달 -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-4 ml-auto">
+                                <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row no-gutters slider-text align-items-center justify-content-center"
+                             data-scrollax-parent="true">
+                            <div class="col-md-11 text-center">
+                                <img th:src="@{'/petppy/images/logo.PNG'}">
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+                        <div class="roe slider-text align-items-center justify-content-center">
+                            <form action="/login" method="post" id="login-form">
+
+                                <div class="form-group" id="login-modal-email-group">
+                                    <input type="email" class="form-control" id="login-modal-email"
+                                           aria-describedby="emailHelp" name="email" placeholder="이메일 또는 아이디 입력">
+                                </div>
+                                <div class="form-group" id="login-modal-password-group">
+                                    <input type="password" class="form-control" id="login-modal-password"
+                                           name="password"
+                                           placeholder="비밀번호">
+                                </div>
+                                <button type="submit" id="login-btn" class="btn btn-success btn-lg btn-block"
+                                        style="font-size: 20px;">로그인
+                                </button>
+                                <div class="form-group"></div>
+                                <div align="center">
+                                    <p>
+                                        <a href="#" style="color: #000a12;"><u>비밀번호 찾기</u></a> &#124;
+                                        <a href="/user/signupForm" style="color: #000a12;"><u>회원가입</u></a>
+                                    </p>
+                                </div>
+
+                            </form>
+                            <div class="hr-sect">소셜 로그인</div>
+                            <div class="social-login-buttons" align="center">
+                                <a href="/oauth2/authorization/google"><img style="width: 44px; height: 44px;"
+                                                                            th:src="@{'/petppy/images/google_login_btn.png'}"></a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/oauth2/authorization/naver"><img style="width: 44px; height: 44px;"
+                                                                           th:src="@{'/petppy/images/naver_login_btn.png'}"></a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="#"><img style="width: 44px; height: 44px;"
+                                                 th:src="@{'/petppy/images/kakao_login_btn.png'}"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="container-fluid">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/petppy/js/jquery.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery-migrate-3.0.1.min.js}"></script>
+    <script th:src="@{/petppy/js/popper.min.js}"></script>
+    <script th:src="@{/petppy/js/bootstrap.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.easing.1.3.js}"></script>
+    <script th:src="@{/petppy/js/jquery.waypoints.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.stellar.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.animateNumber.min.js}"></script>
+    <script th:src="@{/petppy/js/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/petppy/js/jquery.timepicker.min.js}"></script>
+    <script th:src="@{/petppy/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.magnific-popup.min.js}"></script>
+    <script th:src="@{/petppy/js/scrollax.min.js}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script th:src="@{/petppy/js/google-map.js}"></script>
+    <script th:src="@{/petppy/js/main.js}"></script>
+    <script th:src="@{/petppy/ckeditor/ckeditor.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <script th:inline="javascript">
+
+        $(document).ready(function (e) {
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            /* 로그아웃 */
+            $(".logout-btn").on("click", function (e) {
+                e.preventDefault();
+
+                var logoutForm = $('<form></form>');
+                //set attribute (form)
+                logoutForm.attr("name", "logoutForm");
+                logoutForm.attr("method", "post");
+                logoutForm.attr("action", "/logout");
+
+                logoutForm.appendTo('body');
+
+                logoutForm.submit();
+            });
+
+
+            /* 로그인 폼 유효성 검증 */
+            $("#login-btn").on("click", function (e) {
+                    e.preventDefault();
+
+                    loginFormCheck();
+
+                    if (loginFormCheck() === false) {
+                        return;
+                    }
+
+                    $("#login-form").submit();
+
+                }
+            );
+
+            /* 로그인 input 입력 항목 유효성 체크 */
+            function loginFormCheck() {
+
+                /* 이메일 포맷 유효성 */
+                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+                if ($("#login-modal-email").hasClass("is-invalid") === true) {
+                    $("#login-modal-email").removeClass("is-invalid");
+                    $("#email-invalid-div").remove();
+                }
+
+                if ($("#login-modal-password").hasClass("is-invalid") === true) {
+                    $("#login-modal-password").removeClass("is-invalid");
+                    $("#password-invalid-div").remove();
+                }
+
+                /* email칸 & password칸이 공백인 경우 invalid-feedback 클래스 추가 */
+                if ($("#login-modal-email").val().trim() == "" || !re.test($("#login-modal-email").val()) || $("#login-modal-password").val().trim() == "") {
+
+                    /* email칸이 공백인 경우 invalid-feedback 클래스 추가 */
+                    if ($("#login-modal-email").val().trim() == "" || !re.test($("#login-modal-email").val())) {
+                        $("#login-modal-email").addClass("is-invalid");
+                        $("#login-modal-email-group").append("<div class='invalid-feedback' id='email-invalid-div'>" + "올바른 이메일을 입력하세요 </div>");
+                    }
+
+                    /* password칸이 공백인 경우 invalid-feedback 클래스 추가 */
+                    if ($("#login-modal-password").val().trim() == "") {
+                        $("#login-modal-password").addClass("is-invalid");
+                        $("#login-modal-password-group").append("<div class='invalid-feedback' id='password-invalid-div'>" + "비밀번호를 입력하세요 </div>");
+                    }
+
+                    return false;
+                }
+
+            }
+
+        });
+    </script>
+    </body>
+</th:block>
+</html>

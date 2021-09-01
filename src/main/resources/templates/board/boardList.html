@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/baiscLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
+                 data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">Home <i
+                                class="ion-ios-arrow-forward"></i></a></span> <span>Board <i
+                                class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">[[${boardList.totalElements}]] Totals</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ftco-section bg-light">
+            <div class="container">
+                <div class="row d-flex" id="board-list-th">
+                    <div class="col-md-12 d-flex justify-content-between ftco-animated" style="height: 70px;">
+                        <span class="fa fa-th-list fa-2x board-list-ui-change-btn" style="margin-top: 10px;"
+                              th:data-sort="list" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="리스트로 보기"></span>
+
+                        <form action="#" class="search-form ">
+                            <div class="form-group">
+                                <span class="fa fa-search"></span>
+                                <input type="text" class="form-control" placeholder="제목 OR 내용 OR 작성자" aria-hidden="true"
+                                       data-toggle="tooltip" data-placement="top" title="검색">
+                            </div>
+                        </form>
+                    </div>
+                    <th:block th:each="dto: ${boardList.dtoList}">
+                        <div class="col-md-4 d-flex ftco-animate">
+                            <div class="blog-entry align-self-stretch">
+                                <!-- <a href="blog-single.html" class="block-20 rounded" style="background-image: url('images/image_1.jpg');">
+                                 </a>-->
+                                <div class="text p-4">
+                                    <div class="meta mb-2">
+                                        <div><a th:href="@{/board/read(id=${dto.boardId})}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성일">[[${#temporals.format(dto.createdDate, 'yyyy-MM-dd')}]]</a></div>
+                                        <div class="text-lowercase" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자">
+                                            <a href="#">[[${dto.email}]]</a>
+                                        </div>
+                                        <div><a href="" class="meta-chat" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수"><span class="fa fa-comment"></span> [[${dto.replyCount}]]</a></div>
+                                    </div>
+                                    <h3 class="heading"><a th:href="@{/board/read(id=${dto.boardId})}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목">[[${dto.title}]]</a></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div class="row d-flex" id="board-list">
+                    <div class="col-md-12 d-flex ftco-animated justify-content-between">
+                        <span class="fa fa-th fa-2x board-list-ui-change-btn" aria-hidden="true" data-toggle="tooltip"
+                             th:data-sort="th" data-placement="top" title="카드로 보기" style="margin-top: 10px;"></span>
+                        <form action="#" class="search-form">
+                            <div class="form-group">
+                                <span class="fa fa-search"></span>
+                                <input type="text" class="form-control" placeholder="제목 OR 내용 OR 작성자" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 col-12 d-flex list-group-flush list-group">
+                        <th:block th:each="dto: ${boardList.dtoList}">
+
+                            <a th:href="@{/board/read(id=${dto.boardId})}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목">[[${dto.title}]]</b></h5>
+                                    <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">[[${#temporals.format(dto.createdDate, 'yyyy-MM-dd')}]]</small>
+                                </div>
+                                <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">[[${dto.email}]] &nbsp;&nbsp;</small><span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수"
+                                                                       style="color: #00bd56;">&nbsp;[[${dto.replyCount}]]</span>
+                            </a>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="col-md-12 d-flex justify-content-end ftco-animated" style="height: 70px;">
+                    <a th:href="@{/board/edit}" id="board-edit-btn" class="btn btn-success" style="height: 40px; margin-top: 15px; padding-left: 14px; padding-right: 14px;"><span class="fa fa-pencil-square fa-lg" aria-hidden="true"></span>글 쓰기</a>
+                </div>
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <div class="block-27">
+                            <ul>
+                                <li th:if="${boardList.prev}"><a href="#">&lt;</a></li>
+                                <li th:each="page : ${boardList.pageList}" th:class="${boardList.page == page ? 'active':''}"><a th:href="@{/board(page=${page})}" th:data-page="${page}"  class="page-btn">[[${page}]]</a></li>
+                                <li th:if="${boardList.next}"><a th:href="@{/board(page = ${boardList.end + 1})}">&gt;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </th:block>
+</th:block>
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+
+
+        var boardSort = [[${boardSort}]];
+
+
+        $("#board-list").attr("style", "display: none !important");
+
+
+        function changeBoardListUiChange(boardSort) {
+
+
+            if (boardSort === "th") {
+                $("#board-list-th").attr("style", "display: !important");
+                $("#board-list").attr("style", "display: none !important");
+            } else if (boardSort === "list"){
+                $("#board-list").attr("style", "display: !important");
+                $("#board-list-th").attr("style", "display: none !important");
+            }
+        }
+
+        $(".board-list-ui-change-btn").on("click", function () {
+            boardSort = $(this).data("sort");
+            changeBoardListUiChange(boardSort);
+        });
+
+        $('#board-edit-btn').on('click', function (e) {
+            e.preventDefault();
+
+            if ([[${session.user == null}]]) {
+                $("#loginModal").modal("show");
+
+                return;
+            }
+
+            location.href = "/board/edit";
+
+        });
+
+        $('.page-btn').on('click', function (e) {
+            e.preventDefault();
+
+            location.href = "/board?page=" + $(this).data("page") + "&boardSort=" + boardSort;
+        });
+
+    });
+</script>
+</html>

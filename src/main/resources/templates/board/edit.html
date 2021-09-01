@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+  .ck-editor__editable {
+    min-height: 650px;
+  }
+</style>
+<th:block th:replace="~{/fragments/baiscLayout :: setContent(~{this::content})}">
+  <th:block th:fragment="content">
+    <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-end">
+          <div class="col-md-9 ftco-animate pb-5">
+            <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a th:href="@{/board/}">Board <i class="ion-ios-arrow-forward"></i></a></span> <span>Board Edit<i class="ion-ios-arrow-forward"></i></span></p>
+            <h1 class="mb-0 bread">Edit</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <form action="/board/edit" method="post">
+          <input type="hidden" name="email" th:value="${session.user.email}">
+          <input type="hidden" name="hit" value="0">
+          <input type="hidden" name="replyCount" value="0">
+          <input type="hidden" name="id" th:value="${session.user.id}">
+          <div class="input-group">
+            <input class="form-control" name="title" placeholder="제목" style="margin-bottom: 15px;">
+          </div>
+          <textarea name="content" id="editor"></textarea>
+        <div class="row d-flex">
+          <div class="col-md-12" style="height: 70px; margin-top: 15px;">
+            <a th:href="@{/board}" class="btn btn-secondary" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 목록으로 돌아가기">목록</a>
+            <button type="submit" class="btn btn-success float-right" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 저장하기">저장</button>
+          </div>
+        </div>
+        </form>
+      </div>
+    </section>
+
+  </th:block>
+</th:block>
+<script th:inline="javascript">
+  $(document).ready(function () {
+    ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .then( editor => {
+              console.log( editor );
+            } )
+            .catch( error => {
+              console.error( error );
+            } );
+
+  });
+</script>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/baiscLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <div class="hero-wrap bg-transparent" data-stellar-background-ratio="0.5">
+            <div class="container">
+                <div class="row no-gutters slider-text align-items-center justify-content-center"
+                     data-scrollax-parent="true">
+                    <div class="col-md-11 ftco-animate text-center">
+
+                        <div class="row align-items-center justify-content-center">
+                            <div class="card border-white mb-3 w-50">
+                                <div class="card-body bg-transparent border-white"><h2></h2></div>
+                                <div class="card-body">
+                                    <h2 class="card-title">회원가입</h2>
+                                    <form th:action="@{/user/signup}" th:object="${form}" method="post"
+                                          id="sign-up-form" class="justify-content-start">
+                                        <div class="form-group" id="signUp-Form-name-group">
+                                            <label th:for="name" class="d-flex justify-content-start">이름</label>
+                                            <input type="text" class="form-control" th:field="*{name}"
+                                                   placeholder="이름">
+                                        </div>
+                                        <div class="form-group" id="signUp-Form-email-group">
+                                            <label th:for="email" class="d-flex justify-content-start">이메일</label>
+                                            <input type="email" th:field="*{email}" class="form-control"
+                                                   aria-describedby="emailHelp" placeholder="example@petppy.com">
+                                            <small id="emailHelp" class="form-text text-muted"></small>
+                                        </div>
+
+                                        <div class="form-group" id="signUp-Form-password-group1">
+                                            <label th:for="password" class="d-flex justify-content-start">비밀번호</label>
+                                            <input type="password" th:field="*{password}" class="form-control"
+                                                   placeholder="4글자 이상의 비밀번호">
+                                        </div>
+                                        <div class="form-group" id="signUp-Form-password-group2">
+                                            <label th:for="password2" class="d-flex justify-content-start">비밀번호
+                                                확인</label>
+                                            <input type="password" class="form-control" id="password2"
+                                                   placeholder="4글자 이상의 비밀번호">
+                                        </div>
+
+                                        <button type="submit" id="signUp-btn" class="btn btn-success btn-lg btn-block"
+                                                style="font-size: 20px;">회원가입
+                                        </button>
+
+                                        <div class="hr-sect">소셜 로그인</div>
+                                        <div class="social-login-buttons" align="center">
+                                            <a href="/oauth2/authorization/google"><img
+                                                    style="width: 44px; height: 44px;"
+                                                    th:src="@{'/petppy/images/google_login_btn.png'}"></a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="/oauth2/authorization/naver"><img
+                                                    style="width: 44px; height: 44px;"
+                                                    th:src="@{'/petppy/images/naver_login_btn.png'}"></a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="#"><img style="width: 44px; height: 44px;"
+                                                             th:src="@{'/petppy/images/kakao_login_btn.png'}"></a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </th:block>
+</th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+
+        if ([[${checkEmail == true}]]) {
+            alert("이미 가입된 회원 이메일입니다.");
+            return false;
+        }
+
+
+
+
+        /* 회원가입 폼 유효성 검증 */
+        $("#signUp-btn").on("click", function (e) {
+                e.preventDefault();
+
+                if (signUpFormCheck() === false) {
+                    return;
+                }
+
+                $("#sign-up-form").submit();
+
+            }
+        );
+
+        /* 회원가입 input 입력 항목 유효성 체크 */
+        function signUpFormCheck() {
+
+
+
+            var name = $("#name").val().trim();
+            var email = $("#email").val().trim();
+            var password1 = $("#password").val().trim();
+            var password2 = $("#password2").val().trim();
+
+            /* 이미 invalid 클래스가 있는 경우 제거 */
+            if ($("#name").hasClass("is-invalid") === true) {
+                $("#name").removeClass("is-invalid");
+                $(".name-invalid-div").remove();
+            }
+
+            if ($("#email").hasClass("is-invalid") === true) {
+                $("#email").removeClass("is-invalid");
+                $(".email-invalid-div").remove();
+            }
+
+            if ($("#password").hasClass("is-invalid") === true) {
+                $("#password").removeClass("is-invalid");
+                $(".password1-invalid-div").remove();
+            }
+
+            if ($("#password2").hasClass("is-invalid") === true) {
+                $("#password2").removeClass("is-invalid");
+                $(".password2-invalid-div").remove();
+            }
+
+            /* 이메일 포맷 유효성 */
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            /* 각 작성항목이 공백이거나 이메일 유효성 검사 탈락시 invalid-feedback 클래스 추가 */
+            if (name == "" || email == "" || !re.test($("#email").val()) || password1 == "" || password2 == "") {
+
+                if (name == "") {
+                    $("#name").addClass("is-invalid");
+                    $("#signUp-Form-name-group").append("<div class='invalid-feedback name-invalid-div'>" + "올바른 이름을 입력하세요. </div>");
+                }
+
+                if (email == "" || !re.test($("#email").val())) {
+                    $("#email").addClass("is-invalid");
+                    $("#signUp-Form-email-group").append("<div class='invalid-feedback email-invalid-div'>" + "올바른 이메일을 입력하세요. </div>");
+                }
+
+
+                /* 비밀번호 유효성 검증 */
+                if (password1 == "" || password1.length < 4 || password2 == "" || password2.length < 4 || password1 !== password2) {
+
+
+
+                    if (password1 == "" || password1.length < 4) {
+                        $("#password").addClass("is-invalid");
+                        $("#signUp-Form-password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
+                    }
+
+                    if (password2 == "" || password2.length < 4) {
+                        $("#password2").addClass("is-invalid");
+                        $("#signUp-Form-password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
+                    }
+
+                    if (password1 !== password2) {
+
+                        $("#password").addClass("is-invalid");
+                        $("#signUp-Form-password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
+
+                        $("#password2").addClass("is-invalid");
+                        $("#signUp-Form-password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
+                    }
+                }
+
+
+
+                return false;
+            }
+        }
+
+
+    });
+</script>
+</html>
