@@ -105,7 +105,9 @@
         var boardSort = [[${boardSort}]];
 
 
-        $("#board-list").attr("style", "display: none !important");
+        /*$("#board-list").attr("style", "display: none !important");*/
+
+        changeBoardListUiChange(boardSort);
 
 
         function changeBoardListUiChange(boardSort) {
@@ -117,14 +119,20 @@
             } else if (boardSort === "list"){
                 $("#board-list").attr("style", "display: !important");
                 $("#board-list-th").attr("style", "display: none !important");
-            }}
+            } else {
+                $("#board-list-th").attr("style", "display: !important");
+                $("#board-list").attr("style", "display: none !important");
+            }
+        }
 
         $(".board-list-ui-change-btn").on("click", function () {
             boardSort = $(this).data("sort");
+            console.log(boardSort);
             changeBoardListUiChange(boardSort);
         });
 
         $('#board-edit-btn').on('click', function (e) {
+
             e.preventDefault();
 
             if ([[${session.user == null}]]) {
