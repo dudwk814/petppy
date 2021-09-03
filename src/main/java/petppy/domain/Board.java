@@ -20,14 +20,14 @@ public class Board extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     private String title;
 
     private String content;
 
-    private int replyCount;
+    private int commentCount;
 
     private int hit;
 
@@ -37,7 +37,7 @@ public class Board extends BaseTimeEntity {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.replyCount = 0;
+        this.commentCount = 0;
         this.hit = 0;
     }
 
@@ -50,7 +50,7 @@ public class Board extends BaseTimeEntity {
         this.hit += 1;
     }
 
-    public void changeReplyCount() {
-        this.replyCount += 1;
+    public void changeCommentCount() {
+        this.commentCount += 1;
     }
 }

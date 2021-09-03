@@ -23,7 +23,7 @@
         <form action="/board/edit" method="post">
           <input type="hidden" name="email" th:value="${session.user.email}">
           <input type="hidden" name="hit" value="0">
-          <input type="hidden" name="replyCount" value="0">
+          <input type="hidden" name="commentCount" value="0">
           <input type="hidden" name="id" th:value="${session.user.id}">
           <div class="input-group">
             <input class="form-control" name="title" placeholder="제목" style="margin-bottom: 15px;">

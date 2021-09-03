@@ -57,7 +57,7 @@ public class CommentRepositoryTest {
 
         Board findBoard = boardRepository.getById(3L);
 
-        Comment findComment = commentRepository.getById(4L);
+        Comment findComment = commentRepository.getById(34L);
 
         Comment comment = Comment
                 .builder()

@@ -44,7 +44,7 @@
                                         <div class="text-lowercase" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자">
                                             <a href="#">[[${dto.email}]]</a>
                                         </div>
-                                        <div><a href="" class="meta-chat" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수"><span class="fa fa-comment"></span> [[${dto.replyCount}]]</a></div>
+                                        <div><a href="" class="meta-chat" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수"><span class="fa fa-comment"></span> [[${dto.commentCount}]]</a></div>
                                     </div>
                                     <h3 class="heading"><a th:href="@{/board/read(id=${dto.boardId})}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목">[[${dto.title}]]</a></h3>
                                 </div>
@@ -73,7 +73,7 @@
                                     <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">[[${#temporals.format(dto.createdDate, 'yyyy-MM-dd')}]]</small>
                                 </div>
                                 <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">[[${dto.email}]] &nbsp;&nbsp;</small><span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수"
-                                                                       style="color: #00bd56;">&nbsp;[[${dto.replyCount}]]</span>
+                                                                       style="color: #00bd56;">&nbsp;[[${dto.commentCount}]]</span>
                             </a>
                         </th:block>
                     </div>

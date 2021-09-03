@@ -25,7 +25,7 @@ public interface BoardService {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .hit(board.getHit())
-                .replyCount(board.getReplyCount())
+                .commentCount(board.getCommentCount())
                 .email(board.getUser().getEmail())
                 .createdDate(board.getCreatedDate())
                 .lastModifiedDate(board.getModifiedDate())

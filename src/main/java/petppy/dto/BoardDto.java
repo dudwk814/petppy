@@ -13,7 +13,7 @@ public class BoardDto {
     private String title;
     private String content;
     private int hit;
-    private int replyCount;
+    private int commentCount;
 
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
@@ -24,13 +24,13 @@ public class BoardDto {
 
     @Builder
     @QueryProjection
-    public BoardDto(Long boardId, Long userId, String title, String content, int hit, int replyCount, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public BoardDto(Long boardId, Long userId, String title, String content, int hit, int commentCount, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.boardId = boardId;
         this.userId = userId;
         this.title = title;
         this.content = content;
         this.hit = hit;
-        this.replyCount = replyCount;
+        this.commentCount = commentCount;
         this.email = email;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;

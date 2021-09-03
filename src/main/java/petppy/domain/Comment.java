@@ -22,7 +22,7 @@ import static petppy.domain.DeleteStatus.N;
 public class Comment extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
@@ -48,8 +48,6 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-
-
     @Builder
     public Comment(Board board, User user, String content, Comment parent) {
         this.board = board;
@@ -59,7 +57,7 @@ public class Comment extends BaseTimeEntity {
         this.isDeleted = N;
     }
 
-    public void changeReply(String content) {
+    public void changeComment(String content) {
         this.content = content;
     }
 
