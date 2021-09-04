@@ -9,9 +9,13 @@ public interface CommentService {
 
     public void createComment(CommentDTO commentDTO);
 
+    public CommentDTO findComment(Long commentId);
+
     public List<CommentDTO> findCommentsByBoardId(Long boardId);
 
     public void deleteComment(Long commentId);
+
+    public void modifyComment(CommentDTO dto);
 
     default CommentDTO entityToDTO(Comment comment) {
 
@@ -35,7 +39,8 @@ public interface CommentService {
                     .userId(comment.getUser().getId())
                     .build();
         }
-
     }
+
+
 
 }

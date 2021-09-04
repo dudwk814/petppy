@@ -51,6 +51,19 @@ public class CommentServiceImpl implements CommentService {
         board.changeCommentCount();   // 댓글 수 + 1
     }
 
+
+    /**
+     * Comment 수정
+     */
+    @Override
+    @Transactional
+    public void modifyComment(CommentDTO dto) {
+        Comment findComment = commentRepository.findById(dto.getId()).orElseThrow(CommentNotFoundException::new);
+
+        findComment.changeComment(dto.getContent());
+
+    }
+
     /**
      * Comment 삭제
      */
@@ -64,9 +77,6 @@ public class CommentServiceImpl implements CommentService {
         } else { // 삭제 가능한 조상 댓글을 구해서 삭제
             commentRepository.delete(getDeletableAncestorComment(comment));
         }
-
-
-
     }
 
     /**
@@ -78,6 +88,17 @@ public class CommentServiceImpl implements CommentService {
             // 부모가 있고, 부모의 자식이 1개(지금 삭제하는 댓글)이고, 부모의 삭제 상태가 TRUE인 댓글이라면 재귀
             return getDeletableAncestorComment(parent);
         return comment; // 삭제해야하는 댓글 반환
+    }
+
+    /**
+     * Comment 단건 조회
+     */
+    @Override
+    public CommentDTO findComment(Long commentId) {
+
+        Comment findComment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        return entityToDTO(findComment);
     }
 
     /**

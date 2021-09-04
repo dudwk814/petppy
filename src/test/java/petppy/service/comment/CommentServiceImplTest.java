@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import petppy.domain.Comment;
 import petppy.dto.CommentDTO;
 import petppy.repository.BoardRepository;
 import petppy.repository.comment.CommentRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +27,9 @@ class CommentServiceImplTest {
 
     @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    EntityManager em;
 
     @Test
     @Commit
@@ -67,6 +72,16 @@ class CommentServiceImplTest {
 
 
         assertFalse(commentRepository.findById(35L).isPresent());
+
+    }
+
+    @Test
+    @Commit
+    public void 댓글_수정() throws Exception {
+        CommentDTO commentDTO = CommentDTO.builder().id(1L).content("zzzz").build();
+
+
+        commentService.modifyComment(commentDTO);
 
     }
 }

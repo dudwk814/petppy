@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{/fragments/baiscLayout :: setContent(~{this::content})}">
+<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
   <th:block th:fragment="content">
     <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -45,18 +45,35 @@
 
 
             <div class="pt-5 mt-5">
-              <h3 class="mb-5">6 Comments</h3>
+              <h5 class="mb-5">댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
               <ul class="comment-list">
                 <li class="comment">
                   <div class="vcard bio">
                     <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
                   </div>
-                  <div class="comment-body">
+                  <div class="comment-body dropdown">
+                    John Doe<span class="meta"> April 7, 2020 at 10:05pm </span>
+                    <p>테스트 댓글</p>
+                    <p class="d-flex justify-content-between">
+                      <a href="#" class="reply">답글</a>
+                      <a href="#" style="color: grey;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+                      </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                    </p>
+
+                  </div>
+
+                  <!--<div class="comment-body">
                     <h3>John Doe</h3>
                     <div class="meta">April 7, 2020 at 10:05pm</div>
                     <p>테스트 댓글</p>
                     <p><a href="#" class="reply">Reply</a></p>
-                  </div>
+                  </div>-->
 
                   <ul class="children">
                     <li class="comment">
@@ -104,7 +121,7 @@
               </ul>
               <!-- END comment-list -->
 
-              <div class="comment-form-wrap pt-5">
+              <!--<div class="comment-form-wrap pt-5">
                 <h3 class="mb-5">Comment</h3>
                 <form action="#" class="p-5 bg-light">
                   <div class="form-group">
@@ -120,7 +137,7 @@
                   </div>
 
                 </form>
-              </div>
+              </div>-->
             </div>
 
           </div> <!-- .col-md-8 -->
@@ -144,33 +161,11 @@
             </div>-->
 
             <div class="sidebar-box ftco-animate">
-              <h3>Recent Blog</h3>
+              <h3>최근 게시글</h3>
               <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
+                <!--<a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>-->
                 <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_3.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
+                  <h3 class="heading"><a href="#">최근 게시글 1</a></h3>
                   <div class="meta">
                     <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
                     <div><a href="#"><span class="icon-person"></span> Admin</a></div>
@@ -204,4 +199,45 @@
     </section> <!-- .section -->
   </th:block>
 </th:block>
+<script th:inline="javascript">
+  $(document).ready(function (e) {
+
+    var boardId = [[${board.boardId}]];
+
+    commentList(boardId);
+
+    function commentList(boardId) {
+      $.ajax({
+        url: '/comment/' + boardId,
+        type: 'get',
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+          for(var i = 0; i < result.length; i ++) {
+            var tag = "<div class=\"vcard bio\">\n" +
+                    "                    <img src=\"/petppy/images/simbolLogo.PNG\" alt=\"Image placeholder\">\n" +
+                    "                  </div>\n" +
+                    "                  <div class=\"comment-body dropdown\">\n" + result[i].email
+                    +
+                    "                    <span class=\"meta\"> April 7, 2020 at 10:05pm </span>\n" +
+                    "                    <p>테스트 댓글</p>\n" +
+                    "                    <p class=\"d-flex justify-content-between\">\n" +
+                    "                      <a href=\"#\" class=\"reply\">답글</a>\n" +
+                    "                      <a href=\"#\" style=\"color: grey;\" id=\"dropdownMenuButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+                    "                        <i class=\"fa fa-cog fa-lg\" aria-hidden=\"true\"></i>\n" +
+                    "                      </a>\n" +
+                    "                    <div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\">\n" +
+                    "                      <a class=\"dropdown-item\" href=\"#\">Action</a>\n" +
+                    "                      <a class=\"dropdown-item\" href=\"#\">Another action</a>\n" +
+                    "                      <a class=\"dropdown-item\" href=\"#\">Something else here</a>\n" +
+                    "                    </div>\n" +
+                    "                    </p>\n" +
+                    "\n" +
+                    "                  </div>\n";
+            $(".comment-list").append(tag);
+          }
+        }
+      })
+    }
+  });
+</script>
 </html>

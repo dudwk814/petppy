@@ -71,7 +71,7 @@
                     <li th:if="${session.user == null}" class="nav-item"><a class="nav-link" data-toggle="modal"
                                                                             data-target="#loginModal">Login</a></li>
                     <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-display="static"
+                        <a class="nav-link" href="#" data-toggle="dropdown" data-display="static"
                            aria-expanded="false" aria-haspopup="true">
                             <img th:src="@{'/petppy/images/simbolLogo.PNG'}">
                         </a>
