@@ -1,9 +1,6 @@
 package petppy.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import petppy.domain.user.User;
 
 import javax.persistence.*;

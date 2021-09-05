@@ -1,6 +1,7 @@
 package petppy.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import petppy.dto.PageResultDTO;
 import petppy.dto.UserDTO;
 import petppy.service.BoardService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller

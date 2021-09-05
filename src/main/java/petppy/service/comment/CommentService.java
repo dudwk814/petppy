@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    public void createComment(CommentDTO commentDTO);
+    public CommentDTO createComment(CommentDTO commentDTO);
 
     public CommentDTO findComment(Long commentId);
 
@@ -17,7 +17,7 @@ public interface CommentService {
 
     public void modifyComment(CommentDTO dto);
 
-    default CommentDTO entityToDTO(Comment comment) {
+    default CommentDTO entityToDTO(Comment comment) {   // 부모 comment의 id값 유무에 따른 builder 분기
 
         if (comment.getParent() != null) {
             return CommentDTO

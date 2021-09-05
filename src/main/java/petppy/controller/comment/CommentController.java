@@ -3,14 +3,13 @@ package petppy.controller.comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import petppy.dto.CommentDTO;
 import petppy.service.comment.CommentService;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,11 +18,25 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    /**
+     * comment list 조회
+     */
     @GetMapping("/{boardId}")
     public ResponseEntity<List<CommentDTO>> getList(@PathVariable("boardId") Long boardId) {
 
         List<CommentDTO> result = commentService.findCommentsByBoardId(boardId);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, OK);
+    }
+
+    /**
+     * comment 등록
+     */
+    @PostMapping("/{boardId}")
+    public ResponseEntity<Long> addComment(@RequestBody CommentDTO commentDTO) {
+        CommentDTO savedComment = commentService.createComment(commentDTO);
+
+        return new ResponseEntity<>(savedComment.getId(), OK);
+
     }
 }

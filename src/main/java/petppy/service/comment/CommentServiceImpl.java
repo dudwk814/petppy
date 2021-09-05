@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     @Transactional
-    public void createComment(CommentDTO commentDTO) {
+    public CommentDTO createComment(CommentDTO commentDTO) {
 
         Board board = boardRepository.findById(commentDTO.getBoardId()).orElseThrow(BoardNotFoundException::new);
         Comment comment = Comment
@@ -46,9 +46,11 @@ public class CommentServiceImpl implements CommentService {
                 )
                 .build();
 
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment); // comment 생성
 
         board.changeCommentCount();   // 댓글 수 + 1
+
+        return entityToDTO(savedComment);
     }
 
 

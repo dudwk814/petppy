@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentDTO implements Serializable {
 
     private Long id;
@@ -19,9 +22,11 @@ public class CommentDTO implements Serializable {
     private Long userId;
     private Long parentId;
     private String email;
+
+    @Builder.Default
     private List<CommentDTO> children = new ArrayList<>();
 
-    @Builder
+
     public CommentDTO(Long parentId, Long id, String content, Long boardId, Long userId, String email) {
         this.id = id;
         this.content = content;
@@ -31,13 +36,4 @@ public class CommentDTO implements Serializable {
         this.email = email;
     }
 
-    /*@Builder()
-    public CommentDTO(Long parentId, Long id, String content, Long boardId, Long userId, String email) {
-        this.id = id;
-        this.content = content;
-        this.boardId = boardId;
-        this.userId = userId;
-        this.email = email;
-        this.parentId = parentId;
-    }*/
 }

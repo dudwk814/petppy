@@ -17,6 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Override
