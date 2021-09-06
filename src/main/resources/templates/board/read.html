@@ -1,315 +1,345 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
-  <th:block th:fragment="content">
-    <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text align-items-end">
-          <div class="col-md-9 ftco-animate pb-5">
-            <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a th:href="@{/board/}">Board <i class="ion-ios-arrow-forward"></i></a></span> <span>Board Read<i class="ion-ios-arrow-forward"></i></span></p>
-            <h1 class="mb-0 bread">Board</h1>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section ftco-degree-bg">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 ftco-animate">
-            <p>
-              <img src="images/image_1.jpg" alt="" class="img-fluid">
-            </p>
-            <h2 class="mb-3" th:text="${board.title}"></h2>
-            <div th:utext="${board.content}">Content</div>
-
-            <div class="tag-widget post-tag-container mb-5 mt-5">
-              <div class="tagcloud">
-                <a href="#" class="tag-cloud-link">Life</a>
-                <a href="#" class="tag-cloud-link">Sport</a>
-                <a href="#" class="tag-cloud-link">Tech</a>
-                <a href="#" class="tag-cloud-link">Travel</a>
-              </div>
-            </div>
-
-            <!--<div class="about-author d-flex p-4 bg-light">
-              <div class="bio mr-5">
-                <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4">
-              </div>
-              <div class="desc">
-                <h3>George Washington</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
-              </div>
-            </div>-->
-
-
-            <div class="pt-5 mt-5">
-              <h5 class="mb-5">댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
-              <ul class="comment-list">
-                <!--<li class="comment">
-                  <div class="vcard bio">
-                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
-                  </div>
-                  <div class="comment-body dropdown">
-                    John Doe<span class="meta"> April 7, 2020 at 10:05pm </span>
-                    <p>테스트 댓글</p>
-                    <p class="d-flex justify-content-between">
-                      <a href="#" class="reply">답글</a>
-                      <a href="#" style="color: grey;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
-                      </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
+    <th:block th:fragment="content">
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
+                 data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i
+                                class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a
+                                th:href="@{/board/}">Board <i class="ion-ios-arrow-forward"></i></a></span> <span>Board Read<i
+                                class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">Board</h1>
                     </div>
-                    </p>
-
-                  </div>-->
-
-                  <!--<div class="comment-body">
-                    <h3>John Doe</h3>
-                    <div class="meta">April 7, 2020 at 10:05pm</div>
-                    <p>테스트 댓글</p>
-                    <p><a href="#" class="reply">Reply</a></p>
-                  </div>-->
-
-                  <!--<ul class="children">
-                    <li class="comment">
-                      <div class="vcard bio">
-                        <img src="images/person_1.jpg" alt="Image placeholder">
-                      </div>
-                      <div class="comment-body">
-                        <h3>John Doe</h3>
-                        <div class="meta">April 7, 2020 at 10:05pm</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                        <p><a href="#" class="reply">Reply</a></p>
-                      </div>
-
-
-                      <ul class="children">
-                        <li class="comment">
-                          <div class="vcard bio">
-                            <img src="images/person_1.jpg" alt="Image placeholder">
-                          </div>
-                          <div class="comment-body">
-                            <h3>John Doe</h3>
-                            <div class="meta">April 7, 2020 at 10:05pm</div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                            <p><a href="#" class="reply">Reply</a></p>
-                          </div>
-
-                          <ul class="children">
-                            <li class="comment">
-                              <div class="vcard bio">
-                                <img src="images/person_1.jpg" alt="Image placeholder">
-                              </div>
-                              <div class="comment-body">
-                                <h3>John Doe</h3>
-                                <div class="meta">April 7, 2020 at 10:05pm</div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                <p><a href="#" class="reply">Reply</a></p>
-                              </div>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>-->
-              </ul>
-
-              <div class="row mt-5">
-                <div class="col text-center">
-                  <div class="block-27">
-                    <ul>
-                    </ul>
-                  </div>
                 </div>
-              </div>
-              <!-- END comment-list -->
+            </div>
+        </section>
 
-              <div class="comment-form-wrap pt-5">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <div class="vcard bio" style="margin-top: 10px;">
-                      <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
+        <section class="ftco-section ftco-degree-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 ftco-animate">
+                        <p>
+                            <img src="images/image_1.jpg" alt="" class="img-fluid">
+                        </p>
+                        <h2 class="mb-3" th:text="${board.title}"></h2>
+                        <div th:utext="${board.content}">Content</div>
+
+                        <div class="tag-widget post-tag-container mb-5 mt-5">
+                            <div class="tagcloud">
+                                <a href="#" class="tag-cloud-link">Life</a>
+                                <a href="#" class="tag-cloud-link">Sport</a>
+                                <a href="#" class="tag-cloud-link">Tech</a>
+                                <a href="#" class="tag-cloud-link">Travel</a>
+                            </div>
+                        </div>
+
+                        <div class="pt-5 mt-5">
+                            <h5 class="mb-5">댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
+                            <ul class="comment-list">
+                                    <li class="comment" th:data-comment="${comment.id}" th:each="comment : ${commentList}">
+                                        <div class="vcard bio">
+                                            <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
+                                        </div>
+                                        <div class="comment-body" id="comment-body" th:data-comment="${comment.id}"> [[${comment.email}]]
+                                            <span class="meta"> [[${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
+                                            <p>[[${comment.content}]]</p>
+                                            <p><a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a href="#" class="text-black-50 comment-input" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
+                                            </p>
+                                            <p class="d-flex justify-content-between dropdown">
+                                                <a href="#" class="reply" th:data-comment="${comment.id}">
+                                                    <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글 [[${#lists.size(comment.children)}]]개 보기
+                                                    <span></span></a>
+                                                <a href="#" style="color: grey;" id="commentDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+                                                </a>
+                                            <div class="dropdown-menu" aria-labelledby="commentDropdownBtn">
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
+                                            </p>
+                                        </div>
+                                        <th:block th:each="children : ${comment.children}">
+                                            <ul class="children">
+                                                <li class="comment">
+                                                    <div class="vcard bio">
+                                                        <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
+                                                    </div>
+                                                    <div class="comment-body" id="comment-body"> [[${children.email}]]
+                                                        <span class="meta"> [[${#temporals.format(children.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
+                                                        <p th:text="${children.content}"></p>
+                                                        <p class="d-flex justify-content-between dropdown">
+                                                            <a href="#" class="reply">
+                                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글
+                                                                <span></span></a>
+                                                            <a href="#" style="color: grey;" id="commentDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+                                                            </a>
+                                                        <div class="dropdown-menu" aria-labelledby="commentDropdownBtn">
+                                                            <a class="dropdown-item" href="#">Action</a>
+                                                            <a class="dropdown-item" href="#">Another action</a>
+                                                            <a class="dropdown-item" href="#">Something else here</a>
+                                                        </div>
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </th:block>
+                                    </li>
+                            </ul>
+
+                            <div class="row mt-5">
+                                <div class="col text-center">
+                                    <div class="block-27">
+                                        <ul>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END comment-list -->
+
+                            <div class="comment-form-wrap pt-5">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="vcard bio" style="margin-top: 10px;">
+                                            <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
+                                        </div>
+                                    </div>
+                                    <input type="text" id="reply-content" class="form-control" placeholder="댓글을 입력하세요."
+                                           aria-label="Recipient's username" aria-describedby="replyAddBtn">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary replyAddBtn" type="button"
+                                                id="replyAddBtn">등록
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- .col-md-8 -->
+                    <div class="col-lg-4 sidebar pl-lg-5 ftco-animate">
+                        <div class="sidebar-box">
+                            <form action="#" class="search-form">
+                                <div class="form-group">
+                                    <span class="fa fa-search"></span>
+                                    <input type="text" class="form-control" placeholder="제목 OR 내용 OR 작성자">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="sidebar-box ftco-animate">
+                            <h3>최근 게시글</h3>
+                            <div class="block-21 mb-4 d-flex">
+                                <div class="text">
+                                    <h3 class="heading"><a href="#">최근 게시글 1</a></h3>
+                                    <div class="meta">
+                                        <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
+                                        <div><a href="#"><span class="icon-person"></span> Admin</a></div>
+                                        <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-box ftco-animate">
+                            <h3>Tag Cloud</h3>
+                            <div class="tagcloud">
+                                <a href="#" class="tag-cloud-link">cat</a>
+                                <a href="#" class="tag-cloud-link">dog</a>
+                                <a href="#" class="tag-cloud-link">pet</a>
+                                <a href="#" class="tag-cloud-link">bird</a>
+                                <a href="#" class="tag-cloud-link">husky</a>
+                                <a href="#" class="tag-cloud-link">bulldog</a>
+                                <a href="#" class="tag-cloud-link">food</a>
+                            </div>
+                        </div>
+
                     </div>
-                  </div>
-                  <input type="text" id="reply-content" class="form-control" placeholder="댓글을 입력하세요." aria-label="Recipient's username" aria-describedby="replyAddBtn">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary replyAddBtn" type="button" id="replyAddBtn">등록</button>
-                  </div>
+
                 </div>
-              </div>
             </div>
-
-          </div> <!-- .col-md-8 -->
-          <div class="col-lg-4 sidebar pl-lg-5 ftco-animate">
-            <div class="sidebar-box">
-              <form action="#" class="search-form">
-                <div class="form-group">
-                  <span class="fa fa-search"></span>
-                  <input type="text" class="form-control" placeholder="제목 OR 내용 OR 작성자">
-                </div>
-              </form>
-            </div>
-            <!--<div class="sidebar-box ftco-animate">
-              <div class="categories">
-                <h3>Services</h3>
-                <li><a href="#">Pet Sitting <span class="fa fa-chevron-right"></span></a></li>
-                <li><a href="#">Pet Daycare <span class="fa fa-chevron-right"></span></a></li>
-                <li><a href="#">Pet Grooming <span class="fa fa-chevron-right"></span></a></li>
-                <li><a href="#">Pet Spa <span class="fa fa-chevron-right"></span></a></li>
-              </div>
-            </div>-->
-
-            <div class="sidebar-box ftco-animate">
-              <h3>최근 게시글</h3>
-              <div class="block-21 mb-4 d-flex">
-                <!--<a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>-->
-                <div class="text">
-                  <h3 class="heading"><a href="#">최근 게시글 1</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="sidebar-box ftco-animate">
-              <h3>Tag Cloud</h3>
-              <div class="tagcloud">
-                <a href="#" class="tag-cloud-link">cat</a>
-                <a href="#" class="tag-cloud-link">dog</a>
-                <a href="#" class="tag-cloud-link">pet</a>
-                <a href="#" class="tag-cloud-link">bird</a>
-                <a href="#" class="tag-cloud-link">husky</a>
-                <a href="#" class="tag-cloud-link">bulldog</a>
-                <a href="#" class="tag-cloud-link">food</a>
-              </div>
-            </div>
-
-            <!--<div class="sidebar-box ftco-animate">
-              <h3>Paragraph</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
-            </div>-->
-          </div>
-
-        </div>
-      </div>
-    </section> <!-- .section -->
-  </th:block>
+        </section> <!-- .section -->
+    </th:block>
 </th:block>
 <script th:inline="javascript">
-  $(document).ready(function (e) {
+    $(document).ready(function (e) {
 
-    var boardId = [[${board.boardId}]];
+        var boardId = [[${board.boardId}]];
 
-    commentList(boardId); // 댓글 목록 조회
-
-    // 댓글 목록 조회 함수
-    function commentList(boardId) {
-      $.ajax({
-        url: '/comment/' + boardId,
-        type: 'get',
-        contentType: "application/json; charset=utf-8",
-        success: function (result) {
-          for(var i = 0; i < result.length; i ++) {
-            var tag = '<li class="comment">\n' +
-                    '                  <div class="vcard bio">\n' +
-                    '                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
-                    '                  </div>\n' +
-                    '                  <div class="comment-body dropdown" data-id="' + result[i].id + '" id="comment-body' + result[i].id + '"' +
-                    '>\n' + result[i].email +
-                    '                    <span class="meta"> April 7, 2020 at 10:05pm </span>\n' +
-                    '                    <p> '+ result[i].content + '</p>\n' +
-                    '                    <p class="d-flex justify-content-between">\n' +
-                    '                      <a href="#" class="reply" th:data-id="' + result[i].id + '">답글</a>\n' +
-                    '                      <a href="#" style="color: grey;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
-                    '                        <i class="fa fa-cog fa-lg" aria-hidden="true"></i>\n' +
-                    '                      </a>\n' +
-                    '                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
-                    '                      <a class="dropdown-item" href="#">Action</a>\n' +
-                    '                      <a class="dropdown-item" href="#">Another action</a>\n' +
-                    '                      <a class="dropdown-item" href="#">Something else here</a>\n' +
-                    '                    </div>\n' +
-                    '                    </p>\n' +
-                    '\n' +
-                    '                  </div></li>'
-            $(".comment-list").append(tag);
-          }
-        }
-      });
-    }
-
-    $(document).on('click', '.replyAddBtn', function (e) {
-
-      if ([[${session.user == null}]]) {
-        $("#loginModal").modal("show");
-
-        return;
-      }
+        $('.children').attr('style', 'display:none');
 
 
-      [# th:if = "${session.user != null}"]
-        var commentDTO = {
-          boardId : boardId,
-          content : $("#reply-content").val(),
-          userId : [[${session.user.id}]],
-          email : [[${session.user.email}]],
-          parentId : $(this).data("parent")
-        };
 
-        $.ajax({
-          url: '/comment/' + boardId,
-          type: 'post',
-          data: JSON.stringify(commentDTO),
-          contentType: 'application/json; charset=utf-8',
-          dataType: 'text',
-          success: function (result) {
-            console.log(result + "번 댓글이 등록되었습니다.");
+        /* commentList(boardId); // 댓글 목록 조회
 
-            self.location.reload();
-          }
+         // 댓글 목록 조회 함수
+         function commentList(boardId) {
+             $.ajax({
+                 url: '/comment/' + boardId,
+                 type: 'get',
+                 contentType: "application/json; charset=utf-8",
+                 success: function (result) {
+                     for (var i = 0; i < result.length; i++) {
+                         var tag = '<li class="comment">\n' +
+                             '                  <div class="vcard bio">\n' +
+                             '                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                             '                  </div>\n' +
+                             '                  <div class="comment-body dropdown" data-id="' + result[i].id + '" id="comment-body' + result[i].id + '">' + result[i].email +
+                             '                    <span class="meta"> April 7, 2020 at 10:05pm </span>\n' +
+                             '                    <p> ' + result[i].content + '</p>\n' +
+                             '                    <p class="d-flex justify-content-between">\n' +
+                             '                      <a href="#" class="reply" th:data-id="' + result[i].id + '"><i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글 <span>' + result[i].children.length + '개 보기</span></a>\n' +
+                             '                      <a href="#" style="color: grey;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                             '                        <i class="fa fa-cog fa-lg" aria-hidden="true"></i>\n' +
+                             '                      </a>\n' +
+                             '                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                             '                      <a class="dropdown-item" href="#">Action</a>\n' +
+                             '                      <a class="dropdown-item" href="#">Another action</a>\n' +
+                             '                      <a class="dropdown-item" href="#">Something else here</a>\n' +
+                             '                    </div>\n' +
+                             '                    </p>\n' +
+                             '                  </div>';
+                         if (result[i].children != null) {
+                             for (var j = 0; j < result[i].children.length; j++) {
+                                 tag += '<ul class="children">\n' +
+                                     '<li class="comment">\n' +
+                                     '                  <div class="vcard bio">\n' +
+                                     '                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                                     '                  </div>\n' +
+                                     '                  <div class="comment-body dropdown" data-id="' + result[i].children[j].id + '" id="comment-body' + result[i].children[j].id + '">' +
+                                     '\n' + result[i].children[j].email +
+                                     '                    <span class="meta"> <!--April 7, 2020 at 10:05pm -->' + result[i].children[j].createdDate + '</span>\n' +
+                                     '                    <p> ' + result[i].children[j].content + '</p>\n' +
+                                     '                    <p class="d-flex justify-content-between">\n' +
+                                     '                      <a href="#" class="reply" th:data-id="' + result[i].children[j].id + '">답글</a>\n' +
+                                     '                      <a href="#" style="color: grey;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                                     '                        <i class="fa fa-cog fa-lg" aria-hidden="true"></i>\n' +
+                                     '                      </a>\n' +
+                                     '                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                                     '                      <a class="dropdown-item" href="#">Action</a>\n' +
+                                     '                      <a class="dropdown-item" href="#">Another action</a>\n' +
+                                     '                      <a class="dropdown-item" href="#">Something else here</a>\n' +
+                                     '                    </div>\n' +
+                                     '                    </p>\n' +
+                                     '                  </div>';
+
+                                 if (result[i].children[j].children != null) {
+                                 for (var k = 0; k < result[i].children[j].children.length; k++) {
+                                     tag += '<ul class="children">\n' +
+                                         '<li class="comment">\n' +
+                                         '                  <div class="vcard bio">\n' +
+                                         '                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                                         '                  </div>\n' +
+                                         '                  <div class="comment-body dropdown" data-id="' + result[i].children[j].children[k].id + '" id="comment-body' + result[i].children[j].children[k].id + '"' +
+                                         '>\n' + result[i].children[j].email +
+                                         '                    <span class="meta"> <!--April 7, 2020 at 10:05pm -->' + result[i].children[j].children[k].createdDate + '</span>\n' +
+                                         '                    <p> ' + result[i].children[j].children[k].content + '</p>\n' +
+                                         '                    <p class="d-flex justify-content-between">\n' +
+                                         '                      <a href="#" class="reply" th:data-id="' + result[i].children[j].children[k].id + '">답글</a>\n' +
+                                         '                      <a href="#" style="color: grey;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\n' +
+                                         '                        <i class="fa fa-cog fa-lg" aria-hidden="true"></i>\n' +
+                                         '                      </a>\n' +
+                                         '                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">\n' +
+                                         '                      <a class="dropdown-item" href="#">Action</a>\n' +
+                                         '                      <a class="dropdown-item" href="#">Another action</a>\n' +
+                                         '                      <a class="dropdown-item" href="#">Something else here</a>\n' +
+                                         '                    </div>\n' +
+                                         '                    </p>\n' +
+                                         '\n' +
+                                         '                  </div></li></ul>';
+                                 }
+                             }
+
+                                     tag += '</li></ul>';
+                             }
+                         }
+                         tag += '</li>';
+                         $(".comment-list").append(tag);
+                     }
+                 }
+             });
+         }*/
+
+
+        $(document).on('click', '.replyAddBtn', function (e) {
+
+            if ([[${session.user == null}]]) {
+                $("#loginModal").modal("show");
+
+                return;
+            }
+
+
+            [# th:if = "${session.user != null}"]
+            var commentDTO = {
+                boardId: boardId,
+                content: $("#reply-content").val(),
+                userId: [[${session.user.id}]],
+                email: [[${session.user.email}]],
+                parentId: $(this).data("parent")
+            };
+
+            $.ajax({
+                url: '/comment/' + boardId,
+                type: 'post',
+                data: JSON.stringify(commentDTO),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'text',
+                success: function (result) {
+                    console.log(result + "번 댓글이 등록되었습니다.");
+
+                    self.location.reload();
+                }
+            });
+            [/]
+
         });
-      [/]
 
+
+
+        $(document).on('click', '.comment-input', function (e) {
+            e.preventDefault();
+
+            var commentBody = $(this.closest(".comment-body"));
+            var parentId = commentBody.data("comment");
+
+
+            if (commentBody.children('.input-group').length < 1) {
+                $(commentBody).append('<div class="input-group mb-3">\n' +
+                    '                  <div class="input-group-prepend">\n' +
+                    '                    <div class="vcard bio" style="margin-top: 10px;">\n' +
+                    '                      <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                    '                    </div>\n' +
+                    '                  </div>\n' +
+                    '                  <input type="text" id="reply-content" class="form-control" placeholder="답글을 입력하세요." aria-label="Recipient\'s username" aria-describedby="replyAddBtn">\n' +
+                    '                  <div class="input-group-append">\n' +
+                    '                    <button class="btn btn-outline-secondary replyAddBtn" type="button" id="replyAddBtn" data-parent="' + parentId + '">답글 등록</button>\n' +
+                    '                  </div>\n' +
+                    '                </div>');
+            } else {
+                commentBody.children('.input-group').remove();
+                return;
+            }
+        })
+
+        $(document).on('click', '.reply', function (e) {
+            e.preventDefault();
+
+
+            if ($(this).closest('.comment').find('.children').css("display") === 'none') {
+                $(this).closest('.comment').find('.children').show();
+            } else {
+                $(this).closest('.comment').find('.children').hide();
+            }
+
+
+        });
     });
-
-    $(document).on('click', '.reply', function (e) {
-      e.preventDefault();
-
-      if ([[${session.user == null}]]) {
-        $("#loginModal").modal("show");
-
-        return;
-      }
-
-      var commentBody = $(this.closest(".comment-body"));
-      var parentId = commentBody.data("id");
-
-
-      if (commentBody.children('.input-group').length < 1) {
-        $(commentBody).append('<div class="input-group mb-3">\n' +
-                '                  <div class="input-group-prepend">\n' +
-                '                    <div class="vcard bio" style="margin-top: 10px;">\n' +
-                '                      <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
-                '                    </div>\n' +
-                '                  </div>\n' +
-                '                  <input type="text" id="reply-content" class="form-control" placeholder="답글을 입력하세요." aria-label="Recipient\'s username" aria-describedby="replyAddBtn">\n' +
-                '                  <div class="input-group-append">\n' +
-                '                    <button class="btn btn-outline-secondary replyAddBtn" type="button" id="replyAddBtn" data-parent="' + parentId + '">답글 등록</button>\n' +
-                '                  </div>\n' +
-                '                </div>');
-      } else {
-        commentBody.children('.input-group').remove();
-        return;
-      }
-    });
-  });
 </script>
 </html>

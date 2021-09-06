@@ -13,6 +13,7 @@ import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.dto.UserDTO;
 import petppy.service.BoardService;
+import petppy.service.comment.CommentService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpSession;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @GetMapping("")
     public String boardList(Model model, PageRequestDTO requestDTO, String boardSort) {
@@ -42,6 +44,8 @@ public class BoardController {
         BoardDto boardDto = boardService.searchBoard(id);
 
         model.addAttribute("board", boardDto);
+
+        model.addAttribute("commentList", commentService.findCommentsByBoardId(id));
 
         return "/board/read";
     }

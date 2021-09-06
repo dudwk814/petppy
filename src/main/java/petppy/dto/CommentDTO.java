@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,17 +24,22 @@ public class CommentDTO implements Serializable {
     private Long parentId;
     private String email;
 
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
+
     @Builder.Default
     private List<CommentDTO> children = new ArrayList<>();
 
 
-    public CommentDTO(Long parentId, Long id, String content, Long boardId, Long userId, String email) {
+    public CommentDTO(Long parentId, Long id, String content, Long boardId, Long userId, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.content = content;
         this.boardId = boardId;
         this.userId = userId;
         this.parentId = parentId;
         this.email = email;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
     }
 
 }

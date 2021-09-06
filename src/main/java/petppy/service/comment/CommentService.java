@@ -28,6 +28,8 @@ public interface CommentService {
                     .id(comment.getId())
                     .userId(comment.getUser().getId())
                     .parentId(comment.getParent().getId())
+                    .createdDate(comment.getCreatedDate())
+                    .lastModifiedDate(comment.getModifiedDate())
                     .build();
         } else {
             return CommentDTO
@@ -37,6 +39,8 @@ public interface CommentService {
                     .boardId(comment.getBoard().getId())
                     .id(comment.getId())
                     .userId(comment.getUser().getId())
+                    .createdDate(comment.getCreatedDate())
+                    .lastModifiedDate(comment.getModifiedDate())
                     .build();
         }
     }
