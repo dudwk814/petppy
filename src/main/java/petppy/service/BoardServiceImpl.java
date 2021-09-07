@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import petppy.repository.BoardRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -90,6 +92,16 @@ public class BoardServiceImpl implements BoardService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<BoardDto> findRecentBoardList(Pageable pageable) {
+        List<Board> result = boardRepository.findRecentBoardList(pageable);
+
+        return result
+                .stream()
+                .map(board -> entityToDto(board))
+                .collect(Collectors.toList());
     }
 
     /**

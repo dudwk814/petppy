@@ -1,10 +1,13 @@
 package petppy.service;
 
+import org.springframework.data.domain.Pageable;
 import petppy.domain.Board;
 import petppy.domain.user.User;
 import petppy.dto.BoardDto;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+
+import java.util.List;
 
 public interface BoardService {
 
@@ -17,6 +20,8 @@ public interface BoardService {
     public PageResultDTO<BoardDto, Board> searchBoardList(PageRequestDTO requestDTO);
 
     public BoardDto searchBoard(Long id);
+
+    public List<BoardDto> findRecentBoardList(Pageable pageable);
 
     default BoardDto entityToDto(Board board) {
         return BoardDto

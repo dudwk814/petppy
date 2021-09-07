@@ -1,6 +1,7 @@
 package petppy.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,8 @@ public class BoardController {
         model.addAttribute("board", boardDto);
 
         model.addAttribute("commentList", commentService.findCommentsByBoardId(id));
+
+        model.addAttribute("recentBoardList", boardService.findRecentBoardList(PageRequest.of(0, 5)));
 
         return "/board/read";
     }

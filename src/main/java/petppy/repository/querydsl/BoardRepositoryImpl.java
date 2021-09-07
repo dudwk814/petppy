@@ -38,6 +38,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .select(board)
                 .from(board)
                 .leftJoin(board.user, user)
+                .fetchJoin()
+                .distinct()
                 .where(
                         typeContains(requestDTO)
                 )
