@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment savedComment = commentRepository.save(comment); // comment 생성
 
-        board.changeCommentCount();   // 댓글 수 + 1
+        board.plusCommentCount();   // 댓글 수 + 1
 
         return entityToDTO(savedComment);
     }
@@ -71,13 +71,15 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(CommentDTO commentDTO) {
 
-        Comment comment = commentRepository.findCommentByIdWithParent(commentId).orElseThrow(CommentNotFoundException::new);
+        Comment comment = commentRepository.findCommentByIdWithParent(commentDTO.getId()).orElseThrow(CommentNotFoundException::new);
         if(comment.getChildren().size() != 0) { // 자식이 있으면 상태만 변경
             comment.changeDeletedStatus(DeleteStatus.Y);
         } else { // 삭제 가능한 조상 댓글을 구해서 삭제
             commentRepository.delete(getDeletableAncestorComment(comment));
+            Board board = boardRepository.findById(commentDTO.getBoardId()).orElseThrow(BoardNotFoundException::new);
+            board.minusCommentCount();
         }
     }
 

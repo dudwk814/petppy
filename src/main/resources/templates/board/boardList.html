@@ -44,7 +44,7 @@
                                         <div class="text-lowercase" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자">
                                             <a href="#" th:text="${#strings.substringBefore(dto.email,'@')}"></a>
                                         </div>
-                                        <div><a href="" class="meta-chat" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수"><span class="fa fa-comment"></span> [[${dto.commentCount}]]</a></div>
+                                        <div><a th:href="@{/board/read(id=${dto.boardId})}" class="meta-chat" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수"><span class="fa fa-comment"></span> [[${dto.commentCount}]]</a></div>
                                     </div>
 
                                     <h3 class="heading"><a th:href="@{/board/read(id=${dto.boardId})}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목">[[${dto.title}]]</a></h3>

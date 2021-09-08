@@ -65,7 +65,7 @@ class CommentServiceImplTest {
 
     }
 
-    @Test
+    /*@Test
     @Commit
     public void 댓글_삭제() throws Exception {
         commentService.deleteComment(35L);
@@ -73,7 +73,7 @@ class CommentServiceImplTest {
 
         assertFalse(commentRepository.findById(35L).isPresent());
 
-    }
+    }*/
 
     /*@Test
     @Commit

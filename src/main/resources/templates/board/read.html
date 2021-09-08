@@ -26,6 +26,7 @@
                             <img src="images/image_1.jpg" alt="" class="img-fluid">
                         </p>
                         <h2 class="mb-3" th:text="${board.title}"></h2>
+                        <hr>
                         <div th:utext="${board.content}">Content</div>
 
                         <div class="tag-widget post-tag-container mb-5 mt-5">
@@ -44,25 +45,24 @@
                                         <div class="vcard bio">
                                             <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
                                         </div>
-                                        <div class="comment-body" id="comment-body" th:data-comment="${comment.id}"> [[${comment.email}]]
+                                        <div class="comment-body" th:id='comment-body + ${comment.id}' th:data-comment="${comment.id}"> [[${comment.email}]]
                                             <span class="meta"> [[${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
-                                            <p>[[${comment.content}]]</p>
-                                            <p><a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <p class="comment-content">[[${comment.content}]]</p>
+                                            <p class="mr-auto"><a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <a href="#" class="text-black-50 comment-input" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
+                                                <th:block sec:authorize="isAuthenticated()">
+                                                    <th:block th:if="${comment.email == session.user.email}">
+                                                        /&nbsp;
+                                                        <a href="#" class="p2 text-black-50 comment-modify-btn" th:data-comment="${comment.id}"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a> &nbsp;/&nbsp;
+                                                        <a href="#" class="p2 text-black-50 comment-remove-btn" th:data-comment="${comment.id}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>
+                                                    </th:block>
+                                                </th:block>
                                             </p>
-                                            <p class="d-flex justify-content-between dropdown">
+                                            <p class="d-flex">
                                                 <a href="#" class="reply" th:data-comment="${comment.id}">
                                                     <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글 [[${#lists.size(comment.children)}]]개 보기
-                                                    <span></span></a>
-                                                <a href="#" style="color: grey;" id="commentDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
                                                 </a>
-                                            <div class="dropdown-menu" aria-labelledby="commentDropdownBtn">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
                                             </p>
                                         </div>
                                         <th:block th:each="children : ${comment.children}">
@@ -73,14 +73,21 @@
                                                     </div>
                                                     <div class="comment-body" id="comment-body"> [[${children.email}]]
                                                         <span class="meta"> [[${#temporals.format(children.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
-                                                        <p th:text="${children.content}"></p>
+                                                        <p class="comment-content" th:text="${children.content}"></p>
+                                                        <p class="mr-auto"><a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <a href="#" class="text-black-50 comment-input" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
+                                                            <th:block sec:authorize="isAuthenticated()">
+                                                                <th:block th:if="${children.email == session.user.email}">
+                                                                    /&nbsp;
+                                                                    <a href="#" class="p2 text-black-50 comment-modify-btn" th:data-comment="${children.id}"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a> &nbsp;/&nbsp;
+                                                                    <a href="#" class="p2 text-black-50 comment-remove-btn" th:data-comment="${children.id}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>
+                                                                </th:block>
+                                                            </th:block>
+                                                        </p>
                                                         <p class="d-flex justify-content-end dropdown">
-                                                            <!--<a href="#" class="reply">
-                                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글
-                                                                <span></span></a>-->
-                                                            <a href="#" style="color: grey;" id="commentDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
-                                                            </a>
+
+
                                                         <div class="dropdown-menu" aria-labelledby="commentDropdownBtn">
                                                             <a class="dropdown-item" href="#">Action</a>
                                                             <a class="dropdown-item" href="#">Another action</a>
@@ -172,6 +179,12 @@
 
         var boardId = [[${board.boardId}]];
 
+        $(document).on('click', '.commentDropdownBtn', function (e) {
+            e.preventDefault();
+
+            $(this).dropdown('toggle');
+        })
+
         $('.children').attr('style', 'display:none');
 
         /* 답글 등록 버튼 클릭 시 답글 등록 */
@@ -221,8 +234,7 @@
 
         });
 
-
-
+        /* 답글 클릭 시 답글 작성 input창 생성 */
         $(document).on('click', '.comment-input', function (e) {
             e.preventDefault();
 
@@ -248,6 +260,7 @@
             }
         })
 
+        /* 답글 보기 클릭시 답글 리스트 show & hide  */
         $(document).on('click', '.reply', function (e) {
             e.preventDefault();
 
@@ -257,9 +270,89 @@
             } else {
                 $(this).closest('.comment').find('.children').hide();
             }
+        });
+
+        /* 삭제 클릭 시 확인 후 댓글 삭제 */
+        $(document).on('click', '.comment-remove-btn', function (e) {
+            e.preventDefault();
+
+            var commentId = $(this).data("comment");
+
+            var commentDTO = {
+                boardId : boardId,
+                id : commentId
+            }
+
+            if (confirm("댓글을 삭제하시겠습니까?") === true) {
+                $.ajax({
+                    url: '/comment/' + commentId,
+                    type : 'delete',
+                    data: JSON.stringify(commentDTO),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'text',
+                    success : function (result) {
+                        console.log(result);
+
+                        self.location.reload();
+                    }
+                });
+            }
+        });
+
+        /* 댓글 리스트에서 수정 버튼 클릭 시 comment input창 생성 */
+        $(document).on('click', '.comment-modify-btn', function (e) {
+            e.preventDefault();
+
+            var commentId = $(this).data("comment");
+
+            if ($(this).closest('.comment-body').find('.input-group').length < 1) {
+                $(this).closest('.comment-body').find('.comment-content').before('<div class="input-group mb-3">\n' +
+                    '                                    <input type="text" id="modify-content" class="form-control" placeholder="수정할 댓글의 내용을 입력하세요."\n' +
+                    '                                           aria-label="Recipient\'s username" aria-describedby="replyAddBtn">\n' +
+                    '                                    <div class="input-group-append">\n' +
+                    '                                        <button class="btn btn-outline-secondary comment-modify" data-comment="' + commentId + '" type="button"\n' +
+                    '                                                id="replyAddBtn">수정\n' +
+                    '                                        </button>\n' +
+                    '                                    </div>\n' +
+                    '                                </div>');
+                $(this).closest('.comment-body').find('.comment-content').css('visibility', 'hidden');
+                $(this).text('수정 취소');
+            } else {
+                $(this).closest('.comment-body').find('.input-group').remove();
+                $(this).closest('.comment-body').find('.comment-content').css('visibility', 'visible');
+                $(this).text('수정');
+            }
 
 
         });
+
+        /* 댓글 수정창에서 수정 버튼 클릭시 comment 수정 */
+        $(document).on('click', '.comment-modify', function () {
+
+            var commentId = $(this).data("comment");
+            var commentContent = $(this).closest('.input-group').find('#modify-content').val();
+
+            var commentDTO = {
+                id : commentId,
+                content : commentContent
+            }
+
+            if (confirm("댓들을 수정하시겠습니까?") === true) {
+                $.ajax({
+                    url : '/comment/' + commentId,
+                    type: 'patch',
+                    data: JSON.stringify(commentDTO),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'text',
+                    success: function (result) {
+                        console.log(result + "번 댓글이 수정되었습니다.");
+
+                        self.location.reload();
+                    }
+                });
+            }
+        })
+
     });
 </script>
 </html>

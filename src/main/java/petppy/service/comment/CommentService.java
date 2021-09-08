@@ -13,7 +13,7 @@ public interface CommentService {
 
     public List<CommentDTO> findCommentsByBoardId(Long boardId);
 
-    public void deleteComment(Long commentId);
+    public void deleteComment(CommentDTO dto);
 
     public void modifyComment(CommentDTO dto);
 

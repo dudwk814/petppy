@@ -39,4 +39,23 @@ public class CommentController {
         return new ResponseEntity<>(savedComment.getId(), OK);
 
     }
+
+    /**
+     * comment 삭제
+     */
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@RequestBody CommentDTO commentDTO) {
+        commentService.deleteComment(commentDTO);
+
+        return new ResponseEntity<>("success", OK);
+    }
+
+    /**
+     * comment 수정
+     */
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<String> modifyComment(@RequestBody CommentDTO commentDTO) {
+        commentService.modifyComment(commentDTO);
+        return new ResponseEntity<>("success", OK);
+    }
 }

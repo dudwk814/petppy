@@ -50,7 +50,11 @@ public class Board extends BaseTimeEntity {
         this.hit += 1;
     }
 
-    public void changeCommentCount() {
+    public void plusCommentCount() {
         this.commentCount += 1;
+    }
+
+    public void minusCommentCount() {
+        this.commentCount -= 1;
     }
 }

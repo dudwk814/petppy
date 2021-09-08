@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .passwordParameter("password")
                     .failureHandler(new LoginFailureHandler())
                     .loginPage("/loginForm")
+                    .loginProcessingUrl("/login")
+                    .permitAll()
                 .and()
                     .logout()
                     .logoutSuccessUrl("/")
