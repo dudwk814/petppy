@@ -25,6 +25,7 @@ public class Board extends BaseTimeEntity {
 
     private String title;
 
+    @Lob
     private String content;
 
     private int commentCount;

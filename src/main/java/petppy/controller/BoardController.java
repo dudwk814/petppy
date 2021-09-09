@@ -1,13 +1,13 @@
 package petppy.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import petppy.domain.Board;
 import petppy.dto.BoardDto;
 import petppy.dto.PageRequestDTO;
@@ -18,6 +18,9 @@ import petppy.service.comment.CommentService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.InputStream;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -72,5 +75,8 @@ public class BoardController {
 
         return "redirect:/board";
     }
+
+
+
 
 }
