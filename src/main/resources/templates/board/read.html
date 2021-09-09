@@ -22,10 +22,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 ftco-animate">
-                        <p>
-                            <img src="images/image_1.jpg" alt="" class="img-fluid">
+                        <p class="meta">
+                            <span aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자">[[${#strings.substringBefore(board.email,'@')}]]</span> &nbsp;/&nbsp;
+                            <span aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성일">[[${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}]]</span>
                         </p>
-                        <h2 class="mb-3" th:text="${board.title}"></h2>
+                        <h2 class="mb-3" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목" th:text="${board.title}"></h2>
                         <hr>
                         <div th:utext="${board.content}">Content</div>
 
@@ -45,11 +46,12 @@
                                         <div class="vcard bio">
                                             <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
                                         </div>
-                                        <div class="comment-body" th:id='comment-body + ${comment.id}' th:data-comment="${comment.id}"> [[${comment.email}]]
+                                        <div class="comment-body" th:id='comment-body + ${comment.id}' th:data-comment="${comment.id}"> [[${#strings.substringBefore(comment.email,'@')}]] &nbsp;/&nbsp;
                                             <span class="meta"> [[${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
                                             <p class="comment-content">[[${comment.content}]]</p>
-                                            <p class="mr-auto"><a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <p class="mr-auto">
+                                                <!--<a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
                                                 <a href="#" class="text-black-50 comment-input" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
                                                 <th:block sec:authorize="isAuthenticated()">
                                                     <th:block th:if="${comment.email == session.user.email}">
@@ -71,11 +73,12 @@
                                                     <div class="vcard bio">
                                                         <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
                                                     </div>
-                                                    <div class="comment-body" id="comment-body"> [[${children.email}]]
+                                                    <div class="comment-body" id="comment-body"> [[${#strings.substringBefore(children.email,'@')}]] &nbsp;/&nbsp;
                                                         <span class="meta"> [[${#temporals.format(children.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
                                                         <p class="comment-content" th:text="${children.content}"></p>
-                                                        <p class="mr-auto"><a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                            <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <p class="mr-auto">
+                                                            <!--<a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
                                                             <a href="#" class="text-black-50 comment-input" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
                                                             <th:block sec:authorize="isAuthenticated()">
                                                                 <th:block th:if="${children.email == session.user.email}">
