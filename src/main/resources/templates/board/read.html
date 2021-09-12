@@ -8,10 +8,15 @@
             <div class="container">
                 <div class="row no-gutters slider-text align-items-end">
                     <div class="col-md-9 ftco-animate pb-5">
-                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i
-                                class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a
-                                th:href="@{/board/}">Board <i class="ion-ios-arrow-forward"></i></a></span> <span>Board Read<i
-                                class="ion-ios-arrow-forward"></i></span></p>
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true"
+                                                                          data-toggle="tooltip" data-placement="top"
+                                                                          title="메인 페이지로 이동">Home <i
+                                class="ion-ios-arrow-forward"></i></a></span>
+                            <span class="mr-2"><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                  title="게시판 목록으로 이동"
+                                                  th:href="@{/board(page=${requestDTO.page},size=${requestDTO.size})}">Board <i
+                                    class="ion-ios-arrow-forward"></i></a></span> <span>Board Read<i
+                                    class="ion-ios-arrow-forward"></i></span></p>
                         <h1 class="mb-0 bread">Board</h1>
                     </div>
                 </div>
@@ -22,11 +27,28 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 ftco-animate">
-                        <p class="meta">
-                            <span aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자">[[${#strings.substringBefore(board.email,'@')}]]</span> &nbsp;/&nbsp;
+                        <p class="meta d-flex">
+                            <span aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자">[[${#strings.substringBefore(board.email,'@')}]]</span>
+                            &nbsp;/&nbsp;
                             <span aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성일">[[${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}]]</span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span>
+                                <a data-toggle="tooltip" data-placement="top" title="목록으로 돌아가기" class="text-black-50" th:href="@{/board(page=${requestDTO.page},size=${requestDTO.size})}">목록</a>
+                            </span>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <th:block th:if="${board.email == session.user.email}">
+                                    &nbsp; / &nbsp;
+                                    <span>
+                                        <a data-toggle="tooltip" data-placement="top" title="게시글 수정" class="text-black-50" th:href="@{/board/modify(id=${board.boardId})}">수정</a>
+                                    </span> &nbsp; / &nbsp;
+                                    <span>
+                                        <a data-toggle="tooltip" data-placement="top" title="게시글 삭제" class="text-black-50 board-remove-btn" th:href="@{/#}">삭제</a>
+                                    </span>
+                                </th:block>
+                            </th:block>
                         </p>
-                        <h2 class="mb-3" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목" th:text="${board.title}"></h2>
+                        <h2 class="mb-3" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목"
+                            th:text="${board.title}"></h2>
                         <hr>
                         <div th:utext="${board.content}">Content</div>
 
@@ -42,66 +64,85 @@
                         <div class="pt-5 mt-5">
                             <h5 class="mb-5">댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
                             <ul class="comment-list">
-                                    <li th:class="comment" th:data-comment="${comment.id}" th:each="comment : ${commentList}">
-                                        <div class="vcard bio">
-                                            <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
-                                        </div>
-                                        <div class="comment-body" th:id='comment-body + ${comment.id}' th:data-comment="${comment.id}"> [[${#strings.substringBefore(comment.email,'@')}]] &nbsp;/&nbsp;
-                                            <span class="meta"> [[${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
-                                            <p class="comment-content">[[${comment.content}]]</p>
-                                            <p class="mr-auto">
-                                                <!--<a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
-                                                <a href="#" class="text-black-50 comment-input" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
-                                                <th:block sec:authorize="isAuthenticated()">
-                                                    <th:block th:if="${comment.email == session.user.email}">
-                                                        /&nbsp;
-                                                        <a href="#" class="p2 text-black-50 comment-modify-btn" th:data-comment="${comment.id}"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a> &nbsp;/&nbsp;
-                                                        <a href="#" class="p2 text-black-50 comment-remove-btn" th:data-comment="${comment.id}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>
-                                                    </th:block>
+                                <li th:class="comment" th:data-comment="${comment.id}"
+                                    th:each="comment : ${commentList}">
+                                    <div class="vcard bio">
+                                        <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
+                                    </div>
+                                    <div class="comment-body" th:id='comment-body + ${comment.id}'
+                                         th:data-comment="${comment.id}">
+                                        [[${#strings.substringBefore(comment.email,'@')}]] &nbsp;/&nbsp;
+                                        <span class="meta"> [[${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
+                                        <p class="comment-content">[[${comment.content}]]</p>
+                                        <p class="mr-auto">
+                                            <!--<a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                            <a href="#" class="text-black-50 comment-input" aria-hidden="true"
+                                               data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
+                                            <th:block sec:authorize="isAuthenticated()">
+                                                <th:block th:if="${comment.email == session.user.email}">
+                                                    /&nbsp;
+                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"
+                                                       th:data-comment="${comment.id}" aria-hidden="true"
+                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>
+                                                    &nbsp;/&nbsp;
+                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"
+                                                       th:data-comment="${comment.id}" aria-hidden="true"
+                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>
                                                 </th:block>
-                                            </p>
-                                            <p class="d-flex">
-                                                <a href="#" class="reply" th:data-comment="${comment.id}">
-                                                    <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글 [[${#lists.size(comment.children)}]]개 보기
-                                                </a>
-                                            </p>
-                                        </div>
-                                        <th:block th:each="children : ${comment.children}">
-                                            <ul class="children">
-                                                <li class="comment">
-                                                    <div class="vcard bio">
-                                                        <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
-                                                    </div>
-                                                    <div class="comment-body" id="comment-body"> [[${#strings.substringBefore(children.email,'@')}]] &nbsp;/&nbsp;
-                                                        <span class="meta"> [[${#temporals.format(children.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
-                                                        <p class="comment-content" th:text="${children.content}"></p>
-                                                        <p class="mr-auto">
-                                                            <!--<a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                            <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
-                                                            <a href="#" class="text-black-50 comment-input" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>
-                                                            <th:block sec:authorize="isAuthenticated()">
-                                                                <th:block th:if="${children.email == session.user.email}">
-                                                                    /&nbsp;
-                                                                    <a href="#" class="p2 text-black-50 comment-modify-btn" th:data-comment="${children.id}"  aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a> &nbsp;/&nbsp;
-                                                                    <a href="#" class="p2 text-black-50 comment-remove-btn" th:data-comment="${children.id}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>
-                                                                </th:block>
+                                            </th:block>
+                                        </p>
+                                        <p class="d-flex">
+                                            <a href="#" class="reply" th:data-comment="${comment.id}">
+                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글
+                                                [[${#lists.size(comment.children)}]]개 보기
+                                            </a>
+                                        </p>
+                                    </div>
+                                    <th:block th:each="children : ${comment.children}">
+                                        <ul class="children">
+                                            <li class="comment">
+                                                <div class="vcard bio">
+                                                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
+                                                </div>
+                                                <div class="comment-body" id="comment-body">
+                                                    [[${#strings.substringBefore(children.email,'@')}]] &nbsp;/&nbsp;
+                                                    <span class="meta"> [[${#temporals.format(children.createdDate, 'yyyy-MM-dd HH:mm')}]] </span>
+                                                    <p class="comment-content" th:text="${children.content}"></p>
+                                                    <p class="mr-auto">
+                                                        <!--<a href="#" class="fa fa-thumbs-o-up text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <a href="#" class="fa fa-thumbs-o-down text-black-50" aria-hidden="true"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                                        <a href="#" class="text-black-50 comment-input"
+                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                           title="답글 작성">답글</a>
+                                                        <th:block sec:authorize="isAuthenticated()">
+                                                            <th:block th:if="${children.email == session.user.email}">
+                                                                /&nbsp;
+                                                                <a href="#" class="p2 text-black-50 comment-modify-btn"
+                                                                   th:data-comment="${children.id}" aria-hidden="true"
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="댓글 수정">수정</a> &nbsp;/&nbsp;
+                                                                <a href="#" class="p2 text-black-50 comment-remove-btn"
+                                                                   th:data-comment="${children.id}" aria-hidden="true"
+                                                                   data-toggle="tooltip" data-placement="top"
+                                                                   title="댓글 삭제">삭제</a>
                                                             </th:block>
-                                                        </p>
-                                                        <p class="d-flex justify-content-end dropdown">
+                                                        </th:block>
+                                                    </p>
+                                                    <p class="d-flex justify-content-end dropdown">
 
 
-                                                        <div class="dropdown-menu" aria-labelledby="commentDropdownBtn">
-                                                            <a class="dropdown-item" href="#">Action</a>
-                                                            <a class="dropdown-item" href="#">Another action</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                        </div>
-                                                        </p>
+                                                    <div class="dropdown-menu" aria-labelledby="commentDropdownBtn">
+                                                        <a class="dropdown-item" href="#">Action</a>
+                                                        <a class="dropdown-item" href="#">Another action</a>
+                                                        <a class="dropdown-item" href="#">Something else here</a>
                                                     </div>
-                                                </li>
-                                            </ul>
-                                        </th:block>
-                                    </li>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </th:block>
+                                </li>
                             </ul>
 
                             <div class="row mt-5">
@@ -146,12 +187,18 @@
                         <div class="sidebar-box ftco-animate">
                             <h3>최근 게시글</h3>
                             <div class="block-21 mb-4 d-flex" th:each="board : ${recentBoardList}">
-                                <div class="text" >
-                                    <h3 class="heading"><a th:href="@{/board/read(id=${board.boardId})}">[[${board.title}]]</a></h3>
+                                <div class="text">
+                                    <h3 class="heading"><a th:href="@{/board/read(id=${board.boardId})}">[[${board.title}]]</a>
+                                    </h3>
                                     <div class="meta">
-                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자"><span class="icon-person"></span> [[${#strings.substringBefore(board.email,'@')}]]</a></div>
-                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성일"><span class="icon-calendar"></span> [[${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}]]</a></div>
-                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top" title="조회수"><span class="icon-chat"></span> [[${board.hit}]]</a></div>
+                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                title="작성자"><span class="icon-person"></span>
+                                            [[${#strings.substringBefore(board.email,'@')}]]</a></div>
+                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                title="작성일"><span class="icon-calendar"></span>
+                                            [[${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}]]</a></div>
+                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                title="조회수"><span class="icon-chat"></span> [[${board.hit}]]</a></div>
                                     </div>
                                 </div>
                             </div>
@@ -186,6 +233,29 @@
             e.preventDefault();
 
             $(this).dropdown('toggle');
+        })
+
+        $(document).on('click', '.board-remove-btn', function (e) {
+            e.preventDefault();
+
+            if (confirm("게시글을 삭제하시겠습니까?") === true) {
+
+                var commentCount = [[${board.commentCount}]]
+                // create element (form)
+                var boardRemoveForm = $('<form></form>');
+
+                // set attribute(form)
+                boardRemoveForm.attr('method', 'post');
+                boardRemoveForm.attr('action', '/board/delete');
+
+                // set attribute(input)
+                boardRemoveForm.append($('<input/>', {type: 'hidden', name: 'id', value:boardId }));
+                // append form (to body)
+                boardRemoveForm.appendTo('body');
+
+                // submit form
+                boardRemoveForm.submit();
+            }
         })
 
         $('.children').attr('style', 'display:none');
@@ -246,7 +316,7 @@
 
 
             if (commentBody.children('.input-group').length < 1) {
-                $(commentBody).append('<div class="input-group mb-3" th:data-comment-input-group="' + parentId  +'">\n' +
+                $(commentBody).append('<div class="input-group mb-3" th:data-comment-input-group="' + parentId + '">\n' +
                     '                  <div class="input-group-prepend">\n' +
                     '                    <div class="vcard bio" style="margin-top: 10px;">\n' +
                     '                      <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
@@ -282,18 +352,18 @@
             var commentId = $(this).data("comment");
 
             var commentDTO = {
-                boardId : boardId,
-                id : commentId
+                boardId: boardId,
+                id: commentId
             }
 
             if (confirm("댓글을 삭제하시겠습니까?") === true) {
                 $.ajax({
                     url: '/comment/' + commentId,
-                    type : 'delete',
+                    type: 'delete',
                     data: JSON.stringify(commentDTO),
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'text',
-                    success : function (result) {
+                    success: function (result) {
                         console.log(result);
 
                         self.location.reload();
@@ -336,13 +406,13 @@
             var commentContent = $(this).closest('.input-group').find('#modify-content').val();
 
             var commentDTO = {
-                id : commentId,
-                content : commentContent
+                id: commentId,
+                content: commentContent
             }
 
             if (confirm("댓들을 수정하시겠습니까?") === true) {
                 $.ajax({
-                    url : '/comment/' + commentId,
+                    url: '/comment/' + commentId,
                     type: 'patch',
                     data: JSON.stringify(commentDTO),
                     contentType: 'application/json; charset=utf-8',

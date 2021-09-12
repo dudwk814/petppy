@@ -14,5 +14,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, CustomC
     @Query("select c from Comment c left join fetch c.parent where c.id = :id")
     Optional<Comment> findCommentByIdWithParent(@Param("id") Long id);
 
+    @Modifying
+    @Query("delete from Comment c where c.board.id =:id")
+    void deleteByBoardId(@Param("id") Long id);
+
 
 }

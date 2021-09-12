@@ -14,7 +14,9 @@ import petppy.domain.QBoard;
 import petppy.dto.BoardDto;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.exception.BoardNotFoundException;
 import petppy.repository.BoardRepository;
+import petppy.repository.comment.CommentRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional
@@ -37,18 +40,19 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void modifyBoard(BoardDto dto) {
-        Optional<Board> result = boardRepository.findById(dto.getBoardId());
-
-        if (result.isPresent()) {
-            Board findBoard = result.get();
-
-            findBoard.changeBoard(dto.getTitle(), dto.getTitle());
-        }
+        Board board = boardRepository.findById(dto.getBoardId()).orElseThrow(BoardNotFoundException::new);
+        board.changeBoard(dto.getTitle(), dto.getContent());
     }
 
     @Override
     @Transactional
     public void deleteBoard(Long id) {
+
+        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
+
+        if (board.getCommentCount() >= 1) {
+            commentRepository.deleteByBoardId(id);
+        }
         boardRepository.deleteById(id);
     }
 
