@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     public List<User> findByNameContaining(String name, Pageable pageable);
 
@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @EntityGraph(attributePaths = {"membership"}, type = FETCH)
     Optional<User> findByEmailAndType(String email, Type type);
+
+    void deleteByEmail(String email);
 
 
 }

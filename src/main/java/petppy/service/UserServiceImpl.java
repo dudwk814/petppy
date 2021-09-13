@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteMember(String id) {
-        userRepository.deleteById(id);
+        userRepository.deleteByEmail(id);
     }
 
     @Override

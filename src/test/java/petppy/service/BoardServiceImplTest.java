@@ -1,4 +1,3 @@
-/*
 package petppy.service;
 
 import org.junit.jupiter.api.Test;
@@ -8,12 +7,12 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.Address;
 import petppy.domain.Board;
-import petppy.domain.member.Member;
+import petppy.domain.user.User;
 import petppy.dto.BoardDto;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.repository.BoardRepository;
-import petppy.repository.MemberRepository;
+import petppy.repository.UserRepository;
 
 import javax.persistence.EntityManager;
 
@@ -24,7 +23,7 @@ import java.util.List;
 class BoardServiceImplTest {
 
     @Autowired
-    MemberRepository memberRepository;
+    UserRepository userRepository;
 
     @Autowired
     BoardService boardService;
@@ -39,23 +38,26 @@ class BoardServiceImplTest {
     @Rollback(value = false)
     public void 게시글_등록() throws Exception {
         //given
-        Member member = addMember();
+        User user = userRepository.findById(5L).get();
 
         em.flush();
         em.clear();
 
         //when
-        BoardDto boardDto = BoardDto.builder()
-                .memberId(member.getId())
-                .title("testTitle")
-                .content("testContent")
-                .build();
+        for (int i = 0; i < 1000; i++) {
+            BoardDto boardDto = BoardDto.builder()
+                    .email(user.getEmail())
+                    .title("testTitle" + i)
+                    .content("testContent" + i)
+                    .build();
 
-        boardService.createBoard(boardDto);
+            boardService.createBoard(boardDto);
+        }
+
 
     }
 
-    @Test
+    /*@Test
     @Rollback(value = false)
     public void 게시글_수정() throws Exception {
         //given
@@ -133,32 +135,8 @@ class BoardServiceImplTest {
 
         //then
         System.out.println("boardDto = " + boardDto);
-    }
-
-    private Member addMember() {
-        //given
-        Member member = Member.builder()
-                .id("aaa")
-                .password("bbb")
-                .name("hhh")
-                .address(Address.builder().city("111").street("222").zipcode("333").build())
-                .build();
-
-        memberRepository.save(member);
-        return member;
-    }
-
-    private Board addBoard(Member member) {
-        Board board = Board
-                .builder()
-                .title("testTitle")
-                .content("testContent")
-                .member(member)
-                .build();
-
-        boardRepository.save(board);
-        return board;
-    }
+    }*/
 
 
-}*/
+
+}

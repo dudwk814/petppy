@@ -54,23 +54,40 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return new PageImpl<>(content, pageable, total);
     }
 
-    private BooleanExpression typeContains(PageRequestDTO requestDTO) {
+    private BooleanBuilder typeContains(PageRequestDTO requestDTO) {
 
-        BooleanExpression booleanExpression = board.id.gt(0L);
+        String type = requestDTO.getType();
 
-        if (requestDTO.getType() == null || requestDTO.getType().trim().length() == 0) {
-            return null;
+        String keyword = requestDTO.getKeyword();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        BooleanExpression expression = board.id.gt(0L);
+
+        booleanBuilder.and(expression);
+
+        if (type == null || type.trim().length() == 0) {    // 검색조건이 없는 경우
+            return booleanBuilder;
         }
 
-        if (requestDTO.getType().contains("t")) {
-            booleanExpression.and(board.title.contains(requestDTO.getKeyword()));
+        // 검색 조건
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+        if (type.contains("t")) {
+            conditionBuilder.or(board.title.contains(keyword));
         }
 
-        if (requestDTO.getType().contains("c")) {
-            booleanExpression.and(board.content.contains(requestDTO.getKeyword()));
+        if (type.contains("c")) {
+            conditionBuilder.or(board.content.contains(keyword));
         }
 
-        return booleanExpression;
+        if (type.contains("w")) {
+            conditionBuilder.or(board.user.email.contains(keyword));
+        }
+
+        booleanBuilder.and(conditionBuilder);
+
+        return booleanBuilder;
     }
 
     private BooleanExpression titleContains(PageRequestDTO requestDTO) {    // 게시글 제목 포함 조건

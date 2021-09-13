@@ -16,7 +16,7 @@ public interface UserService {
 
     public void ModifyUserAddress(UserDTO dto);
 
-    public void deleteMember(String id);
+    public void deleteMember(String email);
 
     public UserDTO findByEmail(String email);
 

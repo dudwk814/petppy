@@ -40,7 +40,7 @@ public class BoardController {
     private String resourcesUriPath;
 
     @GetMapping("")
-    public String boardList(Model model, PageRequestDTO requestDTO) {
+    public String boardList(Model model, @ModelAttribute("requestDTO") PageRequestDTO requestDTO) {
 
         PageResultDTO<BoardDto, Board> result = boardService.searchBoardList(requestDTO);
 
@@ -50,7 +50,7 @@ public class BoardController {
     }
 
     @GetMapping("/read")
-    public String read(Model model, Long id, PageRequestDTO requestDTO) {
+    public String read(Model model, Long id, @ModelAttribute("requestDTO") PageRequestDTO requestDTO) {
 
         BoardDto boardDto = boardService.searchBoard(id);
 
@@ -60,7 +60,6 @@ public class BoardController {
 
         model.addAttribute("recentBoardList", boardService.findRecentBoardList(PageRequest.of(0, 5)));
 
-        model.addAttribute("requestDTO", requestDTO);
         return "/board/read";
     }
 

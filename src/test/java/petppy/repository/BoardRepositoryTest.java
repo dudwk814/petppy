@@ -1,14 +1,14 @@
-/*
 package petppy.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.Address;
 import petppy.domain.Board;
-import petppy.domain.member.Member;
+import petppy.domain.user.User;
 
 import javax.persistence.EntityManager;
 
@@ -27,12 +27,13 @@ class BoardRepositoryTest {
     BoardRepository boardRepository;
 
     @Autowired
-    MemberRepository memberRepository;
+    UserRepository userRepository;
+
 
     @Autowired
     EntityManager em;
 
-    @BeforeEach
+   /* @BeforeEach
     public void insertDummies() {
         Member member = Member.builder()
                 .id("aaa")
@@ -55,35 +56,30 @@ class BoardRepositoryTest {
 
             boardRepository.save(board);
         }
-    }
+    }*/
 
     @Test
+    @Rollback(value = false)
     public void 게시글_등록() throws Exception {
         //given
 
-        Member findMember = memberRepository.findById("aaa").get();
+        User user = userRepository.findById(5L).get();
 
-        Board board = Board
-                .builder()
-                .member(findMember)
-                .content("testContent")
-                .title("testTitle")
-                .build();
+        for (int i = 0; i < 1000; i++) {
+            Board board = Board
+                    .builder()
+                    .user(user)
+                    .content("testContent" + i)
+                    .title("testTitle" + i)
+                    .build();
 
-        boardRepository.save(board);
+            boardRepository.save(board);
+        }
+
 
         em.flush();
         em.clear();
 
-        //when
-
-        Board findBoard = boardRepository.findById(board.getId()).get();
-
-        //then
-        assertThat(findBoard.getContent()).isEqualTo("testContent");
-        assertThat(findBoard.getTitle()).isEqualTo("testTitle");
-
-        System.out.println("findBoard = " + findBoard);
     }
 
     @Test
@@ -120,4 +116,4 @@ class BoardRepositoryTest {
         assertThrows(NoSuchElementException.class, () -> findBoard.get());  // NoSuchElementException 터지면 안됨
         assertThat(result.size()).isEqualTo(99);    // 100개 중 한개를 삭제하면 결과는 99개 나와야함
     }
-}*/
+}
