@@ -1,12 +1,16 @@
 package petppy.service.comment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.Board;
 import petppy.domain.Comment;
 import petppy.domain.DeleteStatus;
+import petppy.dto.BoardDto;
 import petppy.dto.CommentDTO;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.exception.BoardNotFoundException;
 import petppy.exception.CommentNotFoundException;
 import petppy.exception.UserNotFoundException;
@@ -18,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,6 +53,10 @@ public class CommentServiceImpl implements CommentService {
 
         Comment savedComment = commentRepository.save(comment); // comment 생성
 
+        if (commentDTO.getParentId() != null) {
+            commentRepository.findById(commentDTO.getParentId()).orElseThrow(CommentNotFoundException::new).plusChildrenCount();
+        }
+
         board.plusCommentCount();   // 댓글 수 + 1
 
         return entityToDTO(savedComment);
@@ -66,6 +75,21 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    @Override
+    public PageResultDTO<CommentDTO, Comment> findCommentByBoardIdWithPaging(Long boardId, PageRequestDTO requestDTO) {
+
+        Page<Comment> result = commentRepository.findCommentByBoardIdWithPaging(boardId, requestDTO);
+
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+        Function<Comment, CommentDTO> fn = (entity -> entityToDTO(entity));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
+    }
+
     /**
      * Comment 삭제
      */
@@ -77,22 +101,27 @@ public class CommentServiceImpl implements CommentService {
         if(comment.getChildren().size() != 0) { // 자식이 있으면 상태만 변경
             comment.changeDeletedStatus(DeleteStatus.Y);
         } else { // 삭제 가능한 조상 댓글을 구해서 삭제
-            commentRepository.delete(getDeletableAncestorComment(comment));
+            commentRepository.delete(comment);
             Board board = boardRepository.findById(commentDTO.getBoardId()).orElseThrow(BoardNotFoundException::new);
             board.minusCommentCount();
+
+            if (comment.getParent() != null) {
+                comment.getParent().minusChildrenCount();
+            }
         }
+
     }
 
-    /**
+   /* *//**
      * 삭제 가능한 Comment 조회
-     */
+     *//*
     private Comment getDeletableAncestorComment(Comment comment) { // 삭제 가능한 조상 댓글을 구함
         Comment parent = comment.getParent(); // 현재 댓글의 부모를 구함
         if(parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == DeleteStatus.Y)
             // 부모가 있고, 부모의 자식이 1개(지금 삭제하는 댓글)이고, 부모의 삭제 상태가 TRUE인 댓글이라면 재귀
             return getDeletableAncestorComment(parent);
         return comment; // 삭제해야하는 댓글 반환
-    }
+    }*/
 
     /**
      * Comment 단건 조회

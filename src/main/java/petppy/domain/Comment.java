@@ -45,6 +45,8 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
+    private int childrenCount;
+
     @Builder
     public Comment(Board board, User user, String content, Comment parent) {
         this.board = board;
@@ -52,6 +54,7 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
         this.parent = parent;
         this.isDeleted = N;
+        this.childrenCount = 0;
     }
 
     public void changeComment(String content) {
@@ -61,4 +64,13 @@ public class Comment extends BaseTimeEntity {
     public void changeDeletedStatus(DeleteStatus deleteStatus) {
         this.isDeleted = deleteStatus;
     }
+
+    public void plusChildrenCount() {
+        this.childrenCount += 1;
+    }
+
+    public void minusChildrenCount() {
+        this.childrenCount -= 1;
+    }
+
 }

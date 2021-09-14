@@ -2,9 +2,13 @@ package petppy.controller.comment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import petppy.domain.Comment;
 import petppy.dto.CommentDTO;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.service.comment.CommentService;
 
 import java.util.List;
@@ -21,10 +25,13 @@ public class CommentController {
     /**
      * comment list 조회
      */
-    @GetMapping("/{boardId}")
-    public ResponseEntity<List<CommentDTO>> getList(@PathVariable("boardId") Long boardId) {
+    @GetMapping(value = "/{boardId}/{page}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResultDTO<CommentDTO, Comment>> getList(@PathVariable("boardId") Long boardId, @PathVariable("page") int page) {
 
-        List<CommentDTO> result = commentService.findCommentsByBoardId(boardId);
+        PageRequestDTO requestDTO = new PageRequestDTO();
+        requestDTO.setPage(page);
+
+        PageResultDTO<CommentDTO, Comment> result = commentService.findCommentByBoardIdWithPaging(boardId, requestDTO);
 
         return new ResponseEntity<>(result, OK);
     }

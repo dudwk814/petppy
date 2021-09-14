@@ -7,6 +7,8 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.Comment;
 import petppy.dto.CommentDTO;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.repository.BoardRepository;
 import petppy.repository.comment.CommentRepository;
 
@@ -63,6 +65,22 @@ class CommentServiceImplTest {
         // result(34번글)의 child(35, 37번 글)의 수, 2개가 나와야함
         /*assertEquals(2, result.get(0).getChildren().size());*/
 
+    }
+
+    @Test
+    public void 댓글_목록_조회_페이징() throws Exception {
+        //given
+        PageRequestDTO requestDTO = new PageRequestDTO();
+        PageResultDTO<CommentDTO, Comment> result = commentService.findCommentByBoardIdWithPaging(2088L, requestDTO);
+        //when
+
+        List<CommentDTO> content = result.getDtoList();
+
+        for (CommentDTO commentDTO : content) {
+            System.out.println("commentDTO = " + commentDTO);
+        }
+
+        //then
     }
 
     /*@Test

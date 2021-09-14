@@ -56,7 +56,7 @@ public class BoardController {
 
         model.addAttribute("board", boardDto);
 
-        model.addAttribute("commentList", commentService.findCommentsByBoardId(id));
+        /*model.addAttribute("commentList", commentService.findCommentsByBoardId(id));*/
 
         model.addAttribute("recentBoardList", boardService.findRecentBoardList(PageRequest.of(0, 5)));
 

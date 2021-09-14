@@ -23,6 +23,7 @@ public class CommentDTO implements Serializable {
     private Long userId;
     private Long parentId;
     private String email;
+    private int childrenCount;
 
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
@@ -31,7 +32,7 @@ public class CommentDTO implements Serializable {
     private List<CommentDTO> children = new ArrayList<>();
 
 
-    public CommentDTO(Long parentId, Long id, String content, Long boardId, Long userId, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public CommentDTO(Long parentId, Long id, String content, Long boardId, Long userId, String email, int childrenCount, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.content = content;
         this.boardId = boardId;
@@ -40,6 +41,7 @@ public class CommentDTO implements Serializable {
         this.email = email;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.childrenCount = childrenCount;
     }
 
 }

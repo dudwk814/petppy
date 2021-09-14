@@ -2,6 +2,8 @@ package petppy.service.comment;
 
 import petppy.domain.Comment;
 import petppy.dto.CommentDTO;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 
 import java.util.List;
 
@@ -17,6 +19,8 @@ public interface CommentService {
 
     public void modifyComment(CommentDTO dto);
 
+    public PageResultDTO<CommentDTO, Comment> findCommentByBoardIdWithPaging(Long boardId, PageRequestDTO requestDTO);
+
     default CommentDTO entityToDTO(Comment comment) {   // 부모 comment의 id값 유무에 따른 builder 분기
 
         if (comment.getParent() != null) {
@@ -30,6 +34,7 @@ public interface CommentService {
                     .parentId(comment.getParent().getId())
                     .createdDate(comment.getCreatedDate())
                     .lastModifiedDate(comment.getModifiedDate())
+                    .childrenCount(comment.getChildrenCount())
                     .build();
         } else {
             return CommentDTO
@@ -41,6 +46,7 @@ public interface CommentService {
                     .userId(comment.getUser().getId())
                     .createdDate(comment.getCreatedDate())
                     .lastModifiedDate(comment.getModifiedDate())
+                    .childrenCount(comment.getChildrenCount())
                     .build();
         }
     }

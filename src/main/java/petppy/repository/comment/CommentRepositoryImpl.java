@@ -1,10 +1,16 @@
 package petppy.repository.comment;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import petppy.domain.Comment;
 import petppy.domain.QComment;
 import petppy.domain.user.QUser;
+import petppy.dto.PageRequestDTO;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -33,5 +39,27 @@ public class CommentRepositoryImpl implements CustomCommentRepository {
                         comment.parent.id.asc().nullsFirst(),
                         comment.createdDate.asc()
                 ).fetch();
+    }
+
+    @Override
+    public Page<Comment> findCommentByBoardIdWithPaging(Long boardId, PageRequestDTO requestDTO) {
+
+        Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
+        QueryResults<Comment> results = queryFactory
+                .selectFrom(comment)
+                .leftJoin(comment.user, user)
+                .fetchJoin()
+                .where(
+                        comment.board.id.eq(boardId),
+                        comment.parent.isNull())
+                .orderBy(comment.createdDate.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Comment> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
     }
 }
