@@ -37,18 +37,17 @@ class CommentServiceImplTest {
     @Commit
     public void 댓글_등록() throws Exception {
         //given
-        CommentDTO commentDTO = CommentDTO
-                .builder()
-                .userId(1L)
-                .content("test comment")
-                .boardId(3L)
-                .email("kj99658103@gmail.com")
-                .build();
-        //when
-        commentService.createComment(commentDTO);
+        for (int i = 0; i < 100; i++) {
+            CommentDTO commentDTO = CommentDTO
+                    .builder()
+                    .userId(1L)
+                    .content("test comment" + i)
+                    .boardId(2088L)
+                    .email("kj99658103@gmail.com")
+                    .build();
+            commentService.createComment(commentDTO);
+        }
 
-        //then
-        assertEquals(1, boardRepository.getById(3L).getCommentCount()); // 댓글 등록시 Board의 댓글 수가 1증가해야함
     }
 
     @Test

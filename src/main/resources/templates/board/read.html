@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <div class="pt-5 mt-5">
+                        <div class="pt-5 mt-5 comment-div">
                             <h5>댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
                             <div class="comment-form-wrap">
                                 <div class="input-group mb-3">
@@ -187,6 +187,7 @@
                 success : function (result) {
                     var commentList = "";
 
+                    var pagination = "";
 
                     $.each(result.dtoList, function (index, comment) {
 
@@ -194,7 +195,7 @@
                         var name = comment.email.split('@')[0];
                         var date = comment.createdDate.split('T')[0];
 
-                        commentList += '<li class="comment" id="' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                        commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
                             '                                    <div class="vcard bio">\n' +
                             '                                        <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
                             '                                    </div>\n' +
@@ -211,11 +212,11 @@
                             if (userEmail == comment.email) {
                                 commentList +=  '                                                    /&nbsp;\n' +
                                     '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
-                                    '                                                       th:data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                    '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
                                     '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
                                     '                                                    &nbsp;/&nbsp;\n' +
                                     '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
-                                    '                                                       th:data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                    '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
                                     '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
                             }
 
@@ -234,9 +235,58 @@
 
                     $('.comment-list').html(commentList);
 
+                    /* 페이징 */
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                        '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true">Previous</a>\n' +
+                        '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        var active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'">Next</a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.comment-div').append(pagination);
                 }
             });
         }
+
+        /* 댓글 페이지 버튼 클릭 시 페이지 변경 */
+        $(document).on('click', '.page-link', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('page');
+
+            commentList(page);
+        });
+
+        /* 댓글 다음 페이지 클릭 시 end + 1 페이지로 변경 */
+        $(document).on('click', '.page-next', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('end');
+
+            commentList(page);
+        });
+
+
+
 
         /* 답글 조회  */
         $(document).on('click', '.reply', function (e) {
@@ -252,49 +302,58 @@
                 data: parentId,
                 dataType : 'json',
                 success : function (result) {
-                    var childrenList = '<ul class="children">';
 
-                    console.log(result);
+                    if ($('#comment' + parentId).find('.children').length) {
+                        $('#comment' + parentId).find('.children').remove();
+                    } else {
+                        var childrenList = '<ul class="children">';
 
-                    $.each(result, function (index, children) {
+                        console.log(result);
 
-                        var name = children.email.split('@')[0];
-                        var date = children.createdDate.split('T')[0];
+                        $.each(result, function (index, children) {
+
+                            var name = children.email.split('@')[0];
+                            var date = children.createdDate.split('T')[0];
 
 
-                        childrenList += '                                            <li class="comment">\n' +
-                            '                                                <div class="vcard bio">\n' +
-                            '                                                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
-                            '                                                </div>\n' +
-                            '                                                <div class="comment-body" id="comment-body">\n' +
-                                                                                name + '&nbsp;/&nbsp;\n' +
-                            '                                                    <span class="meta">' + date + '</span>\n' +
-                            '                                                    <p class="comment-content">' + children.content + '</p>\n' +
-                            '                                                    <p class="mr-auto">\n' +
-                            '                                                        <a href="#" class="text-black-50 comment-input"\n' +
-                            '                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"\n' +
-                            '                                                           title="답글 작성">답글</a>\n' +
-                            '                                                        <th:block sec:authorize="isAuthenticated()">\n' +
-                            '                                                            <th:block th:if="${children.email == session.user.email}">\n' +
-                            '                                                                /&nbsp;\n' +
-                            '                                                                <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
-                            '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
-                            '                                                                   data-toggle="tooltip" data-placement="top"\n' +
-                            '                                                                   title="댓글 수정">수정</a> &nbsp;/&nbsp;\n' +
-                            '                                                                <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
-                            '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
-                            '                                                                   data-toggle="tooltip" data-placement="top"\n' +
-                            '                                                                   title="댓글 삭제">삭제</a>\n' +
-                            '                                                            </th:block>\n' +
-                            '                                                        </th:block>\n' +
-                            '                                                    </p>\n' +
-                            '                                                </div>\n' +
-                            '                                            </li>\n';
+                            childrenList += '                                            <li class="comment">\n' +
+                                '                                                <div class="vcard bio">\n' +
+                                '                                                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                                '                                                </div>\n' +
+                                '                                                <div class="comment-body" id="comment-body">\n' +
+                                name + '&nbsp;/&nbsp;\n' +
+                                '                                                    <span class="meta">' + date + '</span>\n' +
+                                '                                                    <p class="comment-content">' + children.content + '</p>\n' +
+                                '                                                    <p class="mr-auto">\n' +
+                                '                                                        <a href="#" class="text-black-50 comment-input"\n' +
+                                '                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"\n' +
+                                '                                                           title="답글 작성">답글</a>\n';
+                            [# th:if = "${session.user != null}"]
+                                var userEmail = [[${session.user.email}]];
+                                if (userEmail == children.email) {
+                                    childrenList +='                                                                /&nbsp;\n' +
+                                        '                                                                <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                                        '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                                        '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                                        '                                                                   title="댓글 수정">수정</a> &nbsp;/&nbsp;\n' +
+                                        '                                                                <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                                        '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                                        '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                                        '                                                                   title="댓글 삭제">삭제</a>\n';
+                                }
+
+                            [/]
+                            childrenList +=  '                                                    </p>\n' +
+                                '                                                </div>\n' +
+                                '                                            </li>\n';
+
+                        });
 
                         childrenList += '</ul>';
-                    });
 
-                    $(this).closest('li').append(childrenList);
+                        $('#comment' + parentId).append(childrenList);
+                    }
+
                 }
             })
 
