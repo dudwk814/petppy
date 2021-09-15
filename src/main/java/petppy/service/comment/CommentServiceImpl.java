@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -88,6 +89,14 @@ public class CommentServiceImpl implements CommentService {
         Function<Comment, CommentDTO> fn = (entity -> entityToDTO(entity));
 
         return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
+    }
+
+    @Override
+    public List<CommentDTO> findCommentByParent(Long parentId) {
+
+        List<Comment> result = commentRepository.findCommentByParent(parentId);
+
+        return result.stream().map(comment -> entityToDTO(comment)).collect(Collectors.toList());
     }
 
     /**

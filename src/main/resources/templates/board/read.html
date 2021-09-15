@@ -62,23 +62,8 @@
                         </div>
 
                         <div class="pt-5 mt-5">
-                            <h5 class="mb-5">댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
-                            <ul class="comment-list">
-
-                                </li>
-                            </ul>
-
-                            <div class="row mt-5">
-                                <div class="col text-center">
-                                    <div class="block-27">
-                                        <ul>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END comment-list -->
-
-                            <div class="comment-form-wrap pt-5">
+                            <h5>댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
+                            <div class="comment-form-wrap">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <div class="vcard bio" style="margin-top: 10px;">
@@ -94,6 +79,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <ul class="comment-list pt-5">
+
+                            </ul>
+
+                            <div class="row mt-5">
+                                <div class="col text-center">
+                                    <div class="block-27">
+                                        <ul>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END comment-list -->
                         </div>
 
                     </div> <!-- .col-md-8 -->
@@ -177,6 +175,7 @@
         commentList(1);
 
 
+        /* 댓글 목록 조회 */
         function commentList(page) {
 
             var page = page || 1;
@@ -186,53 +185,123 @@
                 data : {'boardId':boardId, 'page':page},
                 dataType: 'json',
                 success : function (result) {
-                    var comment = "";
-                    $.each(result, function (index, comment) {
-                        comment += '<li th:class="comment" th:data-comment="'+ comment.id + '">\n' +
+                    var commentList = "";
+
+
+                    $.each(result.dtoList, function (index, comment) {
+
+
+                        var name = comment.email.split('@')[0];
+                        var date = comment.createdDate.split('T')[0];
+
+                        commentList += '<li class="comment" id="' + comment.id + '" data-comment="'+ comment.id + '">\n' +
                             '                                    <div class="vcard bio">\n' +
                             '                                        <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
                             '                                    </div>\n' +
-                            '                                    <div class="comment-body" th:id="comment-body' + comment.id + '"\n' +
-                            '                                         th:data-comment="' + comment.id + '">\n' +
-                                                                    /*[[${#strings.substringBefore(comment.email,\'@\')}]]*/ '&nbsp;/&nbsp;\n' +
-                            '                                        <span class="meta"> [[${#temporals.format(comment.createdDate, \'yyyy-MM-dd HH:mm\')}]] </span>\n' +
+                            '                                    <div class="comment-body" id="comment-body' + comment.id + '"\n' +
+                            '                                         data-comment="' + comment.id + '">\n' +
+                                                                    name + '&nbsp;/&nbsp;\n' +
+                            '                                        <span class="meta">' +  date  + '</span>\n' +
                             '                                        <p class="comment-content">' + comment.content + '</p>\n' +
                             '                                        <p class="mr-auto">\n' +
                             '                                            <a href="#" class="text-black-50 comment-input" aria-hidden="true"\n' +
-                            '                                               data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>\n' +
-                            '                                            <th:block sec:authorize="isAuthenticated()">\n' +
-                            '                                                <th:block th:if="${comment.email == session.user.email}">\n' +
-                            '                                                    /&nbsp;\n' +
-                            '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
-                            '                                                       th:data-comment="' + comment.id + '" aria-hidden="true"\n' +
-                            '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
-                            '                                                    &nbsp;/&nbsp;\n' +
-                            '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
-                            '                                                       th:data-comment="' + comment.id + '" aria-hidden="true"\n' +
-                            '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n' +
-                            '                                                </th:block>\n' +
-                            '                                            </th:block>\n' +
-                            '                                        </p>\n' +
+                            '                                               data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>\n';
+                        [# th:if = "${session.user != null}"]
+                            var userEmail = [[${session.user.email}]];
+                            if (userEmail == comment.email) {
+                                commentList +=  '                                                    /&nbsp;\n' +
+                                    '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                                    '                                                       th:data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                    '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
+                                    '                                                    &nbsp;/&nbsp;\n' +
+                                    '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                                    '                                                       th:data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                    '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
+                            }
+
+                            console.log(userEmail);
+                        [/]
+                            commentList += '                                        </p>\n' +
                             '                                        <p class="d-flex">\n' +
-                            '                                            <a href="#" class="reply" th:data-comment="' + comment.id + '">\n' +
+                            '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
                             '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' +
-                            '                                                [[${#lists.size(comment.children)}]]개 보기\n' +
+                                                                            comment.childrenCount + '개 보기\n' +
                             '                                            </a>\n' +
                             '                                        </p>\n' +
                             '                                    </div>';
                     });
 
-                    $('.comment-list').html(comment);
+
+                    $('.comment-list').html(commentList);
+
                 }
-            })
+            });
         }
 
-        $(document).on('click', '.commentDropdownBtn', function (e) {
+        /* 답글 조회  */
+        $(document).on('click', '.reply', function (e) {
             e.preventDefault();
 
-            $(this).dropdown('toggle');
-        })
+            var parentId = $(this).data('comment');
 
+            console.log(parentId);
+
+            $.ajax({
+                url : '/comment/' + parentId,
+                type : 'get',
+                data: parentId,
+                dataType : 'json',
+                success : function (result) {
+                    var childrenList = '<ul class="children">';
+
+                    console.log(result);
+
+                    $.each(result, function (index, children) {
+
+                        var name = children.email.split('@')[0];
+                        var date = children.createdDate.split('T')[0];
+
+
+                        childrenList += '                                            <li class="comment">\n' +
+                            '                                                <div class="vcard bio">\n' +
+                            '                                                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                            '                                                </div>\n' +
+                            '                                                <div class="comment-body" id="comment-body">\n' +
+                                                                                name + '&nbsp;/&nbsp;\n' +
+                            '                                                    <span class="meta">' + date + '</span>\n' +
+                            '                                                    <p class="comment-content">' + children.content + '</p>\n' +
+                            '                                                    <p class="mr-auto">\n' +
+                            '                                                        <a href="#" class="text-black-50 comment-input"\n' +
+                            '                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"\n' +
+                            '                                                           title="답글 작성">답글</a>\n' +
+                            '                                                        <th:block sec:authorize="isAuthenticated()">\n' +
+                            '                                                            <th:block th:if="${children.email == session.user.email}">\n' +
+                            '                                                                /&nbsp;\n' +
+                            '                                                                <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                            '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                            '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                            '                                                                   title="댓글 수정">수정</a> &nbsp;/&nbsp;\n' +
+                            '                                                                <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                            '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                            '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                            '                                                                   title="댓글 삭제">삭제</a>\n' +
+                            '                                                            </th:block>\n' +
+                            '                                                        </th:block>\n' +
+                            '                                                    </p>\n' +
+                            '                                                </div>\n' +
+                            '                                            </li>\n';
+
+                        childrenList += '</ul>';
+                    });
+
+                    $(this).closest('li').append(childrenList);
+                }
+            })
+
+
+        });
+
+        /* 게시글 삭제 */
         $(document).on('click', '.board-remove-btn', function (e) {
             e.preventDefault();
 
@@ -331,17 +400,7 @@
             }
         })
 
-        /* 답글 보기 클릭시 답글 리스트 show & hide  */
-        $(document).on('click', '.reply', function (e) {
-            e.preventDefault();
 
-
-            if ($(this).closest('.comment').find('.children').css("display") === 'none') {
-                $(this).closest('.comment').find('.children').show();
-            } else {
-                $(this).closest('.comment').find('.children').hide();
-            }
-        });
 
         /* 삭제 클릭 시 확인 후 댓글 삭제 */
         $(document).on('click', '.comment-remove-btn', function (e) {

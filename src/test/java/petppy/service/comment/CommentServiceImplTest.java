@@ -83,6 +83,19 @@ class CommentServiceImplTest {
         //then
     }
 
+    @Test
+    public void 하위_댓글_조회() throws Exception {
+        //given
+        List<CommentDTO> commentByParent = commentService.findCommentByParent(51L);
+        //when
+
+        for (CommentDTO commentDTO : commentByParent) {
+            System.out.println("commentDTO = " + commentDTO);
+        }
+
+        //then
+    }
+
     /*@Test
     @Commit
     public void 댓글_삭제() throws Exception {

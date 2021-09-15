@@ -21,6 +21,8 @@ public interface CommentService {
 
     public PageResultDTO<CommentDTO, Comment> findCommentByBoardIdWithPaging(Long boardId, PageRequestDTO requestDTO);
 
+    public List<CommentDTO> findCommentByParent(Long parentId);
+
     default CommentDTO entityToDTO(Comment comment) {   // 부모 comment의 id값 유무에 따른 builder 분기
 
         if (comment.getParent() != null) {

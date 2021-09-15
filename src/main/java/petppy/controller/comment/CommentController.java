@@ -37,6 +37,16 @@ public class CommentController {
     }
 
     /**
+     * 답글 목록 조회
+     */
+    @GetMapping(value = "/{parentId}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<CommentDTO>> getChildrenList(@PathVariable("parentId") Long parentId) {
+        List<CommentDTO> result = commentService.findCommentByParent(parentId);
+
+        return new ResponseEntity<>(result, OK);
+    }
+
+    /**
      * comment 등록
      */
     @PostMapping("/{boardId}")
