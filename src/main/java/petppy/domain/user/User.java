@@ -4,7 +4,6 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import petppy.domain.Address;
 import petppy.domain.BaseTimeEntity;
-import petppy.domain.Membership;
 
 import javax.persistence.*;
 

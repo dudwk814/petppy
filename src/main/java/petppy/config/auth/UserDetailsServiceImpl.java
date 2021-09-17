@@ -1,6 +1,5 @@
 package petppy.config.auth;
 
-import javafx.beans.property.SimpleListProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,9 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import petppy.config.auth.dto.LoginUserDTO;
 import petppy.domain.user.Role;
-import petppy.domain.user.Type;
 import petppy.domain.user.User;
-import petppy.repository.UserRepository;
+import petppy.repository.user.UserRepository;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;

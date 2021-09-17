@@ -2,14 +2,11 @@ package petppy.repository.comment;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import petppy.domain.Comment;
-import petppy.domain.QComment;
-import petppy.domain.user.QUser;
+import petppy.domain.comment.Comment;
 import petppy.dto.PageRequestDTO;
 
 import javax.persistence.EntityManager;

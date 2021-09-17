@@ -10,10 +10,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import petppy.config.auth.dto.OAuthAttributes;
-import petppy.domain.Membership;
+import petppy.domain.user.Membership;
 import petppy.domain.user.User;
-import petppy.dto.UserDTO;
-import petppy.repository.UserRepository;
+import petppy.dto.user.UserDTO;
+import petppy.repository.user.UserRepository;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;

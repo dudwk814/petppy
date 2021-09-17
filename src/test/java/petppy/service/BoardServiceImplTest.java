@@ -5,18 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import petppy.domain.Address;
-import petppy.domain.Board;
 import petppy.domain.user.User;
-import petppy.dto.BoardDto;
-import petppy.dto.PageRequestDTO;
-import petppy.dto.PageResultDTO;
-import petppy.repository.BoardRepository;
-import petppy.repository.UserRepository;
+import petppy.dto.board.BoardDto;
+import petppy.repository.board.BoardRepository;
+import petppy.repository.user.UserRepository;
+import petppy.service.board.BoardService;
 
 import javax.persistence.EntityManager;
-
-import java.util.List;
 
 @SpringBootTest
 @Transactional

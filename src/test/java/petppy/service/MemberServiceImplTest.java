@@ -11,10 +11,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.Address;
 import petppy.domain.member.Member;
-import petppy.domain.Rating;
+import petppy.domain.user.Rating;
 import petppy.dto.MemberDto;
 import petppy.repository.MemberRepository;
-import petppy.repository.MembershipRepository;
+import petppy.repository.user.MembershipRepository;
 
 import javax.persistence.EntityManager;
 

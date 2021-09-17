@@ -1,14 +1,14 @@
 package petppy.repository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import petppy.domain.Address;
-import petppy.domain.Board;
+import petppy.domain.board.Board;
 import petppy.domain.user.User;
+import petppy.repository.board.BoardRepository;
+import petppy.repository.user.UserRepository;
 
 import javax.persistence.EntityManager;
 

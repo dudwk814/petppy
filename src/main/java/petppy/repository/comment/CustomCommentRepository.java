@@ -1,7 +1,7 @@
 package petppy.repository.comment;
 
 import org.springframework.data.domain.Page;
-import petppy.domain.Comment;
+import petppy.domain.comment.Comment;
 import petppy.dto.PageRequestDTO;
 
 import java.util.List;

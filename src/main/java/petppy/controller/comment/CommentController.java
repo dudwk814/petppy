@@ -1,12 +1,11 @@
 package petppy.controller.comment;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import petppy.domain.Comment;
-import petppy.dto.CommentDTO;
+import petppy.domain.comment.Comment;
+import petppy.dto.comment.CommentDTO;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.service.comment.CommentService;

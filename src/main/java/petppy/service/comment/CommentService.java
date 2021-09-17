@@ -1,7 +1,7 @@
 package petppy.service.comment;
 
-import petppy.domain.Comment;
-import petppy.dto.CommentDTO;
+import petppy.domain.comment.Comment;
+import petppy.dto.comment.CommentDTO;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 

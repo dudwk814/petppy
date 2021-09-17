@@ -4,13 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import petppy.domain.Board;
-import petppy.domain.Comment;
+import petppy.domain.board.Board;
+import petppy.domain.comment.Comment;
 import petppy.domain.user.User;
-import petppy.repository.BoardRepository;
-import petppy.repository.UserRepository;
+import petppy.repository.board.BoardRepository;
+import petppy.repository.user.UserRepository;
 
 import java.util.List;
 

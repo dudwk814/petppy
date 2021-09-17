@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.Address;
-import petppy.domain.Board;
+import petppy.domain.board.Board;
 import petppy.domain.member.Member;
 import petppy.domain.Reply;
 

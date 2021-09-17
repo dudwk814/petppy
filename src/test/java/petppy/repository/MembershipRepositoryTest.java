@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static petppy.domain.Rating.BUSINESS;
+import static petppy.domain.user.Rating.BUSINESS;
 
 @SpringBootTest
 @Transactional
