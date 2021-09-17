@@ -91,6 +91,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="pagination-div">
+
+                            </div>
                             <!-- END comment-list -->
                         </div>
 
@@ -220,7 +223,6 @@
                                     '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
                             }
 
-                            console.log(userEmail);
                         [/]
                             commentList += '                                        </p>\n' +
                             '                                        <p class="d-flex">\n' +
@@ -241,7 +243,7 @@
 
                     if (result.prev) {
                         pagination +='                            <li className="page-item disabled">\n' +
-                        '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true">Previous</a>\n' +
+                        '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
                         '                            </li>\n';
                     }
 
@@ -255,14 +257,14 @@
 
                     if (result.next) {
                         pagination += '                            <li class="page-item">\n' +
-                            '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'">Next</a>\n' +
+                            '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
                             '                            </li>\n';
                     }
 
                     pagination +='                        </ul>\n' +
                         '                    </nav>';
 
-                    $('.comment-div').append(pagination);
+                    $('.pagination-div').html(pagination);
                 }
             });
         }
@@ -275,6 +277,16 @@
 
             commentList(page);
         });
+
+        /* 댓글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-prev', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('preve');
+
+            commentList(page);
+        });
+
 
         /* 댓글 다음 페이지 클릭 시 end + 1 페이지로 변경 */
         $(document).on('click', '.page-next', function (e) {
