@@ -12,7 +12,7 @@ import petppy.dto.PageRequestDTO;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static petppy.domain.QComment.comment;
+import static petppy.domain.comment.QComment.comment;
 import static petppy.domain.user.QUser.user;
 
 

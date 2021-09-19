@@ -14,7 +14,7 @@ import petppy.dto.PageRequestDTO;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static petppy.domain.QBoard.board;
+import static petppy.domain.board.QBoard.board;
 import static petppy.domain.user.QUser.user;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom {
@@ -104,7 +104,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return board.content.contains(requestDTO.getKeyword());
     }
 
-   /* private BooleanExpression memberIdContains(PageRequestDTO requestDTO) {    // 게시글 내용 포함 조건
+/* private BooleanExpression memberIdContains(PageRequestDTO requestDTO) {    // 게시글 내용 포함 조건
 
         if (!requestDTO.getType().contains("w")) {
             return null;
@@ -112,5 +112,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
         return board.member.id.contains(requestDTO.getKeyword());
     }*/
+
 
 }

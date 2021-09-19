@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.board.Board;
-import petppy.domain.QBoard;
+import petppy.domain.board.QBoard;
 import petppy.dto.board.BoardDto;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
