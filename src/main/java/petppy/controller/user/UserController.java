@@ -24,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * 회원 정보 페이지
+     * 회원 설정 페이지
      */
     @PostMapping("")
     public String userPage(
@@ -49,6 +49,15 @@ public class UserController {
         model.addAttribute("userDTO", result);
 
         return "/user/userPage";
+    }
+
+    /**
+     * 회원 DashBoard
+     */
+    @GetMapping("/dashboard")
+    public String dashboard() {
+
+        return "/user/dashboard";
     }
 
     /**
