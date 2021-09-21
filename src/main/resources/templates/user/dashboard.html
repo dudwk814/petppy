@@ -15,43 +15,54 @@
             </div>
         </section>
 
-        <section class="ftco-section bg-light">
+        <section class="ftco-section">
             <div class="container">
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">프로필</h5>
-                                <div class="profile">
-                                    <div class="row profile-header">
-                                        <div class="col-md-2 pr-0">
-                                            <div class="vcard bio">
-                                                <img src="/petppy/images/simbolLogo.PNG">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 pl-0">
-                                            <div class="profile-name">
-                                                <h3 th:text="${session.user.name}"></h3>
-                                            </div>
-                                        </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="list-group" id="list-tab" role="tablist">
+                            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">내 프로필</a>
+                            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">내 멤버십</a>
+                            <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">작성글 관리</a>
+                            <a class="list-group-item list-group-item-action" id="list-comment-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">댓글 관리</a>
+                            <a class="list-group-item list-group-item-action" id="list-review-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">리뷰 관리</a>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                                <div class="card text-center">
+                                    <div class="card-header bg-info text-white">
+                                        Profile
                                     </div>
-                                    <div class="row profile-body">
-                                        <div class="col-md-12">
-
-                                        </div>
-                                    </div>
-                                    <div class="row profile-footer">
-                                        <a href="#" class="float-right">프로필 수정하기</a>
+                                    <div class="card-body">
+                                        <h5 class="card-title">[[${session.user.name}]]</h5>
+                                        <p class="card-text" th:text="${session.user.email}"></p>
+                                        <p class="card-text">[[${#temporals.format(session.user.joinedDate, 'yyyy-MM-dd')}]]일에 가입</p>
+                                        <a href="#" class="btn btn-primary">회원 정보 설정하기</a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">내 정보</h5>
+                            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                                <div class="card text-center">
+                                    <div class="card-header bg-info text-white">
+                                        Membership
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">[[${session.user.name}]]님의 멤버쉽은 '[[${session.user.membershipDTO.rating}]]'입니다.</h5>
+                                        <p class="card-text" th:if="${session.user.membershipDTO.rating.toString() != 'NONE'}">
+                                            멤버십 기간 : [[${#temporals.format(session.user.membershipDTO.createdDate, 'yyyy-MM-dd')}]] ~
+                                            [[${#temporals.format(session.user.membershipDTO.lastDate, 'yyyy-MM-dd')}]]
+                                        </p>
+                                        <p class="card-text" th:if="${session.user.membershipDTO.rating.toString() == 'NONE'}">
+                                        <h5>멤버쉽에 가입하고 Petppy에 다양한 <a th:href="@{/membership}">혜택</a>을 누리세요!</h5>
+                                        </p>
+                                        <a href="#" class="btn btn-primary" th:if="${session.user.membershipDTO.rating.toString() == 'NONE'}">멤버십 가입하기</a>
+                                        <a href="#" class="btn btn-primary" th:unless="${session.user.membershipDTO.rating.toString() == 'NONE'}">멤버십 취소하기</a>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">fff</div>
+                            <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">ttt</div>
                         </div>
                     </div>
                 </div>

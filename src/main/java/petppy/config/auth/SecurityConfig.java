@@ -35,7 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/")
                         .permitAll()
-                    .antMatchers("/user/modifyForm", "/board/edit")
+                    .antMatchers(
+                            "/user/",
+                            "/user/modifyForm",
+                            "/user/dashboard",
+                            "/board/edit")
                         .hasRole("MEMBER")
                 .and()
                 .formLogin()
