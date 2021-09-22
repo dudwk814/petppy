@@ -48,7 +48,7 @@
                             </th:block>
                         </p>
                         <h2 class="mb-3" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목"
-                            th:text="${board.title}"></h2>
+                            th:utext="${board.title}"></h2>
                         <hr>
                         <div th:utext="${board.content}">Content</div>
 
@@ -134,7 +134,7 @@
                             <h3>최근 게시글</h3>
                             <div class="block-21 mb-4 d-flex" th:each="board : ${recentBoardList}">
                                 <div class="text">
-                                    <h3 class="heading"><a th:href="@{/board/read(id=${board.boardId})}">[[${board.title}]]</a>
+                                    <h3 class="heading"><a th:href="@{/board/read(id=${board.boardId})}" th:utext="${board.title}"></a>
                                     </h3>
                                     <div class="meta">
                                         <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top"

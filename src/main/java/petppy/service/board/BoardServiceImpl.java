@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.board.Board;
 import petppy.domain.board.QBoard;
+import petppy.domain.comment.Comment;
 import petppy.dto.board.BoardDto;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.dto.comment.CommentDTO;
 import petppy.exception.BoardNotFoundException;
 import petppy.repository.board.BoardRepository;
 import petppy.repository.comment.CommentRepository;
@@ -57,12 +59,6 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public PageResultDTO<BoardDto, Board> searchBoardList(PageRequestDTO requestDTO) {
 
-        /*Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
-
-        BooleanBuilder booleanBuilder = getSearch(requestDTO);
-
-        Page<Board> result = boardRepository.findAll(booleanBuilder, pageable);*/
-
         Page<Board> result = boardRepository.searchBoardList(requestDTO);
 
         // 페이징 변수들
@@ -96,6 +92,9 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
+    /**
+     * 최근 5개 게시글 조회
+     */
     @Override
     public List<BoardDto> findRecentBoardList(Pageable pageable) {
         List<Board> result = boardRepository.findRecentBoardList(pageable);
@@ -104,6 +103,24 @@ public class BoardServiceImpl implements BoardService {
                 .stream()
                 .map(board -> entityToDto(board))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 유저 이메일로 게시글 조회
+     */
+    @Override
+    public PageResultDTO<BoardDto, Board> findByUserEmail(PageRequestDTO requestDTO, String email) {
+
+        Page<Board> result = boardRepository.findUserEmail(requestDTO, email);
+
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+        Function<Board, BoardDto> fn = (entity -> entityToDto(entity));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
     }
 
     /**

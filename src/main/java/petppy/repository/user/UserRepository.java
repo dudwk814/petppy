@@ -16,6 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     public List<User> findByNameContaining(String name, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"membership"}, type = FETCH)
     Optional<User> findByEmail(String email);
 
     @EntityGraph(attributePaths = {"membership"}, type = FETCH)

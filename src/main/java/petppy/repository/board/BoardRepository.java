@@ -20,4 +20,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPre
     @EntityGraph(attributePaths = {"user"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("select b from Board b order by b.id desc")
     List<Board> findRecentBoardList(Pageable pageable);
+
 }

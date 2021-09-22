@@ -14,6 +14,7 @@ import petppy.domain.user.Type;
 import petppy.domain.user.User;
 import petppy.dto.user.MembershipDTO;
 import petppy.dto.user.UserDTO;
+import petppy.exception.UserNotFoundException;
 import petppy.repository.user.UserRepository;
 import petppy.repository.user.MembershipRepository;
 
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
                 .builder()
                 .id(findMembership.getId())
                 .createdDate(findMembership.getCreatedDate())
+                .modifiedDate(findMembership.getModifiedDate())
                 .rating(findMembership.getRating()).build();
     }
 
@@ -116,7 +118,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findByEmail(String email) {
 
-        User findUser = userRepository.findByEmail(email).get();
+        User findUser = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
         return entityToDto(findUser);
 

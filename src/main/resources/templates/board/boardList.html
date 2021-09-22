@@ -52,7 +52,7 @@
 
                             <a th:href="@{/board/read(id=${dto.boardId},page=${boardList.page},size=${boardList.size}, type=${requestDTO.type}, keyword=${requestDTO.keyword})}" class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목">[[${dto.title}]]</b></h5>
+                                    <h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목" th:utext="${dto.title}"></b></h5>
                                     <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">[[${#temporals.format(dto.createdDate, 'yyyy-MM-dd')}]]</small>
                                 </div>
                                 <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">[[${dto.email}]] &nbsp;&nbsp;</small><span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수"

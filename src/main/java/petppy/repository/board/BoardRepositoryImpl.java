@@ -25,6 +25,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 게시글 목록 검색 및 조회
+     */
     @Override
     public Page<Board> searchBoardList(PageRequestDTO requestDTO) {
 
@@ -38,6 +41,34 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .distinct()
                 .where(
                         typeContains(requestDTO)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(board.id.desc())
+                .fetchResults();
+
+        List<Board> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    /**
+     * 유저 이메일로 게시글 목록 조회
+     */
+    @Override
+    public Page<Board> findUserEmail(PageRequestDTO requestDTO, String email) {
+
+        Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
+
+        QueryResults<Board> results = queryFactory
+                .select(board)
+                .from(board)
+                .leftJoin(board.user, user)
+                .fetchJoin()
+                .distinct()
+                .where(
+                        board.user.email.eq(email)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

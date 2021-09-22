@@ -31,19 +31,21 @@
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
                                 <div class="card text-center">
-                                    <div class="card-header bg-info text-white">
+                                   <!-- <div class="card-header bg-info text-white">
                                         Profile
-                                    </div>
+                                    </div>-->
                                     <div class="card-body">
                                         <h5 class="card-title">[[${session.user.name}]]</h5>
                                         <p class="card-text" th:text="${session.user.email}"></p>
+                                        <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text">멤버십 없음</p>
+                                        <p th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text" th:text="${userDTO.membershipDTO.rating}"></p>
                                         <p class="card-text">[[${#temporals.format(session.user.joinedDate, 'yyyy-MM-dd')}]]일에 가입</p>
                                         <a href="#" class="btn btn-primary">회원 정보 설정하기</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-                                <div class="card text-center">
+                                <!--<div class="card text-center">
                                     <div class="card-header bg-info text-white">
                                         Membership
                                     </div>
@@ -56,12 +58,86 @@
                                         <p class="card-text" th:if="${session.user.membershipDTO.rating.toString() == 'NONE'}">
                                         <h5>멤버쉽에 가입하고 Petppy에 다양한 <a th:href="@{/membership}">혜택</a>을 누리세요!</h5>
                                         </p>
-                                        <a href="#" class="btn btn-primary" th:if="${session.user.membershipDTO.rating.toString() == 'NONE'}">멤버십 가입하기</a>
+                                        <a th:href="@{/membership}" class="btn btn-primary" th:if="${session.user.membershipDTO.rating.toString() == 'NONE'}">멤버십 가입하기</a>
                                         <a href="#" class="btn btn-primary" th:unless="${session.user.membershipDTO.rating.toString() == 'NONE'}">멤버십 취소하기</a>
                                     </div>
+                                </div>-->
+                                <div class="jumbotron bg-transparent">
+                                    <h3>멤버십 상세정보</h3>
+                                    <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}">현재 이용중인 멤버십이 없습니다. <a th:href="@{/membership}">가입하기</a></p>
+                                    <div th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}">
+                                        <p>[[${userDTO.name}]]님의 멤버십은 <span class="text-success">[[${userDTO.membershipDTO.rating}]]</span>입니다.</p>
+                                        <p>
+                                            멤버십 기간: [[${#temporals.format(userDTO.membershipDTO.modifiedDate, 'yyyy.MM.dd')}]] ~  [[${#temporals.format(userDTO.membershipDTO.lastDate, 'yyyy.MM.dd')}]]
+                                        </p>
+                                        <p>아래 표에서 각 멤버십에 혜택을 확인할 수 있습니다.</p>
+                                    </div>
+
+                                    <hr class="my-4">
+                                    <div class="row">
+                                        <div class="col-md-4 ftco-animate">
+                                            <div class="block-7">
+                                                <div class="text-center p-4">
+                                                    <span class="excerpt d-block">Personal</span>
+                                                    <span class="price"><sup>$</sup> <span class="number">49</span> <sub>/mos</sub></span>
+                                                    <ul class="pricing-text mb-5">
+                                                        <li><span class="fa fa-check mr-2"></span>3 Dog Walk</li>
+                                                        <li><span class="fa fa-check mr-2"></span>1 Vet Visit</li>
+                                                        <li><span class="fa fa-check mr-2"></span>1 Pet Spa</li>
+                                                        <li><span class="fa fa-check mr-2"></span>Free Supports</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ftco-animate">
+                                            <div class="block-7">
+                                                <div class="text-center p-4">
+                                                    <span class="excerpt d-block">Business</span>
+                                                    <span class="price"><sup>$</sup> <span class="number">79</span> <sub>/mos</sub></span>
+                                                    <ul class="pricing-text mb-5">
+                                                        <li><span class="fa fa-check mr-2"></span>5 Dog Walk</li>
+                                                        <li><span class="fa fa-check mr-2"></span>3 Vet Visit</li>
+                                                        <li><span class="fa fa-check mr-2"></span>3 Pet Spa</li>
+                                                        <li><span class="fa fa-check mr-2"></span>Free Supports</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ftco-animate">
+                                            <div class="block-7">
+                                                <div class="text-center p-4">
+                                                    <span class="excerpt d-block">Ultimate</span>
+                                                    <span class="price"><sup>$</sup> <span class="number">109</span> <sub>/mos</sub></span>
+                                                    <ul class="pricing-text mb-5">
+                                                        <li><span class="fa fa-check mr-2"></span>15 Dog Walk</li>
+                                                        <li><span class="fa fa-check mr-2"></span>5 Vet Visit</li>
+                                                        <li><span class="fa fa-check mr-2"></span>5 Pet Spa</li>
+                                                        <li><span class="fa fa-check mr-2"></span>Free Supports</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a class="btn btn-outline-primary btn-lg" href="#" role="button">변경/해지</a>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">fff</div>
+                            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                                <ul class="list-group list-group-flush" id="board-group">
+
+                                </ul>
+
+                                <div class="row mt-5">
+                                    <div class="col text-center">
+                                        <div class="block-27">
+                                            <ul>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pagination-div">
+
+                                </div>
+                            </div>
                             <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">ttt</div>
                         </div>
                     </div>
@@ -70,4 +146,105 @@
         </section>
     </th:block>
 </th:block>
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+
+       var email = [[${session.user.email}]];
+
+       boardList(1);
+
+       function boardList(page) {
+
+           var page = page || 1;
+
+           $.ajax({
+               url : '/board/' + email + '/' + page,
+               data : {'email':email, 'page':page},
+               dataType: 'json',
+               success : function (result) {
+                   var boardList = "";
+                   var pagination = "";
+
+                   console.log(result);
+
+                   $.each(result.dtoList, function (index, board) {
+
+                       var name = board.email.split('@')[0];
+                       var date = board.createdDate.split('T')[0];
+
+                       boardList += '<a href="/board/read?id=' + board.boardId + '" class="list-group-item list-group-item-action">' +
+                           '<div class="d-flex w-100 justify-content-between">' +
+                           '<h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목">' + board.title  +'</b></h5>' +
+                           '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">' + date + '</small></div>' +
+                           '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">' + name + '</small>&nbsp;' +
+                           '<span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수" style="color: #00bd56;"> ' + board.commentCount + '</span>' +
+                           '<small class="float-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="조회수">' + board.hit + '</small></a>';
+                   });
+
+                   $('#board-group').html(boardList);
+
+                   /* 페이징 */
+                   pagination += '<nav aria-label="Page navigation example">\n' +
+                       '                        <ul class="pagination justify-content-center">\n';
+
+                   if (result.prev) {
+                       pagination +='                            <li className="page-item disabled">\n' +
+                           '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                           '                            </li>\n';
+                   }
+
+
+                   $.each(result.pageList, function (index, page) {
+
+                       var active = result.page == page ? 'active' : '';
+                       pagination += '<li class="page-item ' + active + '">';
+                       pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
+                   })
+
+                   if (result.next) {
+                       pagination += '                            <li class="page-item">\n' +
+                           '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                           '                            </li>\n';
+                   }
+
+                   pagination +='                        </ul>\n' +
+                       '                    </nav>';
+
+                   $('.pagination-div').html(pagination);
+
+               }
+           });
+
+           /* 게시글 페이지 버튼 클릭 시 페이지 변경 */
+           $(document).on('click', '.page-link', function (e) {
+               e.preventDefault();
+
+               var page = $(this).data('page');
+
+               boardList(page);
+           });
+
+           /* 게시글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+           $(document).on('click', '.page-prev', function (e) {
+               e.preventDefault();
+
+               var page = $(this).data('preve');
+
+               boardList(page);
+           });
+
+
+           /* 게시글 다음 페이지 클릭 시 end + 1 페이지로 변경 */
+           $(document).on('click', '.page-next', function (e) {
+               e.preventDefault();
+
+               var page = $(this).data('end');
+
+               boardList(page);
+           });
+
+
+       }
+    });
+</script>
 </html>

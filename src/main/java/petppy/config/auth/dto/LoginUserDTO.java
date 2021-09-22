@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import petppy.domain.Address;
+import petppy.domain.user.Role;
 import petppy.domain.user.Type;
 
 import java.util.Collection;
@@ -20,12 +21,14 @@ public class LoginUserDTO extends User {
     private Address address;
     private Type type;
     private Long id;
+    private Role role;
 
-    public LoginUserDTO(String username, String password, Long id, Type type, Collection<? extends GrantedAuthority> authorities) {
+    public LoginUserDTO(String username, String password, Long id, Type type, Role role, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.email = username;
         this.type = type;
         this.id = id;
+        this.role = role;
     }
 
 }

@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/")
                         .permitAll()
                     .antMatchers(
-                            "/user/",
+                            "/user",
                             "/user/modifyForm",
                             "/user/dashboard",
                             "/board/edit")

@@ -23,6 +23,8 @@ public interface BoardService {
 
     public List<BoardDto> findRecentBoardList(Pageable pageable);
 
+    public PageResultDTO<BoardDto, Board> findByUserEmail(PageRequestDTO requestDTO, String email);
+
     default BoardDto entityToDto(Board board) {
         return BoardDto
                 .builder()

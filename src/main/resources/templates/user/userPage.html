@@ -30,7 +30,7 @@
                                 <span th:align="center">[[${userDTO.role}]]</span>
                                 <li class="list-group-item"><i class="fa fa-id-card" aria-hidden="true"></i>&nbsp;&nbsp;멤버십 : [[${userDTO.membershipDTO.rating}]]</li>
                                 <li class="list-group-item"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>&nbsp;&nbsp;멤버십 기간 :
-                                    <span th:text="${#strings.equals(userDTO.membershipDTO.rating, 'NONE')}? 'NONE' : ${#temporals.format(userDTO.membershipDTO.createdDate, 'yyyy.MM.dd')} + '~' + ${#temporals.format(userDTO.membershipDTO.lastDate, 'yyyy.MM.dd')}"></span>
+                                    <span th:text="${#strings.equals(userDTO.membershipDTO.rating, 'NONE')}? 'NONE' : ${#temporals.format(userDTO.membershipDTO.modifiedDate, 'yyyy.MM.dd')} + '~' + ${#temporals.format(userDTO.membershipDTO.lastDate, 'yyyy.MM.dd')}"></span>
                                 </li>
                             </ul>
                             <div class="card-body">

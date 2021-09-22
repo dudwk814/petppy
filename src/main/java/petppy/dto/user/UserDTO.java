@@ -40,6 +40,7 @@ public class UserDTO implements Serializable {
         this.type = user.getType();
         this.membershipDTO = MembershipDTO.builder()
                 .createdDate(user.getMembership().getCreatedDate())
+                .modifiedDate(user.getMembership().getModifiedDate())
                 .rating(user.getMembership().getRating())
                 .id(user.getMembership().getId()).build();
 

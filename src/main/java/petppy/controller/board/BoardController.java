@@ -4,6 +4,9 @@ import com.nhncorp.lucy.security.xss.XssPreventer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -81,7 +85,6 @@ public class BoardController {
         boardDto.setUserId(userDTO.getId());
 
         boardDto.setContent(XssPreventer.unescape(boardDto.getContent()));
-        boardDto.setTitle(XssPreventer.unescape(boardDto.getTitle()));
 
         System.out.println("boardDto = " + boardDto);
 
@@ -189,6 +192,21 @@ public class BoardController {
         }
 
         return;
+    }
+
+    /**
+     * 유저 이메일로 조회
+     */
+    @ResponseBody
+    @GetMapping(value = "/{email}/{page}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResultDTO<BoardDto, Board>> findUserEmail(@PathVariable("email") String email, @PathVariable("page") int page) {
+        PageRequestDTO requestDTO = new PageRequestDTO();
+        requestDTO.setPage(page);
+
+        PageResultDTO<BoardDto, Board> result = boardService.findByUserEmail(requestDTO, email);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
     }
 
 }

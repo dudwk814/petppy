@@ -2,6 +2,7 @@ package petppy.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import petppy.domain.user.Type;
 import petppy.dto.user.UserDTO;
+import petppy.service.board.BoardService;
+import petppy.service.comment.CommentService;
 import petppy.service.user.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -22,31 +25,20 @@ import static petppy.domain.user.Type.*;
 public class UserController {
 
     private final UserService userService;
+    private final BoardService boardService;
+    private final CommentService commentService;
 
     /**
      * 회원 설정 페이지
      */
-    @PostMapping("")
-    public String userPage(
-            @Param("email") String email,
-            @Param("type") String type,
-            @Param("userId") Long id,
-            Model model) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', ROLE_MEMBER)")
+    @GetMapping("")
+    public String userPage(HttpSession session, Model model) {
 
-        Type userType = NORMAL;
+        UserDTO user = (UserDTO)session.getAttribute("user");
 
-        /* 회원 가입 타입(소셜 회원 or 일반 회원에 따라  */
-        if (type.equals("GOOGLE")) {
-            userType = GOOGLE;
-        } else if (type.equals("NAVER")) {
-            userType = NAVER;
-        } else if (type.equals("KAKAO")) {
-            userType = KAKAO;
-        }
 
-        UserDTO result = userService.findByEmailAndType(email, userType);
-
-        model.addAttribute("userDTO", result);
+        model.addAttribute("userDTO", userService.findByEmail(user.getEmail()));
 
         return "/user/userPage";
     }
@@ -55,7 +47,12 @@ public class UserController {
      * 회원 DashBoard
      */
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(HttpSession session,  Model model) {
+
+        UserDTO user = (UserDTO)session.getAttribute("user");
+
+
+        model.addAttribute("userDTO", userService.findByEmail(user.getEmail()));
 
         return "/user/dashboard";
     }

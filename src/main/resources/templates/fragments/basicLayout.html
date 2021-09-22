@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block th:fragment="setContent(content)">
     <head>
         <title>Petppy</title>
@@ -70,7 +70,7 @@
                     <!--<li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>-->
                     <li th:if="${session.user == null}" class="nav-item"><a class="nav-link" data-toggle="modal"
                                                                             data-target="#loginModal">Login</a></li>
-                    <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <li th:unless="${session.user == null}" class="nav-item dropdown">
                         <a class="nav-link" href="#" data-toggle="dropdown" data-display="static"
                            aria-expanded="false" aria-haspopup="true">
                             <img th:src="@{'/petppy/images/simbolLogo.PNG'}">
@@ -84,7 +84,7 @@
 
                             <a href="#" class="dropdown-item"><h6><i class="fa fa-truck fa-lg"
                                                                      aria-hidden="true"></i>&nbsp;&nbsp;주문조회</h6></a>-->
-                            <form action="/user" method="post">
+                            <!--<form action="/user" method="post">
                                 <input type="hidden" name="email" th:value="${session.user.email}">
                                 <input type="hidden" name="type" th:value="${session.user.type}">
                                 <input type="hidden" name="id" th:value="${session.user.id}">
@@ -92,7 +92,11 @@
                                         class="fa fa-cog fa-lg"
                                         aria-hidden="true"></i>&nbsp;&nbsp;회원설정
                                 </h6></button>
-                            </form>
+                            </form>-->
+
+                            <a class="dropdown-item" th:href="@{/user}"><h6><i class="fa fa-cog fa-lg"
+                                                                     aria-hidden="true"></i>&nbsp;&nbsp;회원설정</h6></a>
+
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item logout-btn" href="#"><h6><i class="fa fa-share-square-o fa-lg"
                                                                                 aria-hidden="true"></i>&nbsp;&nbsp;로그아웃

@@ -7,4 +7,6 @@ import petppy.dto.PageRequestDTO;
 public interface BoardRepositoryCustom {
 
     Page<Board> searchBoardList(PageRequestDTO requestDTO);
+
+    Page<Board> findUserEmail(PageRequestDTO requestDTO, String email);
 }

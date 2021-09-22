@@ -14,15 +14,17 @@ public class MembershipDTO {
     private String name;
     private Rating rating;
     private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private LocalDateTime lastDate;
 
     @Builder
-    public MembershipDTO(Long id, String email, Rating rating, String name, LocalDateTime createdDate) {
+    public MembershipDTO(Long id, String email, Rating rating, String name, LocalDateTime modifiedDate, LocalDateTime createdDate) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.rating = rating;
         this.createdDate = createdDate;
-        this.lastDate = createdDate.plusMonths(1L);
+        this.modifiedDate = modifiedDate;
+        this.lastDate = modifiedDate.plusMonths(1L);
     }
 }
