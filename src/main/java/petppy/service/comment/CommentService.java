@@ -39,6 +39,7 @@ public interface CommentService {
                     .createdDate(comment.getCreatedDate())
                     .lastModifiedDate(comment.getModifiedDate())
                     .childrenCount(comment.getChildrenCount())
+                    .deleteStatus(comment.getIsDeleted())
                     .build();
         } else {
             return CommentDTO
@@ -51,6 +52,7 @@ public interface CommentService {
                     .createdDate(comment.getCreatedDate())
                     .lastModifiedDate(comment.getModifiedDate())
                     .childrenCount(comment.getChildrenCount())
+                    .deleteStatus(comment.getIsDeleted())
                     .build();
         }
     }

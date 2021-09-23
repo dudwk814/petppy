@@ -169,6 +169,7 @@
 
        boardList(1);
 
+       /* 유저 이메일로 게시글 조회 */
        function boardList(page) {
 
            var page = page || 1;
@@ -192,7 +193,7 @@
                            '<div class="d-flex w-100 justify-content-between">' +
                            '<h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목">' + board.title  +'</b></h5>' +
                            '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">' + date + '</small></div>' +
-                           '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">' + name + '</small>&nbsp;' +
+                           '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">' + maskingFunc.email(board.email) + '</small>&nbsp;' +
                            '<span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수" style="color: #00bd56;"> ' + board.commentCount + '</span>' +
                            '<small class="float-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="조회수">' + board.hit + '</small></a>';
                    });
@@ -297,28 +298,47 @@
                        var name = comment.email.split('@')[0];
                        var date = comment.createdDate.split('T')[0];
 
-                       commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
-                           '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + name + '&nbsp;/&nbsp;\n' +
-                           '                                        <span class="meta">' +  date  + '</span>\n' +
-                           '                                        <p class="comment-content">' + comment.content + '</p>\n' +
-                           '                                        <p class="mr-auto">\n' +
-                           '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
-                           '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
-                       commentList +=  '                                                    /&nbsp;\n' +
-                           '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
-                           '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
-                           '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
-                           '                                                    &nbsp;/&nbsp;\n' +
-                           '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
-                           '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
-                           '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
-                       commentList += '                                        </p>\n' +
-                           '                                        <p class="d-flex">\n' +
-                           '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
-                           '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
-                           '                                            </a>\n' +
-                           '                                        </p>\n' +
-                           '                                    </div>';
+                       if (comment.deleteStatus === 'Y') {  // 댓글이 삭제된 경우
+                           commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                               '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                               '                                        <span class="meta">' +  date  + '</span>\n' +
+                               '                                        <p class="comment-content">삭제된 댓글입니다.</p>\n' +
+                               '                                        <p class="mr-auto">\n' +
+                               '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
+                               '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
+                           commentList += '                                        </p>\n' +
+                               '                                        <p class="d-flex">\n' +
+                               '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                               '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
+                               '                                            </a>\n' +
+                               '                                        </p>\n' +
+                               '                                    </div>';
+                       } else {
+                           commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                               '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                               '                                        <span class="meta">' +  date  + '</span>\n' +
+                               '                                        <p class="comment-content">' + comment.content + '</p>\n' +
+                               '                                        <p class="mr-auto">\n' +
+                               '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
+                               '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
+                           commentList +=  '                                                    /&nbsp;\n' +
+                               '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                               '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                               '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
+                               '                                                    &nbsp;/&nbsp;\n' +
+                               '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                               '                                                       data-comment="' + comment.id + '" aria-hidden="true" data-board="' + comment.boardId + '" \n' +
+                               '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
+                           commentList += '                                        </p>\n' +
+                               '                                        <p class="d-flex">\n' +
+                               '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                               '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
+                               '                                            </a>\n' +
+                               '                                        </p>\n' +
+                               '                                    </div>';
+                       }
+
+
                    });
 
                    $('.comment-list').html(commentList);
@@ -351,6 +371,34 @@
                        '                    </nav>';
 
                    $('.comment-pagination-div').html(pagination);
+               }
+           });
+
+           /* 답글 삭제 클릭 시 확인 후 댓글 삭제 */
+           $(document).on('click', '.comment-remove-btn', function (e) {
+               e.preventDefault();
+
+               var commentId = $(this).data("comment");
+               var boardId = $(this).data("board");
+
+               var commentDTO = {
+                   boardId: boardId,
+                   id: commentId
+               }
+
+               if (confirm("댓글을 삭제하시겠습니까?") === true) {
+                   $.ajax({
+                       url: '/comment/' + commentId,
+                       type: 'delete',
+                       data: JSON.stringify(commentDTO),
+                       contentType: 'application/json; charset=utf-8',
+                       dataType: 'text',
+                       success: function (result) {
+                           console.log(result);
+
+                           self.location.reload();
+                       }
+                   });
                }
            });
 
@@ -387,7 +435,7 @@
                                    '                                                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
                                    '                                                </div>\n' +
                                    '                                                <div class="comment-body" id="comment-body">\n' +
-                                   name + '&nbsp;/&nbsp;\n' +
+                                   maskingFunc.email(children.email) + '&nbsp;/&nbsp;\n' +
                                    '                                                    <span class="meta">' + date + '</span>\n' +
                                    '                                                    <p class="comment-content">' + children.content + '</p>\n' +
                                    '                                                    <p class="mr-auto">\n' +
@@ -415,7 +463,7 @@
                        }
 
                    }
-               })
+               });
            });
 
        }
