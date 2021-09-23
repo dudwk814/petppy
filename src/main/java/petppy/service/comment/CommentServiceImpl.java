@@ -90,6 +90,27 @@ public class CommentServiceImpl implements CommentService {
         return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
     }
 
+    /**
+     * 유저 이메일로 comment 조회
+     */
+    @Override
+    public PageResultDTO<CommentDTO, Comment> findByUserEmail(String email, PageRequestDTO requestDTO) {
+
+        Page<Comment> result = commentRepository.findByUserEmail(email, requestDTO);
+
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+        Function<Comment, CommentDTO> fn = (entity -> entityToDTO(entity));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
+    }
+
+    /**
+     * 부모 Comment id로 comment 조회
+     */
     @Override
     public List<CommentDTO> findCommentByParent(Long parentId) {
 

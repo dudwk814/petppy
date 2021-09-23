@@ -59,4 +59,28 @@ public class CommentRepositoryImpl implements CustomCommentRepository {
 
         return new PageImpl<>(content, pageable, total);
     }
+
+    @Override
+    public Page<Comment> findByUserEmail(String email, PageRequestDTO requestDTO) {
+        Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
+        QueryResults<Comment> results = queryFactory
+                .selectFrom(comment)
+                .leftJoin(comment.parent)
+                .leftJoin(comment.user, user)
+                .fetchJoin()
+                .where(comment.user.email.eq(email))
+                .orderBy(
+                        comment.parent.id.asc().nullsFirst(),
+                        comment.createdDate.asc()
+
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Comment> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
 }

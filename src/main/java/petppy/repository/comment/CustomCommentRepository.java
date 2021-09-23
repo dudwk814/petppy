@@ -12,4 +12,6 @@ public interface CustomCommentRepository {
     List<Comment> findCommentByBoardId(Long boardId);
 
     Page<Comment> findCommentByBoardIdWithPaging(Long boardId, PageRequestDTO requestDTO);
+
+    Page<Comment> findByUserEmail(String email, PageRequestDTO requestDTO);
 }

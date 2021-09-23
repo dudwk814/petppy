@@ -36,6 +36,20 @@ public class CommentController {
     }
 
     /**
+     * email로 comment list 조회
+     */
+    @GetMapping(value = "/userPage/{email}/{page}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResultDTO<CommentDTO, Comment>> getListByUserId(@PathVariable("email") String email, @PathVariable("page") int page) {
+
+        PageRequestDTO requestDTO = new PageRequestDTO();
+        requestDTO.setPage(page);
+
+        PageResultDTO<CommentDTO, Comment> result = commentService.findByUserEmail(email, requestDTO);
+
+        return new ResponseEntity<>(result, OK);
+    }
+
+    /**
      * 답글 목록 조회
      */
     @GetMapping(value = "/{parentId}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
