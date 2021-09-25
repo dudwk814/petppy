@@ -49,13 +49,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getId(),
                 user.getType(),
                 user.getRole(),
-                roles.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList())
+                roles.stream().map(role -> new SimpleGrantedAuthority(user.getRoleKey())).collect(Collectors.toList())
         );
 
         loginUserDTO.setName(user.getName());
         loginUserDTO.setAddress(user.getAddress());
 
         httpSession.setAttribute("user", loginUserDTO);
+        httpSession.setAttribute("userEmail", user.getEmail());
 
         return loginUserDTO;
     }

@@ -7,12 +7,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import petppy.domain.comment.Comment;
+import petppy.domain.user.QMembership;
 import petppy.dto.PageRequestDTO;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static petppy.domain.comment.QComment.comment;
+import static petppy.domain.user.QMembership.membership;
 import static petppy.domain.user.QUser.user;
 
 

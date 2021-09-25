@@ -35,10 +35,10 @@ public class UserController {
     @GetMapping("")
     public String userPage(HttpSession session, Model model) {
 
-        UserDTO user = (UserDTO)session.getAttribute("user");
+        String userEmail = (String)session.getAttribute("userEmail");
 
 
-        model.addAttribute("userDTO", userService.findByEmail(user.getEmail()));
+        model.addAttribute("userDTO", userService.findByEmail(userEmail));
 
         return "/user/userPage";
     }
@@ -49,10 +49,10 @@ public class UserController {
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session,  Model model) {
 
-        UserDTO user = (UserDTO)session.getAttribute("user");
+        String userEmail = (String)session.getAttribute("userEmail");
 
 
-        model.addAttribute("userDTO", userService.findByEmail(user.getEmail()));
+        model.addAttribute("userDTO", userService.findByEmail(userEmail));
 
         return "/user/dashboard";
     }

@@ -20,16 +20,16 @@
                 <div class="row">
                     <div class="col-md-2">
                         <div class="list-group" id="list-tab" role="tablist">
-                            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">내 프로필</a>
-                            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">내 멤버십</a>
-                            <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">작성글 관리</a>
-                            <a class="list-group-item list-group-item-action" id="list-comment-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">댓글 관리</a>
-                            <a class="list-group-item list-group-item-action" id="list-review-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">리뷰 관리</a>
+                            <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="home">내 프로필</a>
+                            <a class="list-group-item list-group-item-action" id="list-membership-list" data-toggle="list" href="#list-membership" role="tab" aria-controls="profile">내 멤버십</a>
+                            <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-board" role="tab" aria-controls="messages">작성글 관리</a>
+                            <a class="list-group-item list-group-item-action" id="list-comment-list" data-toggle="list" href="#list-comment" role="tab" aria-controls="settings">댓글 관리</a>
+                            <a class="list-group-item list-group-item-action" id="list-review-list" data-toggle="list" href="#list-review" role="tab" aria-controls="settings">리뷰 관리</a>
                         </div>
                     </div>
                     <div class="col-md-10">
                         <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                            <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
                                 <div class="card text-center">
                                    <!-- <div class="card-header bg-info text-white">
                                         Profile
@@ -39,29 +39,12 @@
                                         <p class="card-text" th:text="${session.user.email}"></p>
                                         <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text">멤버십 없음</p>
                                         <p th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text" th:text="${userDTO.membershipDTO.rating}"></p>
-                                        <p class="card-text">[[${#temporals.format(session.user.joinedDate, 'yyyy-MM-dd')}]]일에 가입</p>
+                                        <p class="card-text">[[${#temporals.format(userDTO.joinedDate, 'yyyy-MM-dd')}]]일에 가입</p>
                                         <a href="#" class="btn btn-primary">회원 정보 설정하기</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-                                <!--<div class="card text-center">
-                                    <div class="card-header bg-info text-white">
-                                        Membership
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">[[${session.user.name}]]님의 멤버쉽은 '[[${session.user.membershipDTO.rating}]]'입니다.</h5>
-                                        <p class="card-text" th:if="${session.user.membershipDTO.rating.toString() != 'NONE'}">
-                                            멤버십 기간 : [[${#temporals.format(session.user.membershipDTO.createdDate, 'yyyy-MM-dd')}]] ~
-                                            [[${#temporals.format(session.user.membershipDTO.lastDate, 'yyyy-MM-dd')}]]
-                                        </p>
-                                        <p class="card-text" th:if="${session.user.membershipDTO.rating.toString() == 'NONE'}">
-                                        <h5>멤버쉽에 가입하고 Petppy에 다양한 <a th:href="@{/membership}">혜택</a>을 누리세요!</h5>
-                                        </p>
-                                        <a th:href="@{/membership}" class="btn btn-primary" th:if="${session.user.membershipDTO.rating.toString() == 'NONE'}">멤버십 가입하기</a>
-                                        <a href="#" class="btn btn-primary" th:unless="${session.user.membershipDTO.rating.toString() == 'NONE'}">멤버십 취소하기</a>
-                                    </div>
-                                </div>-->
+                            <div class="tab-pane fade" id="list-membership" role="tabpanel" aria-labelledby="list-membership-list">
                                 <div class="jumbotron bg-transparent">
                                     <h3>멤버십 상세정보</h3>
                                     <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}">현재 이용중인 멤버십이 없습니다. <a th:href="@{/membership}">가입하기</a></p>
@@ -121,7 +104,7 @@
                                     <a class="btn btn-outline-primary btn-lg" href="#" role="button">변경/해지</a>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                            <div class="tab-pane fade" id="list-board" role="tabpanel" aria-labelledby="list-messages-list">
                                 <ul class="list-group list-group-flush" id="board-group">
 
                                 </ul>
@@ -138,7 +121,7 @@
 
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+                            <div class="tab-pane fade" id="list-comment" role="tabpanel" aria-labelledby="list-settings-list">
                                 <ul class="comment-list pt-5">
 
                                 </ul>
@@ -152,6 +135,23 @@
                                     </div>
                                 </div>
                                 <div class="comment-pagination-div">
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-review" role="tabpanel" aria-labelledby="list-settings-list">
+                                <ul class="review-list pt-5">
+
+                                </ul>
+
+                                <div class="row mt-5">
+                                    <div class="col text-center">
+                                        <div class="block-27">
+                                            <ul>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="review-pagination-div">
 
                                 </div>
                             </div>
@@ -182,52 +182,62 @@
                    var boardList = "";
                    var pagination = "";
 
-                   console.log(result);
+                   if (result.totalElements === 0) {    // 댓글이 없는 경우
+                       boardList += '<div class="jumbotron bg-transparent">\n' +
+                           '  <div class="container"> \n' +
+                           '    <h1 style="padding-left: 350px; padding-right: 350px;" class="display-4r"><span class="fa fa-frown-o fa-5x" aria-hidden="true"></span></h1>\n' +
+                           '    <p class="lead text-center">회원님께서 작성하신 게시글이 없습니다.</p>\n' +
+                           '  </div>\n' +
+                           '</div>';
 
-                   $.each(result.dtoList, function (index, board) {
+                       $('#list-board').html(boardList);
+                       return;
+                   } else {
+                       $.each(result.dtoList, function (index, board) {
 
-                       var name = board.email.split('@')[0];
-                       var date = board.createdDate.split('T')[0];
+                           var name = board.email.split('@')[0];
+                           var date = board.createdDate.split('T')[0];
 
-                       boardList += '<a href="/board/read?id=' + board.boardId + '" class="list-group-item list-group-item-action">' +
-                           '<div class="d-flex w-100 justify-content-between">' +
-                           '<h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목">' + board.title  +'</b></h5>' +
-                           '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">' + date + '</small></div>' +
-                           '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">' + maskingFunc.email(board.email) + '</small>&nbsp;' +
-                           '<span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수" style="color: #00bd56;"> ' + board.commentCount + '</span>' +
-                           '<small class="float-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="조회수">' + board.hit + '</small></a>';
-                   });
+                           boardList += '<a href="/board/read?id=' + board.boardId + '" class="list-group-item list-group-item-action">' +
+                               '<div class="d-flex w-100 justify-content-between">' +
+                               '<h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목">' + board.title + '</b></h5>' +
+                               '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">' + date + '</small></div>' +
+                               '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">' + maskingFunc.email(board.email) + '</small>&nbsp;' +
+                               '<span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수" style="color: #00bd56;"> ' + board.commentCount + '</span>' +
+                               '<small class="float-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="조회수">' + board.hit + '</small></a>';
+                       });
 
-                   $('#board-group').html(boardList);
+                       $('#board-group').html(boardList);
 
-                   /* 페이징 */
-                   pagination += '<nav aria-label="Page navigation example">\n' +
-                       '                        <ul class="pagination justify-content-center">\n';
+                       /* 페이징 */
+                       pagination += '<nav aria-label="Page navigation example">\n' +
+                           '                        <ul class="pagination justify-content-center">\n';
 
-                   if (result.prev) {
-                       pagination +='                            <li className="page-item disabled">\n' +
-                           '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
-                           '                            </li>\n';
+                       if (result.prev) {
+                           pagination += '                            <li className="page-item disabled">\n' +
+                               '                                <a class="page-link page-prev" data-preve="' + (result.start - 1) + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                               '                            </li>\n';
+                       }
+
+
+                       $.each(result.pageList, function (index, page) {
+
+                           var active = result.page == page ? 'active' : '';
+                           pagination += '<li class="page-item ' + active + '">';
+                           pagination += '<a class="page-link page-num" data-page="' + page + '" href="#">' + page + '</a></li>'
+                       })
+
+                       if (result.next) {
+                           pagination += '                            <li class="page-item">\n' +
+                               '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) + '"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                               '                            </li>\n';
+                       }
+
+                       pagination += '                        </ul>\n' +
+                           '                    </nav>';
+
+                       $('.board-pagination-div').html(pagination);
                    }
-
-
-                   $.each(result.pageList, function (index, page) {
-
-                       var active = result.page == page ? 'active' : '';
-                       pagination += '<li class="page-item ' + active + '">';
-                       pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
-                   })
-
-                   if (result.next) {
-                       pagination += '                            <li class="page-item">\n' +
-                           '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
-                           '                            </li>\n';
-                   }
-
-                   pagination +='                        </ul>\n' +
-                       '                    </nav>';
-
-                   $('.board-pagination-div').html(pagination);
 
                }
            });
@@ -291,55 +301,67 @@
 
                    var pagination = "";
 
-                   console.log(result);
+                   if (result.totalElements === 0) {    // 댓글이 없는 경우
+                        commentList += '<div class="jumbotron bg-transparent">\n' +
+                            '  <div class="container"> \n' +
+                            '    <h1 style="padding-left: 350px; padding-right: 350px;" class="display-4r"><span class="fa fa-frown-o fa-5x" aria-hidden="true"></span></h1>\n' +
+                            '    <p class="lead text-center">회원님께서 작성하신 댓글이 없습니다.</p>\n' +
+                            '  </div>\n' +
+                            '</div>';
 
-                   $.each(result.dtoList, function (index, comment) {
+                        $('#list-comment').html(commentList);
+                        return;
+                   } else {
+                       $.each(result.dtoList, function (index, comment) { // 댓글이 존재하면 댓글 관리창에 표시
 
-                       var name = comment.email.split('@')[0];
-                       var date = comment.createdDate.split('T')[0];
+                           var name = comment.email.split('@')[0];
+                           var date = comment.createdDate.split('T')[0];
 
-                       if (comment.deleteStatus === 'Y') {  // 댓글이 삭제된 경우
-                           commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
-                               '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
-                               '                                        <span class="meta">' +  date  + '</span>\n' +
-                               '                                        <p class="comment-content">삭제된 댓글입니다.</p>\n' +
-                               '                                        <p class="mr-auto">\n' +
-                               '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
-                               '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
-                           commentList += '                                        </p>\n' +
-                               '                                        <p class="d-flex">\n' +
-                               '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
-                               '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
-                               '                                            </a>\n' +
-                               '                                        </p>\n' +
-                               '                                    </div>';
-                       } else {
-                           commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
-                               '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
-                               '                                        <span class="meta">' +  date  + '</span>\n' +
-                               '                                        <p class="comment-content">' + comment.content + '</p>\n' +
-                               '                                        <p class="mr-auto">\n' +
-                               '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
-                               '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
-                           commentList +=  '                                                    /&nbsp;\n' +
-                               '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
-                               '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
-                               '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
-                               '                                                    &nbsp;/&nbsp;\n' +
-                               '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
-                               '                                                       data-comment="' + comment.id + '" aria-hidden="true" data-board="' + comment.boardId + '" \n' +
-                               '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
-                           commentList += '                                        </p>\n' +
-                               '                                        <p class="d-flex">\n' +
-                               '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
-                               '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
-                               '                                            </a>\n' +
-                               '                                        </p>\n' +
-                               '                                    </div>';
-                       }
+                           if (comment.deleteStatus === 'Y') {  // 댓글이 삭제된 경우
+                               commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                                   '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                                   '                                        <span class="meta">' +  date  + '</span>\n' +
+                                   '                                        <p class="comment-content">삭제된 댓글입니다.</p>\n' +
+                                   '                                        <p class="mr-auto">\n' +
+                                   '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
+                                   '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
+                               commentList += '                                        </p>\n' +
+                                   '                                        <p class="d-flex">\n' +
+                                   '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                                   '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
+                                   '                                            </a>\n' +
+                                   '                                        </p>\n' +
+                                   '                                    </div>';
+                           } else {
+                               commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                                   '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                                   '                                        <span class="meta">' +  date  + '</span>\n' +
+                                   '                                        <p class="comment-content">' + comment.content + '</p>\n' +
+                                   '                                        <p class="mr-auto">\n' +
+                                   '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
+                                   '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
+                               commentList +=  '                                                    /&nbsp;\n' +
+                                   '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                                   '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                   '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
+                                   '                                                    &nbsp;/&nbsp;\n' +
+                                   '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                                   '                                                       data-comment="' + comment.id + '" aria-hidden="true" data-board="' + comment.boardId + '" \n' +
+                                   '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
+                               commentList += '                                        </p>\n' +
+                                   '                                        <p class="d-flex">\n' +
+                                   '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                                   '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
+                                   '                                            </a>\n' +
+                                   '                                        </p>\n' +
+                                   '                                    </div>';
+                           }
 
 
-                   });
+                       });
+                   }
+
+
 
                    $('.comment-list').html(commentList);
 
