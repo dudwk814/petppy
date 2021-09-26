@@ -8,8 +8,7 @@ import petppy.domain.user.User;
 
 import java.util.Map;
 
-import static petppy.domain.user.Type.GOOGLE;
-import static petppy.domain.user.Type.NAVER;
+import static petppy.domain.user.Type.*;
 
 /**
  * 소셜 로그인 DTO
@@ -41,6 +40,10 @@ public class OAuthAttributes {
         if ("naver".equals(registrationId)) {
             return ofNaver("id", attributes);
         }
+
+        if ("kakao".equals(registrationId)) {
+            return ofKakao("id", attributes);
+        }
         return ofGoogle(userNameAttributeName, attributes);
     }
 
@@ -69,6 +72,21 @@ public class OAuthAttributes {
                 .type(NAVER)
                 .build();
     }
+
+    /* 카카오 로그인 */
+    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String,Object> response = (Map<String, Object>)attributes.get("kakao_account");
+        Map<String, Object> profile = (Map<String, Object>) response.get("profile");
+        return OAuthAttributes.builder()
+                .name((String)profile.get("nickname"))
+                .email((String)response.get("email"))
+                .picture((String)profile.get("profile_image_url"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .type(KAKAO)
+                .build();
+    }
+
 
     public User toEntity() {
         return User.builder()

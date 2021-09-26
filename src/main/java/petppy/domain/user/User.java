@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class User extends BaseTimeEntity {
 
     @Id
-    @Column(name = "member_id")
+    @Column(name = "user_id")
     @GeneratedValue
     private Long id;
 
