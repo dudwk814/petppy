@@ -36,9 +36,10 @@ public class UserController {
     public String userPage(HttpSession session, Model model) {
 
         String userEmail = (String)session.getAttribute("userEmail");
+        Type type = (Type) session.getAttribute("type");
 
 
-        model.addAttribute("userDTO", userService.findByEmail(userEmail));
+        model.addAttribute("userDTO", userService.findByEmailAndType(userEmail, type));
 
         return "/user/userPage";
     }
@@ -51,8 +52,9 @@ public class UserController {
 
         String userEmail = (String)session.getAttribute("userEmail");
 
+        Type type = (Type) session.getAttribute("type");
 
-        model.addAttribute("userDTO", userService.findByEmail(userEmail));
+        model.addAttribute("userDTO", userService.findByEmailAndType(userEmail, type));
 
         return "/user/dashboard";
     }
@@ -82,8 +84,6 @@ public class UserController {
         }
 
         String name = userService.joinedMember(userDTO);
-
-        rttr.addAttribute("msg", name);
 
         return "redirect:/";
 

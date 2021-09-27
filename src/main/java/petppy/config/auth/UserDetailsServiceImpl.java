@@ -57,6 +57,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         httpSession.setAttribute("user", loginUserDTO);
         httpSession.setAttribute("userEmail", user.getEmail());
+        httpSession.setAttribute("type", user.getType());
 
         return loginUserDTO;
     }
