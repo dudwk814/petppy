@@ -277,16 +277,70 @@
     <script th:src="@{/petppy/js/google-map.js}"></script>
     <script th:src="@{/petppy/js/main.js}"></script>
     <script th:src="@{/petppy/ckeditor/ckeditor.js}"></script>
-    <script th:src="@{/petppy/js/masking.js}"
+    <script th:src="@{/petppy/js/masking.js}"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 
     <script th:inline="javascript">
 
+        // socket 전역변수 설정
+        var socket = null;
+
+
+        function connectWs(){
+            sock = new SockJS( "/echo" );
+            socket = sock;
+
+            sock.onopen = function() {
+                console.log('info: connection opened.');
+            };
+
+            sock.onmessage = function(evt) {
+                var data = evt.data;
+                console.log("ReceivMessage : " + data + "\n");
+
+                $.ajax({
+                    url : '/mentor/member/countAlarm',
+                    type : 'POST',
+                    dataType: 'text',
+                    success : function(data) {
+                        if(data == '0'){
+                        }else{
+                            $('#alarmCountSpan').addClass('bell-badge-danger bell-badge')
+                            $('#alarmCountSpan').text(data);
+                        }
+                    },
+                    error : function(err){
+                        alert('err');
+                    }
+                });
+
+                // 모달 알림
+                /*var toastTop = app.toast.create({
+                    text: "알림 : " + data + "\n",
+                    position: 'top',
+                    closeButton: true,
+                });
+                toastTop.open();*/
+            };
+
+            sock.onclose = function() {
+                console.log('connect close');
+                /* setTimeout(function(){conntectWs();} , 1000); */
+            };
+
+            sock.onerror = function (err) {console.log('Errors : ' , err);};
+
+        }
+
         $(document).ready(function (e) {
+
+            // 웹 소켓 연결
+            connectWs();
 
             $('[data-toggle="tooltip"]').tooltip();
 
-            /* 로그아웃 */
+            // 로그아웃
             $(".logout-btn").on("click", function (e) {
                 e.preventDefault();
 

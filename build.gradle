@@ -31,6 +31,7 @@ dependencies {
     implementation group: 'com.navercorp.lucy', name: 'lucy-xss-servlet', version: '2.0.0'
     implementation 'com.querydsl:querydsl-jpa'
     compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.5.5'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     runtimeOnly 'com.h2database:h2'

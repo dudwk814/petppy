@@ -37,10 +37,11 @@
                                     <div class="card-body">
                                         <h5 class="card-title">[[${session.user.name}]]</h5>
                                         <p class="card-text" th:text="${session.user.email}"></p>
+                                        <p th:if="${userDTO.type.toString() != 'NORMAL'}" class="card-text">SNS 회원</p>
                                         <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text">멤버십 없음</p>
                                         <p th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text" th:text="${userDTO.membershipDTO.rating}"></p>
                                         <p class="card-text">[[${#temporals.format(userDTO.joinedDate, 'yyyy-MM-dd')}]]일에 가입</p>
-                                        <a href="#" class="btn btn-primary">회원 정보 설정하기</a>
+                                        <a th:href="@{/user/modifyForm}" class="btn btn-primary">회원 정보 설정하기</a>
                                     </div>
                                 </div>
                             </div>
