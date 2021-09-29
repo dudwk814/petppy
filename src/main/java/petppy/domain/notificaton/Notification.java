@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import petppy.domain.BaseTimeEntity;
 import petppy.domain.user.User;
 
 import javax.persistence.*;
@@ -12,30 +13,34 @@ import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
+import static petppy.domain.notificaton.IsRead.Y;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Notification {
+public class Notification extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "not_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "target_email")
+    private String targetEmail;
 
     @Column(name = "not_message")
     private String message;
 
-    @Column(updatable = false)
-    private LocalDateTime createdDate;
+    private IsRead isRead;
 
-    private LocalDateTime readDate;
+    @Enumerated(value = EnumType.STRING)
+    private NotificationType notificationType;
+
+    public void readNotify() {
+        this.isRead = Y;
+    }
 
 
 }

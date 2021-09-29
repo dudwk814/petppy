@@ -58,7 +58,7 @@
 	};
 	carousel();
 
-	$('nav .dropdown').hover(function(){
+	/*$('nav .dropdown').hover(function(){
 		var $this = $(this);
 		// 	 timer;
 		// clearTimeout(timer);
@@ -75,7 +75,7 @@
 			// $this.find('.dropdown-menu').removeClass('animated-fast fadeInUp show');
 			$this.find('.dropdown-menu').removeClass('show');
 		// }, 100);
-	});
+	});*/
 
 
 	$('#dropdown04').on('show.bs.dropdown', function () {

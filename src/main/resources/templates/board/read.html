@@ -5,7 +5,7 @@
         <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
                  data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
-            <div class="container">
+            <div class="container content-section">
                 <div class="row no-gutters slider-text align-items-end">
                     <div class="col-md-9 ftco-animate pb-5">
                         <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true"
@@ -177,6 +177,9 @@
 
         commentList(1);
 
+        sock.onopen = function() {
+            console.log('info: comment socket.');
+        };
 
         /* 댓글 목록 조회 */
         function commentList(page) {
@@ -457,10 +460,39 @@
                 success: function (result) {
                     console.log(result + "번 댓글이 등록되었습니다.");
 
-                    self.location.reload();
                 }
             });
             [/]
+
+            var targetEmail = [[${board.email}]];
+            var message = [[${board.boardId}]] + "번 글에 댓글이 작성되었습니다.";
+            var url = "/board/read?id=" + [[${board.boardId}]];
+
+            var notificationData = {
+                targetEmail : targetEmail,
+                message : message
+            };
+            //스크랩 알림 DB저장
+            $.ajax({
+                type : 'post',
+                url : '/notify/save',
+                data : JSON.stringify(notificationData),
+                contentType: "application/json; charset=utf-8",
+                dataType : 'text',
+                success : function(data){
+                    if(socket){
+                        let socketMsg = "댓글," + targetEmail +","+ message +","+ url;
+                        /*console.log("msgmsg : " + socketMsg);*/
+                        socket.send(socketMsg);
+                    }
+
+                },
+                error : function(err){
+                    console.log(err);
+                }
+            });
+
+            /*self.location.reload();*/
 
         });
 
