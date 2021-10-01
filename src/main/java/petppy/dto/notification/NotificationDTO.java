@@ -25,5 +25,5 @@ public class NotificationDTO {
 
     private IsRead isRead;
 
-    private NotificationType notificationType;
+    private String notificationType;
 }

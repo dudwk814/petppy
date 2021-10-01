@@ -29,6 +29,8 @@ public class EchoHandler extends TextWebSocketHandler {
             log(senderId + " 연결 됨");
             users.put(senderId, session);   // 로그인중 개별유저 저장
         }
+
+        System.out.println("users.size() = " + users.size());
     }
     // 클라이언트가 Data 전송 시
     @Override

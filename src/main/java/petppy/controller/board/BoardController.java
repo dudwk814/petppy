@@ -20,6 +20,7 @@ import petppy.dto.PageResultDTO;
 import petppy.dto.user.UserDTO;
 import petppy.service.board.BoardService;
 import petppy.service.comment.CommentService;
+import petppy.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final CommentService commentService;
+    private final UserService userService;
 
     @Value("${resources.location}")
     private String resourcesLocation;
@@ -80,7 +82,9 @@ public class BoardController {
     @PostMapping("/edit")
     public String edit(BoardDto boardDto, HttpSession session) {
 
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        String userEmail = (String) session.getAttribute("userEmail");
+
+        UserDTO userDTO = userService.findByEmail(userEmail);
 
         boardDto.setUserId(userDTO.getId());
 
@@ -207,6 +211,16 @@ public class BoardController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
 
+    }
+
+    /**
+     * 게시글 댓글 갯수 조회
+     */
+    @ResponseBody
+    @GetMapping(value = "/commentCount/{boardId}")
+    public ResponseEntity<Long> commentCount(@PathVariable("boardId") Long boardId) {
+
+        return new ResponseEntity<>(boardService.commentCount(boardId), HttpStatus.OK);
     }
 
 }

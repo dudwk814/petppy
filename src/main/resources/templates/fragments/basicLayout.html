@@ -24,15 +24,6 @@
 
         <link rel="stylesheet" th:href="@{/petppy/css/flaticon.css}">
         <link rel="stylesheet" th:href="@{/petppy/css/style.css}">
-
-        <style>
-            .badge-notify{
-                background:#4CD964;
-                position:relative;
-                top: -12px;
-                left: -16px;
-            }
-        </style>
     </head>
     <body>
 
@@ -80,16 +71,14 @@
                     <li th:if="${session.user == null}" class="nav-item">
                         <a class="nav-link" data-toggle="modal" data-target="#loginModal">Login</a>
                     </li>
-                    <li th:unless="${session.user == null}" class="nav-item dropdown">
-                        <button type="button" class="nav-link btn btn-link"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <li th:unless="${session.user == null}" class="nav-item dropdown" >
+                        <button data-toggle="dropdown" data-display="static" aria-expanded="false" aria-haspopup="true" type="button" class="nav-link btn btn-link" id="notifyBtn" th:data-email="${session.user.email}">
                             <i class="fa fa-bell-o fa-lg" aria-hidden="true"></i>
-                            <span class="badge badge-notify" style="font-size:10px;">3</span>
+                            <span class="badge badge-notify" style="font-size:10px;"></span>
                         </button>
 
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="dropdownMenuButton">
+
                         </div>
                     </li>
                     <li th:unless="${session.user == null}" class="nav-item dropdown">
@@ -97,7 +86,7 @@
                            aria-expanded="false" aria-haspopup="true">
                             <img th:src="@{'/petppy/images/simbolLogo.PNG'}">
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right px-4 py-3">
+                        <div class="dropdown-menu dropdown-menu-lg-left px-4 py-3">
                             <h6 class="dropdown-header">[[${session.user.name}]]님 반갑습니다!</h6>
                             <h6></h6>
                             <div class="dropdown-divider"></div>
@@ -315,20 +304,36 @@
         // socket 전역변수 설정
         var socket = null;
 
-
         function connectWs(){
             sock = new SockJS( "/echo" );
             socket = sock;
 
             sock.onopen = function() {
                 console.log('info: connection opened.');
+
+                if ([[${session.user != null}]]) {
+                    var email = $('#notifyBtn').data('email');
+                    $.ajax({
+                        url : '/notify/unChecked/' + email,
+                        type : 'get',
+                        /*data: email,*/
+                        dataType : 'json',
+                        success : function (result) {
+
+                            $('.badge-notify').text(result);
+
+
+                        }
+                    });
+                }
+
             };
 
             sock.onmessage = function(evt) {
                 var data = evt.data;
                 console.log("ReceivMessage : " + data + "\n");
 
-                let toast = "<div class='toast' style='position: absolute; top: 20px; right: 20px;' role='alert' aria-live='assertive' aria-atomic='true'>";
+                let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
                 toast += "<div class='toast-header'><i class='fa fa-bell-o mr-2'></i><strong class='mr-auto'>알림</strong>";
                 toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
                 toast += "<span aria-hidden='true'>&times;</span></button>";
@@ -337,29 +342,18 @@
                 $(".toast").toast({"animation": true, "autohide": false});
                 $('.toast').toast('show');
 
-                /*$.ajax({
-                    url : '/mentor/member/countAlarm',
-                    type : 'POST',
-                    dataType: 'text',
-                    success : function(data) {
-                        if(data == '0'){
-                        }else{
-                            $('#alarmCountSpan').addClass('bell-badge-danger bell-badge')
-                            $('#alarmCountSpan').text(data);
-                        }
-                    },
-                    error : function(err){
-                        alert('err');
-                    }
-                });*/
+                var email = $('#notifyBtn').data('email');
+                $.ajax({
+                    url : '/notify/unChecked/' + email,
+                    type : 'get',
+                    /*data: email,*/
+                    dataType : 'json',
+                    success : function (result) {
 
-                // 모달 알림
-                /*var toastTop = app.toast.create({
-                    text: "알림 : " + data + "\n",
-                    position: 'top',
-                    closeButton: true,
+                        $('.badge-notify').text(result);
+                    }
                 });
-                toastTop.open();*/
+
             };
 
             sock.onclose = function() {
@@ -371,12 +365,77 @@
 
         }
 
+        // 알람 시간 계산 함수
+        function timeForToday(value) {
+            const today = new Date();
+            const timeValue = new Date(value);
+
+            const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+            if (betweenTime < 1) return '방금전';
+            if (betweenTime < 60) {
+                return `${betweenTime}분전`;
+            }
+
+            const betweenTimeHour = Math.floor(betweenTime / 60);
+            if (betweenTimeHour < 24) {
+                return `${betweenTimeHour}시간전`;
+            }
+
+            const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+            if (betweenTimeDay < 365) {
+                return `${betweenTimeDay}일전`;
+            }
+
+            return `${Math.floor(betweenTimeDay / 365)}년전`;
+        }
+
         $(document).ready(function (e) {
 
             // 웹 소켓 연결
             connectWs();
 
             $('[data-toggle="tooltip"]').tooltip();
+
+            // 알림 벨 버튼 클릭시 알람 dropdown show
+            $('#notifyBtn').on('click', function (e) {
+
+                var email = $(this).data('email');
+                var notifyList = "";
+                var unCheckedNotify = $('.badge-notify').text();
+
+                $.ajax({
+                    url: '/notify/recent/' + email,
+                    type: 'get',
+                    data: email,
+                    dataType: 'json',
+                    success : function (result) {
+
+                        notifyList +=
+                            '<h6 class="dropdown-item-text text-center p-3">읽지 않은 알림 <span class="text-success">' +  unCheckedNotify + '</span>개</h6>' +
+                            '<div class="dropdown-divider"></div>';
+
+
+                        $.each(result, function (index, notify) {
+
+                            var notificationType = notify.notificationType;
+
+                            notifyList += '<a href="#" class="dropdown-item p-3">\n';
+
+
+                            notifyList += '    <p style="font-size: 16px;" class="mb-1"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
+                                '  </a><div class="dropdown-divider"></div>';
+                        });
+
+                        notifyList += '<a href="/board" class="dropdown-item notify-more">\n' +
+                            '<div class="d-flex w-100 justify-content-between">' +
+                            '<h6 class="mb-1 text-center"><span class="fa fa-bell-o"></span> 알림 더 확인하기</h6> </div></a>';
+
+                        $('#notifyBtn').closest('li').children('.dropdown-menu').html(notifyList);
+                    }
+                });
+
+            });
+
 
             // 로그아웃
             $(".logout-btn").on("click", function (e) {

@@ -5,7 +5,13 @@
         <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
                  data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
-            <div class="container content-section">
+            <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+                    </div>
+                </div>
                 <div class="row no-gutters slider-text align-items-end">
                     <div class="col-md-9 ftco-animate pb-5">
                         <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true"
@@ -62,7 +68,7 @@
                         </div>
 
                         <div class="pt-5 mt-5 comment-div">
-                            <h5>댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
+                            <h5 class="comment-count">댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
                             <div class="comment-form-wrap">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -70,7 +76,7 @@
                                             <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
                                         </div>
                                     </div>
-                                    <input type="text" id="reply-content" class="form-control" placeholder="댓글을 입력하세요."
+                                    <input type="text" id="reply-content" class="form-control main-input" placeholder="댓글을 입력하세요."
                                            aria-label="Recipient's username" aria-describedby="replyAddBtn">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary replyAddBtn" type="button"
@@ -171,15 +177,12 @@
     </th:block>
 </th:block>
 <script th:inline="javascript">
+
     $(document).ready(function (e) {
 
         var boardId = [[${board.boardId}]];
 
         commentList(1);
-
-        sock.onopen = function() {
-            console.log('info: comment socket.');
-        };
 
         /* 댓글 목록 조회 */
         function commentList(page) {
@@ -416,9 +419,98 @@
                 // submit form
                 boardRemoveForm.submit();
             }
-        })
+        });
+
 
         $('.children').attr('style', 'display:none');
+
+        function comment_create_promise(commentContent){ // 댓글 작성 함수
+
+            [# th:if = "${session.user != null}"]
+            var commentDTO = {
+                boardId: boardId,
+                content: commentContent,
+                userId: [[${session.user.id}]],
+                email: [[${session.user.email}]],
+                parentId: $(this).data("parent")
+            };
+
+            [/]
+
+            return new Promise(function(resolve, reject){   // 댓글 작성 Promise
+                $.ajax({
+                    url: '/comment/' + boardId,
+                    type: 'post',
+                    data: JSON.stringify(commentDTO),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'text',
+                    success : function(result){
+                        console.log(result + "번 댓글이 등록되었습니다.");
+
+                        $('.main-input').val("");
+
+                        alert(result + "번 댓글이 등록되었습니다.");
+
+                        commentList(1);
+
+                        resolve();
+
+                    }
+                });
+
+            });
+        }
+
+        function notify_ajax(result) { // 댓글 알림 DB저장
+            return new Promise(function(resolve, reject){
+
+                var targetEmail = [[${board.email}]];
+                var message = boardId + "번 글에 댓글이 작성되었습니다.";
+                var url = "/board/read?id=" + [[${board.boardId}]];
+
+                var notificationData = {
+                    targetEmail : targetEmail,
+                    message : message,
+                    notificationType : "comment"
+                };
+
+                $.ajax({
+                    type : 'post',
+                    url : '/notify/save',
+                    data : JSON.stringify(notificationData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType : 'text',
+                    success : function(data){
+                        if(socket){
+                            let socketMsg = "댓글," + targetEmail +","+ message +","+ url;
+                            /*console.log("msgmsg : " + socketMsg);*/
+                            socket.send(socketMsg);
+                        }
+
+                        resolve();
+
+                    },
+                    error : function(err){
+                        console.log(err);
+                    }
+                });
+            });
+        }
+
+        function comment_count_promise() {  // 댓글 갯수 변경 함수
+            return new Promise(function(resolve, reject){
+                $.ajax({
+                    type : 'get',
+                    url : '/board/commentCount/' + boardId,
+                    success : function (result) {
+                        console.log(result);
+                        $('.comment-count').text('댓글 ' + result + '개');
+                    }
+                })
+            });
+        }
+
+
 
         /* 답글 등록 버튼 클릭 시 답글 등록 */
         $(document).on('click', '.replyAddBtn', function (e) {
@@ -442,57 +534,15 @@
                 return;
             }
 
-            [# th:if = "${session.user != null}"]
-            var commentDTO = {
-                boardId: boardId,
-                content: commentContent,
-                userId: [[${session.user.id}]],
-                email: [[${session.user.email}]],
-                parentId: $(this).data("parent")
-            };
 
-            $.ajax({
-                url: '/comment/' + boardId,
-                type: 'post',
-                data: JSON.stringify(commentDTO),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'text',
-                success: function (result) {
-                    console.log(result + "번 댓글이 등록되었습니다.");
+            comment_create_promise(commentContent)
+            .then(notify_ajax)
+            .then(comment_count_promise);
 
-                }
-            });
-            [/]
 
-            var targetEmail = [[${board.email}]];
-            var message = [[${board.boardId}]] + "번 글에 댓글이 작성되었습니다.";
-            var url = "/board/read?id=" + [[${board.boardId}]];
-
-            var notificationData = {
-                targetEmail : targetEmail,
-                message : message
-            };
-            //스크랩 알림 DB저장
-            $.ajax({
-                type : 'post',
-                url : '/notify/save',
-                data : JSON.stringify(notificationData),
-                contentType: "application/json; charset=utf-8",
-                dataType : 'text',
-                success : function(data){
-                    if(socket){
-                        let socketMsg = "댓글," + targetEmail +","+ message +","+ url;
-                        /*console.log("msgmsg : " + socketMsg);*/
-                        socket.send(socketMsg);
-                    }
-
-                },
-                error : function(err){
-                    console.log(err);
-                }
-            });
 
             /*self.location.reload();*/
+
 
         });
 

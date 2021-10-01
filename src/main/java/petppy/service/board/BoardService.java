@@ -17,6 +17,8 @@ public interface BoardService {
 
     public void deleteBoard(Long id);
 
+    public Long commentCount(Long id);
+
     public PageResultDTO<BoardDto, Board> searchBoardList(PageRequestDTO requestDTO);
 
     public BoardDto searchBoard(Long id);

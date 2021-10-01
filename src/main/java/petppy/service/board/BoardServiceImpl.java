@@ -57,6 +57,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Long commentCount(Long id) {
+        return boardRepository.countComment(id);
+    }
+
+    @Override
     public PageResultDTO<BoardDto, Board> searchBoardList(PageRequestDTO requestDTO) {
 
         Page<Board> result = boardRepository.searchBoardList(requestDTO);

@@ -1,8 +1,10 @@
 package petppy.service.notification;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import petppy.domain.notificaton.IsRead;
 import petppy.domain.notificaton.Notification;
 import petppy.dto.notification.NotificationDTO;
 import petppy.repository.notification.NotificationRepository;
@@ -41,5 +43,21 @@ public class NotificationServiceImpl implements NotificationService{
                 .stream()
                 .map(notification -> entityToDto(notification))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NotificationDTO> findRecentNotificationList(String targetEmail, Pageable pageable) {
+
+        return notificationRepository.findRecentByTargetEmail(targetEmail, pageable)
+                .stream()
+                .map(notification -> entityToDto(notification))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long unCheckedCount(String targetEmail) {
+
+        IsRead isRead = IsRead.N;
+        return notificationRepository.unCheckedNotification(targetEmail, isRead);
     }
 }
