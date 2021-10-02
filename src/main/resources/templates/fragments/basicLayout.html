@@ -419,14 +419,22 @@
 
                             var notificationType = notify.notificationType;
 
-                            notifyList += '<a href="#" class="dropdown-item p-3">\n';
+                            if (notify.isRead.toString() === 'Y') {
+                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url bg-light" data-id="' + notify.id +'">\n';
+
+                                notifyList += '    <p style="font-size: 16px;" class="mb-1 text-muted"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
+                                    '  </a><div class="dropdown-divider"></div>';
+                            } else {
+                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url" data-id="' + notify.id +'">\n';
+
+                                notifyList += '    <p style="font-size: 16px;" class="mb-1"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
+                                    '  </a><div class="dropdown-divider"></div>';
+                            }
 
 
-                            notifyList += '    <p style="font-size: 16px;" class="mb-1"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
-                                '  </a><div class="dropdown-divider"></div>';
                         });
 
-                        notifyList += '<a href="/board" class="dropdown-item notify-more">\n' +
+                        notifyList += '<a href="/user/dashboard" class="dropdown-item notify-more">\n' +
                             '<div class="d-flex w-100 justify-content-between">' +
                             '<h6 class="mb-1 text-center"><span class="fa fa-bell-o"></span> 알림 더 확인하기</h6> </div></a>';
 
@@ -435,6 +443,25 @@
                 });
 
             });
+
+            // 알림 목록에서 알림 클릭시 읽음 처리
+            $(document).on('click', '.notify_url', function (e) {
+                e.preventDefault();
+
+                var url = $(this).attr('href');
+                var id = $(this).data('id');
+
+                $.ajax({
+                    url : '/notify/' + id,
+                    type : 'patch',
+                    data : id,
+                    success : function (result) {
+                        if (result === 'success') {
+                            location.href = url;
+                        }
+                    }
+                })
+            })
 
 
             // 로그아웃

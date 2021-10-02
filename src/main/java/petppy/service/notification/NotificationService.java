@@ -5,6 +5,8 @@ import petppy.domain.notificaton.IsRead;
 import petppy.domain.notificaton.Notification;
 import petppy.domain.notificaton.NotificationType;
 import petppy.domain.user.User;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.dto.notification.NotificationDTO;
 
 import java.util.List;
@@ -17,11 +19,15 @@ public interface NotificationService {
 
     public NotificationDTO findNotification(Long id);
 
-    public List<NotificationDTO> findNotificationList(String targetEmail);
+    public PageResultDTO<NotificationDTO, Notification> findNotificationList(String targetEmail, PageRequestDTO requestDTO);
 
     public List<NotificationDTO> findRecentNotificationList(String targetEmail, Pageable pageable);
 
     public Long unCheckedCount(String targetEmail);
+
+    public void readItNotification(Long id);
+
+    public void allReadCheck(String email);
 
     default Notification dtoToEntity(NotificationDTO dto) {
 
@@ -32,6 +38,7 @@ public interface NotificationService {
                     .targetEmail(dto.getTargetEmail())
                     .message(dto.getMessage())
                     .isRead(IsRead.N)
+                    .url(dto.getUrl())
                     .build();
         } else if (dto.getNotificationType().equals("reserve")) {
             return Notification
@@ -40,6 +47,7 @@ public interface NotificationService {
                     .targetEmail(dto.getTargetEmail())
                     .message(dto.getMessage())
                     .isRead(IsRead.N)
+                    .url(dto.getUrl())
                     .build();
         } else {
             return Notification
@@ -48,6 +56,7 @@ public interface NotificationService {
                     .targetEmail(dto.getTargetEmail())
                     .message(dto.getMessage())
                     .isRead(IsRead.N)
+                    .url(dto.getUrl())
                     .build();
         }
 
@@ -63,6 +72,7 @@ public interface NotificationService {
                     .message(notification.getMessage())
                     .isRead(notification.getIsRead())
                     .targetEmail(notification.getTargetEmail())
+                    .url(notification.getUrl())
                     .notificationType("댓글")
                     .build();
         } else if (notification.getNotificationType() == RESERVE) {
@@ -73,6 +83,7 @@ public interface NotificationService {
                     .message(notification.getMessage())
                     .isRead(notification.getIsRead())
                     .targetEmail(notification.getTargetEmail())
+                    .url(notification.getUrl())
                     .notificationType("예약")
                     .build();
         } else {
@@ -83,6 +94,7 @@ public interface NotificationService {
                     .message(notification.getMessage())
                     .isRead(notification.getIsRead())
                     .targetEmail(notification.getTargetEmail())
+                    .url(notification.getUrl())
                     .notificationType("공지")
                     .build();
         }

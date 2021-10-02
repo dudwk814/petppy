@@ -22,6 +22,7 @@
                         <div class="list-group" id="list-tab" role="tablist">
                             <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="home">내 프로필</a>
                             <a class="list-group-item list-group-item-action" id="list-membership-list" data-toggle="list" href="#list-membership" role="tab" aria-controls="profile">내 멤버십</a>
+                            <a class="list-group-item list-group-item-action" id="list-notify-list" data-toggle="list" href="#list-notify" role="tab" aria-controls="notify">내 알림</a>
                             <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-board" role="tab" aria-controls="messages">작성글 관리</a>
                             <a class="list-group-item list-group-item-action" id="list-comment-list" data-toggle="list" href="#list-comment" role="tab" aria-controls="settings">댓글 관리</a>
                             <a class="list-group-item list-group-item-action" id="list-review-list" data-toggle="list" href="#list-review" role="tab" aria-controls="settings">리뷰 관리</a>
@@ -105,6 +106,26 @@
                                     <a class="btn btn-outline-primary btn-lg" href="#" role="button">변경/해지</a>
                                 </div>
                             </div>
+                            <div class="tab-pane fade" id="list-notify" role="tabpanel" aria-labelledby="list-membership-list">
+                                <div  class="row" style="background-color: #f8f9fa;">
+                                    <div class="col-md-10  p-2">
+                                        <p class="font-weight-bold" style="font-size: 18px;">읽지 않은 알림  <span class="text-success">0개</span></p>
+                                    </div>
+                                    <div class="col-md-2 p2">
+                                        <a href="#" class="text-dark text-center notify-check-btn"> <span class="fa fa-check-circle-o" aria-hidden="true"></span>  모두 읽음 처리</a>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="list-group list-group-flush notify-list-group">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="tab-pane fade" id="list-board" role="tabpanel" aria-labelledby="list-messages-list">
                                 <ul class="list-group list-group-flush" id="board-group">
 
@@ -166,7 +187,67 @@
 <script th:inline="javascript">
     $(document).ready(function (e) {
 
+
        var email = [[${session.user.email}]];
+
+       notifyList(1);
+
+       $(document).on('click', '.notify-check-btn', function (e) {
+           e.preventDefault();
+
+           $.ajax({
+               url : '/notify/allReadCheck/' + email,
+               type : 'patch',
+               data : 'email',
+               success : function (result) {
+                   if (result === 'success') {
+                       $('.not_checked').addClass('checked');
+                       $('.not_checked').addClass('bg-light');
+                       $('.not_checked').find('p').prepend('<i class="fa fa-check" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="읽은 알림"></i>&nbsp;&nbsp;');
+                       $('.not_checked').removeClass('not_checked');
+                   }
+               }
+           })
+       });
+
+       function notifyList(page) {  // 이메일로 알림 조회
+
+           var page = page || 1;
+
+           var notifyList = "";
+
+           $.ajax({
+                url : '/notify/' + email + '/' + page,
+                type : 'get',
+                success : function (result) {
+
+                   $.each(result.dtoList, function (index, notify) {
+
+                       var notificationType = notify.notificationType;
+
+                       if (notify.isRead.toString() === 'Y') {
+                           notifyList += '<a href="' + notify.url + '" class="list-group-item list-group-item-action p-3 notify_url bg-light checked" data-id="' + notify.id +'">\n';
+
+                           notifyList += '    <p style="font-size: 16px;" class="mb-1 text-muted">' +
+                               '<i class="fa fa-check" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="읽은 알림"></i>&nbsp;&nbsp;' +
+                               '<span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message +
+                               '<small class="text-muted float-right">' + timeForToday(notify.createdDate)  +
+                               '</small>' + '</p>\n' +
+                               '  </a>';
+                       } else {
+                           notifyList += '<a href="' + notify.url + '" class="list-group-item list-group-item-action p-3 notify_url not_checked" data-id="' + notify.id +'">\n';
+
+                           notifyList += '    <p style="font-size: 16px;" class="mb-1"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                               '<small class="text-muted float-right">' + timeForToday(notify.createdDate)  +
+                               '</small>' + '</p>\n' +
+                               '  </a>';
+                       }
+                   });
+
+                   $('.notify-list-group').append(notifyList);
+               }
+           })
+       }
 
        boardList(1);
 

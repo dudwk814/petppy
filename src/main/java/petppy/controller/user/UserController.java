@@ -13,6 +13,7 @@ import petppy.domain.user.Type;
 import petppy.dto.user.UserDTO;
 import petppy.service.board.BoardService;
 import petppy.service.comment.CommentService;
+import petppy.service.notification.NotificationService;
 import petppy.service.user.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -27,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
     private final CommentService commentService;
+    private final NotificationService notificationService;
 
     /**
      * 회원 설정 페이지

@@ -21,6 +21,8 @@ public class NotificationDTO {
 
     private String message;
 
+    private String url;
+
     private LocalDateTime createdDate;
 
     private IsRead isRead;

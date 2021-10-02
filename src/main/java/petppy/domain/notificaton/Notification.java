@@ -33,6 +33,9 @@ public class Notification extends BaseTimeEntity {
     @Column(name = "not_message")
     private String message;
 
+    @Column(name = "url")
+    private String url;
+
     @Enumerated(value = EnumType.STRING)
     private IsRead isRead;
 
