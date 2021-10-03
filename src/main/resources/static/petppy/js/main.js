@@ -178,11 +178,18 @@
 	contentWayPoint();
 
 	$('.appointment_date').datepicker({
-	  'format': 'm/d/yyyy',
-	  'autoclose': true
+		'format': 'yyyy-mm-dd',
+		'autoclose': true,
+
 	});
 
-	$('.appointment_time').timepicker();
+	/*$('.appointment_time').timepicker({
+		'minTime': '09:00am', // 조회하고자 할 시작 시간 ( 09시 부터 선택 가능하다. )
+		'maxTime': '20:00pm', // 조회하고자 할 종료 시간 ( 20시 까지 선택 가능하다. )
+		'timeFormat': 'H:i',
+		'step': 120 // 30분 단위로 지정. ( 10을 넣으면 10분 단위 )
+
+	});*/
 
 })(jQuery);
 

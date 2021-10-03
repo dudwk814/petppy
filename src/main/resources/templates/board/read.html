@@ -200,7 +200,8 @@
 
                     $.each(result.dtoList, function (index, comment) {
 
-                        var date = comment.createdDate.split('T')[0];
+                        var date = timeForToday(comment.createdDate);
+
 
                         console.log(comment.deleteStatus);
 
@@ -351,8 +352,7 @@
 
                         $.each(result, function (index, children) {
 
-                            var name = children.email.split('@')[0];
-                            var date = children.createdDate.split('T')[0];
+                            var date = timeForToday(children.createdDate);
 
 
                             childrenList += '                                            <li class="comment">\n' +
@@ -424,7 +424,7 @@
 
         $('.children').attr('style', 'display:none');
 
-        function comment_create_promise(commentContent){ // 댓글 작성 함수
+        function comment_create_promise(commentContent, parentId){ // 댓글 작성 함수
 
             [# th:if = "${session.user != null}"]
             var commentDTO = {
@@ -432,7 +432,7 @@
                 content: commentContent,
                 userId: [[${session.user.id}]],
                 email: [[${session.user.email}]],
-                parentId: $(this).data("parent")
+                parentId: parentId
             };
 
             [/]
@@ -513,7 +513,7 @@
 
 
 
-        /* 답글 등록 버튼 클릭 시 답글 등록 */
+        /* 댓글 & 답글 등록 버튼 클릭 시 댓글 & 답글 등록 */
         $(document).on('click', '.replyAddBtn', function (e) {
 
             if ([[${session.user == null}]]) {
@@ -523,6 +523,7 @@
             }
 
             var commentContent = $(this).closest('.input-group').find('#reply-content').val();
+            var parentId = $(this).data("parent");
 
 
             if (commentContent.trim() === "") {
@@ -536,7 +537,7 @@
             }
 
 
-            comment_create_promise(commentContent)
+            comment_create_promise(commentContent, parentId)
             .then(notify_ajax)
             .then(comment_count_promise);
 

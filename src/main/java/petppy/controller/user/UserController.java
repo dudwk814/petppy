@@ -57,6 +57,7 @@ public class UserController {
         Type type = (Type) session.getAttribute("type");
 
         model.addAttribute("userDTO", userService.findByEmailAndType(userEmail, type));
+        model.addAttribute("unCheckedNotifyCount", notificationService.unCheckedCount(userEmail));
 
         return "/user/dashboard";
     }
