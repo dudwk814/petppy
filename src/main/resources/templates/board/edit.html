@@ -20,18 +20,18 @@
     </section>
     <section class="ftco-section bg-light">
       <div class="container">
-        <form action="/board/edit" method="post">
+        <form action="/board/edit" method="post" class="edit-form">
           <input type="hidden" name="email" th:value="${session.user.email}">
           <input type="hidden" name="hit" value="0">
           <input type="hidden" name="commentCount" th:value="0">
-          <div class="input-group">
+          <div class="input-group title-input-group">
             <input class="form-control" name="title" placeholder="제목" style="margin-bottom: 15px;">
           </div>
           <textarea name="content" id="editor"></textarea>
         <div class="row d-flex">
           <div class="col-md-12" style="height: 70px; margin-top: 15px;">
             <a th:href="@{/board}" class="btn btn-secondary" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 목록으로 돌아가기">목록</a>
-            <button type="submit" class="btn btn-success float-right" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 저장하기">저장</button>
+            <button type="submit" class="btn btn-success float-right edit-submit-btn" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 저장하기">저장</button>
           </div>
         </div>
         </form>
@@ -51,6 +51,22 @@
     };
 
     CKEDITOR.replace('editor', ckeditor_config);
+
+    /* 제목 공백 체크 */
+    $('.edit-submit-btn').on('click', function (e) {
+      e.preventDefault();
+
+      var title = $("input[name='title']").val().trim();
+
+      if (title === "") { // 제목이 공백인 경우
+        $("input[name='title']").attr('class', 'form-control is-invalid')
+        $("input[name='title']").attr('placeholder', '제목을 입력해주세요.');
+        return false;
+      }
+
+      $('.edit-form').submit();
+
+    });
   });
 </script>
 </html>

@@ -119,7 +119,6 @@ public class BoardController {
     public String modify(BoardDto boardDto, PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
 
         boardDto.setContent(XssPreventer.unescape(boardDto.getContent()));
-        boardDto.setTitle(XssPreventer.unescape(boardDto.getTitle()));
 
         boardService.modifyBoard(boardDto);
 
