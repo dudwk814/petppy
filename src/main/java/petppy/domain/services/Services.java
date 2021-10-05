@@ -22,6 +22,7 @@ public class Services extends BaseTimeEntity {
     @Column(name = "service_id")
     private Long id;
 
-    @Column(name = "service_name")
-    private String serviceName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "service_type")
+    private ServicesType servicesType;
 }

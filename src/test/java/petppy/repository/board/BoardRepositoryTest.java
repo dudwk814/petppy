@@ -1,4 +1,4 @@
-package petppy.repository;
+package petppy.repository.board;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

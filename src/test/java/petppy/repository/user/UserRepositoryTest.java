@@ -1,4 +1,4 @@
-package petppy.repository;
+package petppy.repository.user;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

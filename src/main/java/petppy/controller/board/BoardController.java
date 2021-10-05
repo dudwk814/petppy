@@ -106,6 +106,8 @@ public class BoardController {
 
         BoardDto boardDto = boardService.searchBoard(id);
 
+        boardDto.setTitle(XssPreventer.unescape(boardDto.getTitle()));
+
         model.addAttribute("board", boardDto);
 
         return "/board/modify";

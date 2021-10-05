@@ -207,19 +207,19 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="#">
+                        <form action="#" class="reserve-form">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="form-field">
                                             <div class="select-wrap">
-                                                <select name="" id="" class="form-control">
+                                                <select name="servicesType" id="services-type-select" class="form-control">
                                                     <option value="">Select services</option>
-                                                    <option value="">고양이 돌봄</option>
-                                                    <option value="">강아지 산책</option>
-                                                    <option value="">반려동물 목욕</option>
-                                                    <option value="">반려동물 미용</option>
-                                                    <option value="">반려동물 종일 돌봄</option>
+                                                    <option data-id="1" value="CAT_SITTING">고양이 돌봄</option>
+                                                    <option data-id="2" value="DOG_WALK">강아지 산책</option>
+                                                    <option data-id="3" value="PET_SPA">반려동물 목욕</option>
+                                                    <option data-id="4" value="PET_GROOMING">반려동물 미용</option>
+                                                    <option data-id="5" value="PET_DAYCARE">반려동물 종일 돌봄</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -235,15 +235,15 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <input type="text" th:if="${session.user != null}" class="form-control" th:value="${session.user.email}" disabled placeholder="Vehicle number">
-                                        <input type="text" th:unless="${session.user != null}" class="form-control" placeholder="Vehicle number">
+                                        <input type="text" th:if="${session.user != null}" class="form-control reserve-form-email" th:data-id="${session.user.id}" th:value="${session.user.email}" disabled placeholder="Vehicle number">
+                                        <input type="text" th:unless="${session.user != null}" class="form-control reserve-form-email" placeholder="Vehicle number">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="input-wrap">
                                             <div class="icon"><span class="fa fa-calendar"></span></div>
-                                            <input type="text" class="form-control appointment_date" placeholder="날짜">
+                                            <input type="text" class="form-control appointment_date reserveStartDate" placeholder="날짜">
                                         </div>
                                     </div>
                                 </div>
@@ -251,7 +251,7 @@
                                     <div class="form-group">
                                         <div class="input-wrap">
                                             <div class="icon"><span class="fa fa-clock-o"></span></div>
-                                            <select type="text" class="form-control " placeholder="Time">
+                                            <select type="text"  class="form-control reserveStartTime" placeholder="Time">
                                                 <option selected>시간</option>
                                                 <option value="09:00" disabled style="color: red">09:00 AM - 예약 불가</option>
                                                 <option value="11:00">11:00 AM</option>
@@ -272,7 +272,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input type="submit" value="예약하기"
-                                               class="btn btn-primary py-3 px-4 reservation-btn">
+                                               class="btn btn-primary py-3 px-4 reserve-submit-btn">
                                     </div>
                                 </div>
                             </div>
@@ -300,7 +300,47 @@
             $("#reservationModal").modal("show");
         });
 
+        $(document).on('click', '.reserve-submit-btn', function (e) {
+            e.preventDefault();
 
-    })
+            var userId = $('.reserve-form-email').data('id');
+            var email = $('.reserve-form-email').val();
+            var servicesId = $('#services-type-select').find('option:selected').data('id');
+            var servicesType = $('#services-type-select').val();
+            var reserveStartDate = $('.reserveStartDate').val();
+            var reserveStartTime = $('.reserveStartTime').val();
+            var reserveStartDateTime = (reserveStartDate + "-" + reserveStartTime).replace(':', '-');
+
+            var reserveDTO = {
+                userId : userId,
+                email : email,
+                servicesId : servicesId,
+                servicesType : servicesType,
+                reserveStartDateTime : reserveStartDateTime
+            }
+
+            console.log(userId);
+            console.log(email);
+            console.log(servicesId);
+            console.log(servicesType);
+            console.log(reserveStartDate);
+            console.log(reserveStartTime);
+            console.log(reserveStartDateTime);
+
+            $.ajax({
+                url : '/reserve/create',
+                type : 'post',
+                data : reserveDTO,
+                dataType : 'json',
+                success : function (result) {
+                    console.log(result);
+                }
+
+            })
+
+        });
+
+
+    });
 </script>
 </html>

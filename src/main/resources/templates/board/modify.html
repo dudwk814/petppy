@@ -20,7 +20,7 @@
         </section>
         <section class="ftco-section bg-light">
             <div class="container">
-                <form action="/board/modify" method="post">
+                <form action="/board/modify" method="post" class="modify-submit-form">
                     <input type="hidden" name="boardId" th:value="${board.boardId}">
                     <input type="hidden" name="hit" th:value="${board.hit}">
                     <input type="hidden" name="commentCount" th:value="${board.commentCount}">
@@ -51,6 +51,22 @@
         };
 
         CKEDITOR.replace('editor', ckeditor_config);
+
+        /* 제목 공백 체크 */
+        $('.modify-submit-form').on('click', function (e) {
+            e.preventDefault();
+
+            var title = $("input[name='title']").val().trim();
+
+            if (title === "") { // 제목이 공백인 경우
+                $("input[name='title']").attr('class', 'form-control is-invalid')
+                $("input[name='title']").attr('placeholder', '제목을 입력해주세요.');
+                return false;
+            }
+
+            $('.modify-submit-form').submit();
+
+        });
     });
 </script>
 </html>
