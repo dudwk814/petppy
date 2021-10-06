@@ -265,7 +265,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <textarea name="" id="" cols="30" rows="7" class="form-control"
+                                        <textarea name="" id="reserveRequest" cols="30" rows="7" class="form-control"
                                                   placeholder="요청사항"></textarea>
                                     </div>
                                 </div>
@@ -310,14 +310,18 @@
             var reserveStartDate = $('.reserveStartDate').val();
             var reserveStartTime = $('.reserveStartTime').val();
             var reserveStartDateTime = (reserveStartDate + "-" + reserveStartTime).replace(':', '-');
+            var reserveRequest = $('#reserveRequest').val();
 
-            var reserveDTO = {
+            var reserveDTO = JSON.stringify({
                 userId : userId,
                 email : email,
                 servicesId : servicesId,
                 servicesType : servicesType,
-                reserveStartDateTime : reserveStartDateTime
-            }
+                reserveStartDate : reserveStartDateTime,
+                request : reserveRequest
+            });
+
+
 
             console.log(userId);
             console.log(email);
@@ -331,9 +335,12 @@
                 url : '/reserve/create',
                 type : 'post',
                 data : reserveDTO,
+                contentType: 'application/json',
                 dataType : 'json',
                 success : function (result) {
                     console.log(result);
+
+                    alert('예약이 완료되었습니다.');
                 }
 
             })

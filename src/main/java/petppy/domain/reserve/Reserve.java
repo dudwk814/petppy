@@ -39,6 +39,9 @@ public class Reserve extends BaseTimeEntity {
     @JoinColumn(name = "service_id")
     private Services services;
 
+    @Column(name = "request")
+    private String request;
+
     @Column(name = "reserve_start_date")
     private LocalDateTime reserveStartDate;
 

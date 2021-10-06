@@ -180,7 +180,8 @@
 	$('.appointment_date').datepicker({
 		'format': 'yyyy-mm-dd',
 		'autoclose': true,
-
+		'startDate' : '0d',
+		'title' : '예약일'
 	});
 
 	/*$('.appointment_time').timepicker({

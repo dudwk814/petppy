@@ -34,6 +34,7 @@ public interface ReserveService {
                 .email(reserve.getUser().getEmail())
                 .reserveEndDate(reserve.getReserveEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")))
                 .reserveStartDate(reserve.getReserveStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")))
+                .request(reserve.getRequest())
                 .build();
     }
 
@@ -44,7 +45,7 @@ public interface ReserveService {
 
         String[] reserveStartDateToString = dto.getReserveStartDate().split("-");
 
-        int[] reserveStartDateToInt = new int[4];
+        int[] reserveStartDateToInt = new int[5];
 
         for (int i = 0; i < reserveStartDateToString.length; i++) {
 
@@ -62,6 +63,7 @@ public interface ReserveService {
                 .reserveStartDate(reserveStartDate)
                 .reserveEndDate(reserveStartDate.plusHours(2))
                 .reserveType(dto.getReserveType())
+                .request(dto.getRequest())
                 .build();
     }
 }

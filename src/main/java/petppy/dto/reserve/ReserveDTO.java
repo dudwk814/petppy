@@ -27,6 +27,8 @@ public class ReserveDTO {
 
     private String reserveStartDate;
 
+    private String request;
+
     private String reserveEndDate;
 
     private ReserveType reserveType;
