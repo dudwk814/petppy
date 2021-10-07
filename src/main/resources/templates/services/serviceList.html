@@ -247,7 +247,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 time-col">
                                     <div class="form-group">
                                         <div class="input-wrap">
                                             <div class="icon"><span class="fa fa-clock-o"></span></div>
@@ -312,7 +312,7 @@
             var reserveStartDateTime = (reserveStartDate + "-" + reserveStartTime).replace(':', '-');
             var reserveRequest = $('#reserveRequest').val();
 
-            var reserveDTO = JSON.stringify({
+            var reserveDTO = JSON.stringify({   // 예약 데이터
                 userId : userId,
                 email : email,
                 servicesId : servicesId,
@@ -321,15 +321,16 @@
                 request : reserveRequest
             });
 
+            if (servicesType === "") {
+                alert('이용하실 서비스를 선택해주세요!');
+                return false;
+            } else if (reserveStartDate === "") {
+                alert('이용하실 날짜를 선택해주세요!');
+                return false;
+            }
 
 
-            console.log(userId);
-            console.log(email);
-            console.log(servicesId);
-            console.log(servicesType);
-            console.log(reserveStartDate);
-            console.log(reserveStartTime);
-            console.log(reserveStartDateTime);
+
 
             $.ajax({
                 url : '/reserve/create',
@@ -343,7 +344,7 @@
                     alert('예약이 완료되었습니다.');
                 }
 
-            })
+            });
 
         });
 
