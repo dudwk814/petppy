@@ -1,13 +1,17 @@
 package petppy.service.user;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import petppy.domain.user.Type;
 import petppy.domain.user.User;
 import petppy.domain.user.Rating;
 import petppy.dto.user.MembershipDTO;
 import petppy.dto.user.UserDTO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -29,7 +33,7 @@ public interface UserService {
 
     public MembershipDTO findMembership(Long userId);
 
-    public boolean checkMemberIdExist(UserDTO userDTO);
+    public boolean checkEmailExist(String email);
 
     default User dtoToEntity(UserDTO dto) {
         User user = User.builder()
@@ -51,4 +55,7 @@ public interface UserService {
 
         return userDTO;
     }
+
+
+
 }

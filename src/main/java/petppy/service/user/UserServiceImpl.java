@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import petppy.domain.*;
 import petppy.domain.user.Membership;
 import petppy.domain.user.Rating;
@@ -18,7 +20,9 @@ import petppy.exception.UserNotFoundException;
 import petppy.repository.user.UserRepository;
 import petppy.repository.user.MembershipRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -148,8 +152,9 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public boolean checkMemberIdExist(UserDTO userDTO) {
-        Optional<User> findMember = userRepository.findByEmail(userDTO.getEmail());
+    // 회원가입 이메일 항목 중복 체크
+    public boolean checkEmailExist(String email) {
+        Optional<User> findMember = userRepository.findByEmail(email);
 
         if (findMember.isPresent()) {
             System.out.println("findMember.get() = " + findMember.get());
@@ -157,4 +162,7 @@ public class UserServiceImpl implements UserService {
 
         return findMember.isPresent();
     }
+
+
+    
 }

@@ -108,11 +108,11 @@
                                 <span class="flaticon-dog-eating"></span>
                             </div>
                             <div class="media-body p-4">
-                                <h3 class="heading">Pet Hotel</h3>
+                                <h3 class="heading">수의사 방문</h3>
                                 <p>Far far away, behind the word mountains, far from the countries Vokalia and
                                     Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
                                     right.</p>
-                                <a href="#" class="btn-custom d-flex align-items-center justify-content-center reservation-btn pet-hotel"><span
+                                <a href="#" class="btn-custom d-flex align-items-center justify-content-center reservation-btn vet-visit"><span
                                         class="fa fa-chevron-right"></span><i class="sr-only">Read more</i></a>
                             </div>
                         </div>
@@ -121,79 +121,7 @@
             </div>
         </section>
 
-        <!--<section class="ftco-appointment ftco-section ftco-no-pt ftco-no-pb img"
-                 style="background-image: url('/petppy/images/bg_3.jpg');">
-            <div class="overlay"></div>
-            <div class="container">
-                <div class="row d-md-flex justify-content-end">
-                    <div class="col-md-12 col-lg-6 half p-3 py-5 pl-lg-5 ftco-animate">
-                        <h2 class="mb-4">Reservation</h2>
-                        <form action="#" class="appointment">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="form-field">
-                                            <div class="select-wrap">
-                                                <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">Select services</option>
-                                                    <option value="">Cat Sitting</option>
-                                                    <option value="">Dog Walk</option>
-                                                    <option value="">Pet Spa</option>
-                                                    <option value="">Pet Grooming</option>
-                                                    <option value="">Pet Daycare</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input th:if="${session.user != null}" type="text" class="form-control"
-                                               th:value="${session.user.name}">
-                                        <input th:unless="${session.user != null}" type="text" class="form-control"
-                                               placeholder="name">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Vehicle number">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <div class="input-wrap">
-                                            <div class="icon"><span class="fa fa-calendar"></span></div>
-                                            <input type="text" class="form-control appointment_date" placeholder="Date">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <div class="input-wrap">
-                                            <div class="icon"><span class="fa fa-clock-o"></span></div>
-                                            <input type="text" class="form-control appointment_time" placeholder="Time">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <textarea name="" id="" cols="30" rows="7" class="form-control"
-                                                  placeholder="요청사항"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="submit" value="예약하기"
-                                               class="btn btn-primary py-3 px-4 reservation-btn">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>-->
+
 
         <!-- Modal -->
         <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -290,14 +218,7 @@
 <script th:inline="javascript">
     $(document).ready(function (e) {
 
-        $('.reserveStartDate').datepicker({
-            'format': 'yyyy-mm-dd',
-            'autoclose': true,
-            'startDate' : '0d',
-            'title' : '예약일',
-            "multidate" : 'true', //여러 날짜 선택할 수 있게 하는 옵션 기본값 :false
-            "multidateSeparator" :"~"
-        });
+
 
         $(".reservation-btn").on("click", function (e) {
             e.preventDefault();
@@ -308,27 +229,27 @@
                 return;
             }
 
+            // 각 서비스에 맞는 input value로 변경
             if ($(this).hasClass('dog-walking')) {
-                $("#reservationModal").find('#services-type').val('강아지 산책');
                 $('#reserve-form')[0].reset();
-                $('.reserve-start-date-col').attr('class', 'col-md-6 reserve-start-date-col');
-                $('.reserve-start-time-col').show();
-                $("#reservationModal").modal("show");
             } else if ($(this).hasClass('pet-grooming')) {
+                $('#reserve-form')[0].reset();
                 $("#reservationModal").find('#services-type').val('애완동물 미용');
+
+            } else if ($(this).hasClass('vet-visit')) {
                 $('#reserve-form')[0].reset();
-                $('.reserve-start-date-col').attr('class', 'col-md-6 reserve-start-date-col');
-                $('.reserve-start-time-col').show();
-                $("#reservationModal").modal("show");
-            } else if ($(this).hasClass('pet-hotel')) {
-                $("#reservationModal").find('#services-type').val('애완동물 호텔');
-                $('#reserve-form')[0].reset();
-                $('.reserve-start-time-col').hide();
-                $('.reserve-start-date-col').attr('class', 'col-md-12 reserve-start-date-col');
-                $('.reserveStartDate').removeClass('appointment_date')
-                $("#reservationModal").modal("show");
+                $("#reservationModal").find('#services-type').val('수의사 방문');
+
             }
+
+
+
+            $("#reservationModal").modal("show");
         });
+
+
+
+
 
         $(document).on('click', '.reserve-submit-btn', function (e) {
             e.preventDefault();

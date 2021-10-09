@@ -7,12 +7,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import petppy.config.util.FormValidator;
 import petppy.domain.board.Board;
 import petppy.dto.board.BoardDto;
 import petppy.dto.PageRequestDTO;
@@ -25,8 +30,10 @@ import petppy.service.user.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -37,6 +44,7 @@ public class BoardController {
     private final BoardService boardService;
     private final CommentService commentService;
     private final UserService userService;
+    private final FormValidator formValidator;
 
     @Value("${resources.location}")
     private String resourcesLocation;
@@ -71,7 +79,7 @@ public class BoardController {
      * 글 작성 폼으로 이동
      */
     @GetMapping("/edit")
-    public String editForm() {
+    public String editForm(BoardDto boardDto) {
 
         return "/board/edit";
     }
@@ -80,7 +88,16 @@ public class BoardController {
      * 글 작성
      */
     @PostMapping("/edit")
-    public String edit(BoardDto boardDto, HttpSession session) {
+    public String edit(@Valid BoardDto boardDto, BindingResult result, Model model, HttpSession session) {
+
+        if (result.hasErrors()) {
+            Map<String, String> validatorResult = formValidator.validateHandling(result);
+            for (String key : validatorResult.keySet()) {
+                model.addAttribute(key, validatorResult.get(key));
+            }
+
+            return "/board/edit";
+        }
 
         String userEmail = (String) session.getAttribute("userEmail");
 
@@ -100,11 +117,15 @@ public class BoardController {
     /**
      * 글 수정 폼으로 이동
      */
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', ROLE_MEMBER)")
     @GetMapping("/modify")
-    public String modifyForm(Long id, PageRequestDTO requestDTO, Model model) {
+    public String modifyForm(Long id, HttpSession session, PageRequestDTO requestDTO, Model model) {
+
 
         BoardDto boardDto = boardService.searchBoard(id);
+
+        if (boardDto.getEmail() != session.getAttribute("userEmail")) {
+            return "redirect:/board/read?id=" + boardDto.getBoardId();
+        }
 
         boardDto.setTitle(XssPreventer.unescape(boardDto.getTitle()));
 
@@ -116,17 +137,19 @@ public class BoardController {
     /**
      * 글 수정
      */
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', ROLE_MEMBER)")
+    @PreAuthorize("isAuthenticated() and #boardDto.email == authentication.principal.username")
     @PostMapping("/modify")
-    public String modify(BoardDto boardDto, PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
+    public String modify(BoardDto boardDto, PageRequestDTO requestDTO, RedirectAttributes rttr) {
+
 
         boardDto.setContent(XssPreventer.unescape(boardDto.getContent()));
 
         boardService.modifyBoard(boardDto);
 
-        redirectAttributes.addFlashAttribute("requestDTO", requestDTO);
+        rttr.addAttribute("id", boardDto.getBoardId());
 
-        return "redirect:/board";
+
+        return "redirect:/board/read";
     }
 
     /**

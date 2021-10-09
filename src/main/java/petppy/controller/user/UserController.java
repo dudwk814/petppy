@@ -2,13 +2,15 @@ package petppy.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import petppy.config.util.FormValidator;
 import petppy.domain.user.Type;
 import petppy.dto.user.UserDTO;
 import petppy.service.board.BoardService;
@@ -17,6 +19,9 @@ import petppy.service.notification.NotificationService;
 import petppy.service.user.UserService;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import java.util.Map;
 
 import static petppy.domain.user.Type.*;
 
@@ -29,6 +34,7 @@ public class UserController {
     private final BoardService boardService;
     private final CommentService commentService;
     private final NotificationService notificationService;
+    private final FormValidator formValidator;
 
     /**
      * 회원 설정 페이지
@@ -66,9 +72,8 @@ public class UserController {
      * 회원가입 form으로 이동
      */
     @GetMapping("/signupForm")
-    public String signupForm(Model model) {
+    public String signupForm(UserDTO userDTO, Model model) {
 
-        model.addAttribute("form", new UserDTO());
         return "signup";
     }
 
@@ -76,15 +81,26 @@ public class UserController {
      * 회원가입
      */
     @PostMapping("/signup")
-    public String signup(UserDTO userDTO, RedirectAttributes rttr) {
+    public String signup(@Valid UserDTO userDTO, BindingResult result,  Model model) {
+
+        if (result.hasErrors()) {
+
+            Map<String, String> validatorResult = formValidator.validateHandling(result);
+            for (String key : validatorResult.keySet()) {
+                model.addAttribute(key, validatorResult.get(key));
+            }
+
+            return "signup";
+        }
         userDTO.setType(NORMAL);
 
-        if (userService.checkMemberIdExist(userDTO) == true) {
+
+        /*if (userService.checkMemberIdExist(userDTO) == true) {
 
             rttr.addFlashAttribute("checkEmail", true);
 
             return "redirect:/user/signupForm";
-        }
+        }*/
 
         String name = userService.joinedMember(userDTO);
 
@@ -120,5 +136,14 @@ public class UserController {
         userService.ModifyUserAddress(userDTO);
 
         return "redirect:/user/modifyForm";
+    }
+
+    /**
+     * 회원가입 이메일 중복 검증
+     */
+    @ResponseBody
+    @GetMapping(value = "/checkEmailExist/{email}")
+    public ResponseEntity<Boolean> checkEmailExist(@PathVariable("email") String email) {
+        return new ResponseEntity<>(userService.checkEmailExist(email), HttpStatus.OK);
     }
 }

@@ -4,16 +4,19 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
 public class BoardDto {
 
     private Long boardId;
+
+    @NotBlank(message = "제목은 필수 입력 항목입니다.")
     private String title;
     private String content;
-    private int hit;
-    private int commentCount;
+    private Integer hit;
+    private Integer commentCount ;
 
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
@@ -24,7 +27,7 @@ public class BoardDto {
 
     @Builder
     @QueryProjection
-    public BoardDto(Long boardId, Long userId, String title, String content, int hit, int commentCount, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public BoardDto(Long boardId, Long userId, String title, String content, Integer hit, Integer commentCount, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.boardId = boardId;
         this.userId = userId;
         this.title = title;

@@ -20,14 +20,15 @@
     </section>
     <section class="ftco-section bg-light">
       <div class="container">
-        <form action="/board/edit" method="post" class="edit-form">
+        <form action="/board/edit" th:object="${boardDto}" method="post" class="edit-form">
           <input type="hidden" name="email" th:value="${session.user.email}">
-          <input type="hidden" name="hit" value="0">
-          <input type="hidden" name="commentCount" th:value="0">
-          <div class="input-group title-input-group">
-            <input class="form-control" name="title" placeholder="제목" style="margin-bottom: 15px;">
+          <input type="hidden" name="hit" th:field="*{hit}" value="0">
+          <input type="hidden" name="commentCount" th:field="*{commentCount}"  th:value="0">
+          <div class="form-group title-input-group">
+            <input class="form-control" name="title" th:field="*{title}" placeholder="제목" style="margin-bottom: 15px;">
+            <span th:style="${'color: red;'}" th:text="${valid_title}"></span>
           </div>
-          <textarea name="content" id="editor"></textarea>
+          <textarea name="content" th:field="*{content}" id="editor"></textarea>
         <div class="row d-flex">
           <div class="col-md-12" style="height: 70px; margin-top: 15px;">
             <a th:href="@{/board}" class="btn btn-secondary" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 목록으로 돌아가기">목록</a>
@@ -52,7 +53,7 @@
 
     CKEDITOR.replace('editor', ckeditor_config);
 
-    /* 제목 공백 체크 */
+     /*제목 공백 체크*/
     $('.edit-submit-btn').on('click', function (e) {
       e.preventDefault();
 

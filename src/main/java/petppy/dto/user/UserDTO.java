@@ -5,6 +5,9 @@ import petppy.domain.user.Role;
 import petppy.domain.user.Type;
 import petppy.domain.user.User;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -13,9 +16,17 @@ import java.time.LocalDateTime;
 public class UserDTO implements Serializable {
 
     private Long id;
+
+    @Email(message = "이메일 형식을 맞춰주세요.")
+    @NotBlank(message = "필수 입력 항목입니다.")
     private String email;
+
+    @Size(min = 4, max = 16, message = "비밀번호를 4 ~ 16글자 사이로 입력해주세요.")
     private String password;
+
+    @Size(min = 2, max = 10, message = "이름을 2 ~ 10글자 사이로 입력해주세요.")
     private String name;
+
     private String picture;
     private LocalDateTime joinedDate;
     private LocalDateTime modifiedDate;

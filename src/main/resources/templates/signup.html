@@ -13,30 +13,35 @@
                                 <div class="card-body bg-transparent border-white"><h2></h2></div>
                                 <div class="card-body">
                                     <h2 class="card-title">회원가입</h2>
-                                    <form th:action="@{/user/signup}" th:object="${form}" method="post"
+                                    <form th:action="@{/user/signup}" th:object="${userDTO}" method="post"
                                           id="sign-up-form" class="justify-content-start">
                                         <div class="form-group" id="signUp-Form-name-group">
                                             <label th:for="name" class="d-flex justify-content-start">이름</label>
                                             <input type="text" class="form-control" th:field="*{name}"
                                                    placeholder="이름">
+                                            <span th:style="${'color: red;'}" th:text="${valid_name}"></span>
                                         </div>
                                         <div class="form-group" id="signUp-Form-email-group">
                                             <label th:for="email" class="d-flex justify-content-start">이메일</label>
-                                            <input type="email" th:field="*{email}" class="form-control"
+                                            <input type="text" th:field="*{email}" class="form-control"
                                                    aria-describedby="emailHelp" placeholder="example@petppy.com">
+                                            <span th:style="${'color: red;'}" th:text="${valid_email}"></span>
                                             <small id="emailHelp" class="form-text text-muted"></small>
+
                                         </div>
 
                                         <div class="form-group" id="signUp-Form-password-group1">
                                             <label th:for="password" class="d-flex justify-content-start">비밀번호</label>
                                             <input type="password" th:field="*{password}" class="form-control"
                                                    placeholder="4글자 이상의 비밀번호">
+                                            <span th:style="${'color: red;'}" th:text="${valid_password}"></span>
                                         </div>
                                         <div class="form-group" id="signUp-Form-password-group2">
                                             <label th:for="password2" class="d-flex justify-content-start">비밀번호
                                                 확인</label>
                                             <input type="password" class="form-control" id="password2"
                                                    placeholder="4글자 이상의 비밀번호">
+                                            <span th:style="${'color: red;'}" th:text="${valid_password}"></span>
                                         </div>
 
                                         <button type="submit" id="signUp-btn" class="btn btn-success btn-lg btn-block"
@@ -79,8 +84,6 @@
         }
 
 
-
-
         /* 회원가입 폼 유효성 검증 */
         $("#signUp-btn").on("click", function (e) {
                 e.preventDefault();
@@ -89,7 +92,22 @@
                     return;
                 }
 
-                $("#sign-up-form").submit();
+                var email = $('#email').val().trim();
+
+                $.ajax({
+                    url : '/user/checkEmailExist/' + email,
+                    type : 'get',
+                    success : function (result) {
+                        if (result) {
+                            alert('이미 가입된 회원 이메일입니다.');
+                            return false;
+                        } else {
+                            $("#sign-up-form").submit();
+                        }
+                    }
+                });
+
+
 
             }
         );
@@ -176,4 +194,6 @@
 
     });
 </script>
+
+
 </html>

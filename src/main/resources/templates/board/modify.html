@@ -20,12 +20,13 @@
         </section>
         <section class="ftco-section bg-light">
             <div class="container">
-                <form action="/board/modify" method="post" class="modify-submit-form">
+                <form action="/board/modify"  method="post" class="modify-submit-form">
                     <input type="hidden" name="boardId" th:value="${board.boardId}">
                     <input type="hidden" name="hit" th:value="${board.hit}">
                     <input type="hidden" name="commentCount" th:value="${board.commentCount}">
+                    <input type="hidden" name="email" th:value="${board.email}">
                     <div class="input-group">
-                        <input class="form-control" name="title" placeholder="제목" style="margin-bottom: 15px;" th:value="${board.title}">
+                        <input class="form-control"  name="title" placeholder="제목" style="margin-bottom: 15px;" th:value="${board.title}">
                     </div>
                     <textarea name="content" id="editor" th:value="${board.content}" th:text="${board.content}"></textarea>
                     <div class="row d-flex">
@@ -53,7 +54,7 @@
         CKEDITOR.replace('editor', ckeditor_config);
 
         /* 제목 공백 체크 */
-        $('.modify-submit-form').on('click', function (e) {
+        $('submit').on('click', function (e) {
             e.preventDefault();
 
             var title = $("input[name='title']").val().trim();
