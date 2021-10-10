@@ -137,7 +137,6 @@ public class BoardController {
     /**
      * 글 수정
      */
-    @PreAuthorize("isAuthenticated() and #boardDto.email == authentication.principal.username")
     @PostMapping("/modify")
     public String modify(BoardDto boardDto, PageRequestDTO requestDTO, RedirectAttributes rttr) {
 
@@ -155,9 +154,18 @@ public class BoardController {
     /**
      * 글 삭제
      */
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', ROLE_MEMBER)")
     @PostMapping("/delete")
-    public String delete(Long id, PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
+    public String delete(Long id, HttpSession session, PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
+
+        BoardDto boardDto = boardService.searchBoard(id);
+
+        String email = (String) session.getAttribute("userEmail");
+
+        if (!boardDto.getEmail().equals(email)) {
+            return "redirect:/board";
+        }
+
+
         boardService.deleteBoard(id);
 
         redirectAttributes.addFlashAttribute("requestDTO", requestDTO);

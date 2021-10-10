@@ -36,7 +36,7 @@
                   <li><span class="fa fa-check mr-2"></span>Free Supports</li>
                 </ul>
 
-                <a href="#" class="btn btn-primary d-block px-2 py-3" data-membership="Personal">Get Started</a>
+                <a href="#" class="btn btn-primary kakaoPay d-block px-2 py-3" data-membership="Personal">카카오페이 간편 결제</a>
               </div>
             </div>
           </div>
@@ -145,14 +145,14 @@
 
 <script th:inline="javascript">
   $(document).ready(function (e) {
-    $(".btn-primary").on("click", function (e) {
+    $(".kakaoPay").on("click", function (e) {
       e.preventDefault();
 
       if ([[${session.user}]] == null) {
         $("#loginModal").modal("show");
       } else {
 
-        $("#membershipModal").modal("show");
+        requestKakaoPay();
       }
 
 
