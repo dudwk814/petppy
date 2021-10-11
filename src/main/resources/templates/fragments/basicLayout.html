@@ -299,6 +299,7 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script th:inline="javascript">
 
@@ -309,32 +310,51 @@
         IMP.init("imp59501026"); // 예: imp00000000
 
         // iamport kakaoPay 결제 요청
-        function requestKakaoPay() {
+        function changeMembershipRequestKakaoPay(request) {
             // IMP.request_pay(param, callback) 결제창 호출
             IMP.request_pay({
                 pg : 'kakaopay',
                 pay_method : 'card',
                 merchant_uid: "petppy_" + new Date().getTime(), // 상점에서 관리하는 주문 번호
-                name : '주문명:결제테스트',
-                amount : 14000,
-                buyer_email : 'iamport@siot.do',
-                buyer_name : '구매자이름',
+                name : '주문명:' + request.rating,
+                amount : request.price,
+                buyer_email : request.email,
+                buyer_name : request.name,
                 buyer_tel : '010-1234-5678',
                 buyer_addr : '서울특별시 강남구 삼성동',
                 buyer_postcode : '123-456'
             }, function(rsp) {
                 console.log(rsp);
                 if ( rsp.success ) {    // 결제 성공시 서버에 ajax 데이터 넘기면 됨
-                    var msg = '결제가 완료되었습니다.';
-                    msg += '고유ID : ' + rsp.imp_uid;
-                    msg += '상점 거래ID : ' + rsp.merchant_uid;
-                    msg += '결제 금액 : ' + rsp.paid_amount;
-                    msg += '카드 승인번호 : ' + rsp.apply_num;
-                } else {
-                    var msg = '결제에 실패하였습니다.';
-                    msg += '에러내용 : ' + rsp.error_msg;
+
+                    $.ajax({
+                        url : '/payment/complete',
+                        type : 'post',
+                        dataType : 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data : JSON.stringify({
+                            pg : 'kakao',
+                            price : request.price,
+                            userId : request.userId,
+                            email : request.email,
+                            transactionNumber : rsp.imp_uid,
+                            approvalNumber : rsp.pg_tid
+                        })
+                    }).done(function (data) {
+                        if (everythings_fine) {
+                            var msg = '결제가 완료되었습니다.\n';
+                            msg += '고유ID : ' + rsp.imp_uid + '\n';
+                            msg += '상점 거래ID : ' + rsp.merchant_uid + '\n';
+                            msg += '결제 금액 : ' + rsp.paid_amount + '\n';
+                            msg += '카드 승인번호 : 실제 결제는 되지않습니다.\n';
+                            swal("결제 성공", msg);
+                        } else {
+                            var msg = '결제에 실패하였습니다.\n';
+                            msg += '에러내용 : ' + rsp.error_msg;
+                            swal("결제실패", msg);
+                        }
+                    });
                 }
-                alert(msg);
             });
         }
 

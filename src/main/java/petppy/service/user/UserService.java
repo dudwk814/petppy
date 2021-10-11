@@ -29,7 +29,7 @@ public interface UserService {
 
     public List<UserDTO> findAll(Pageable pageable);
 
-    public void changeMembership(UserDTO userDTO, Rating rating);
+    public void changeMembership(Long userId, String rating);
 
     public MembershipDTO findMembership(Long userId);
 

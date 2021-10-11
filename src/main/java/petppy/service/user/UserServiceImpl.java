@@ -40,9 +40,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void changeMembership(UserDTO dto, Rating rating) {
-        Membership findMembership = membershipRepository.findByUser(dtoToEntity(dto));
-        findMembership.changeRating(rating);
+    public void changeMembership(Long userId, String rating) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Membership findMembership = membershipRepository.findByUser(user);
+
+        Rating changeRating = Rating.NONE;
+
+        if (rating.equals("Personal")) {
+            changeRating = Rating.PERSONAL;
+        } else if (rating.equals("Business")) {
+            changeRating = Rating.BUSINESS;
+        } else if (rating.equals("Ultimate")) {
+            changeRating = Rating.ULTIMATE;
+        }
+        findMembership.changeRating(changeRating);
 
     }
 
