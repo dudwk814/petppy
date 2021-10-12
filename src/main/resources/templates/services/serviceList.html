@@ -273,10 +273,10 @@
             });
 
             if (servicesType === "") {
-                alert('이용하실 서비스를 선택해주세요!');
+                swal("예약실패", "이용하실 서비스를 선택해주세요!");
                 return false;
             } else if (reserveStartDate === "") {
-                alert('이용하실 날짜를 선택해주세요!');
+                swal("예약실패", "이용하실 날짜를 선택해주세요!");
                 return false;
             }
 

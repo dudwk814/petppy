@@ -148,16 +148,18 @@
     $(".kakaoPay").on("click", function (e) {
       e.preventDefault();
 
+
       if ([[${session.user}]] == null) {
         $("#loginModal").modal("show");
-      } else {
+      }
+
+      [# th:if = "${session.user != null}"]
 
         var rating = $(this).data('membership');
         var price = $(this).data('price');
         var userId = [[${session.user.id}]];
         var email = [[${session.user.email}]];
         var name = [[${session.user.name}]];
-
         var request = {
           rating : rating,
           userId : userId,
@@ -166,7 +168,7 @@
           price : price
         }
         changeMembershipRequestKakaoPay(request);
-      }
+      [/]
 
 
     })

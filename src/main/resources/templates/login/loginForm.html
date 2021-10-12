@@ -66,7 +66,7 @@
         fail = [[${session.fail}]];
 
         if (fail == true) {
-            alert("이메일 혹은 비밀번호가 틀렸습니다.");
+            swal("로그인 실패", "이메일 혹은 비밀번호가 틀렸습니다.");
         }
 
         $("button[type='submit']").on("click", function (e) {

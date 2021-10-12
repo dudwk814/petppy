@@ -39,7 +39,7 @@ public class UserController {
     /**
      * 회원 설정 페이지
      */
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', ROLE_MEMBER)")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("")
     public String userPage(HttpSession session, Model model) {
 

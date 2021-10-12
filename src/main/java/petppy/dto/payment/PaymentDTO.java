@@ -24,7 +24,7 @@ public class PaymentDTO {
 
     private String approvalNumber;
 
-    private PaymentStatus paymentStatus = PaymentStatus.SUCCESS;
+    private boolean paymentStatus;
 
     private String email;
 
