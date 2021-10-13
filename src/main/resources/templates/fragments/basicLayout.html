@@ -345,18 +345,18 @@
                                 approvalNumber: rsp.pg_tid,
                                 paymentStatus: rsp.success
                             })
-                        });
-                    }
-                }).done(function () {   // 멤버쉽 등급 변경 함수
-                    $.ajax({
-                        url: '/membership/change/' + request.userId,
-                        type: 'patch',
-                        data: {
-                            userId : request.userId,
-                            rating : request.rating
-                        }
+                        }).done(function () {   // 멤버쉽 등급 변경 함수
+                            $.ajax({
+                                url: '/membership/change/' + request.userId,
+                                type: 'patch',
+                                data: {
+                                    userId: request.userId,
+                                    rating: request.rating
+                                }
 
-                    });
+                            });
+                        })
+                    }
                 }).always(function (data) {
                     if (rsp.success) {
                         var msg = '결제가 완료되었습니다.\n';
