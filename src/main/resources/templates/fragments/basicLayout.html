@@ -330,7 +330,7 @@
                     type: "POST",
                     url: "/payment/verifyIamport/" + rsp.imp_uid
                 }).done(function (data) {   // 결제 함수
-                    if (rsp.paid_amount == data.response.amount) {
+                    if (rsp.paid_amount == data.response.amount && rsp.success) {
                         $.ajax({
                             url: '/payment/complete',
                             type: 'post',
@@ -343,21 +343,77 @@
                                 email: request.email,
                                 transactionNumber: rsp.imp_uid,
                                 approvalNumber: rsp.pg_tid,
-                                paymentStatus: rsp.success
+                                paymentStatus: rsp.success,
+                                detailMessage: '결제성공'
                             })
-                        }).done(function () {   // 멤버쉽 등급 변경 함수
-                            $.ajax({
-                                url: '/membership/change/' + request.userId,
-                                type: 'patch',
-                                data: {
-                                    userId: request.userId,
-                                    rating: request.rating
-                                }
-
-                            });
+                        })
+                    } else {
+                        $.ajax({
+                            url: '/payment/complete',
+                            type: 'post',
+                            dataType: 'json',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify({
+                                pg: 'kakao',
+                                price: request.price,
+                                userId: request.userId,
+                                email: request.email,
+                                transactionNumber: rsp.imp_uid,
+                                approvalNumber: rsp.pg_tid,
+                                paymentStatus: rsp.success,
+                                detailMessage: rsp.error_msg
+                            })
                         })
                     }
-                }).always(function (data) {
+                }).done(function () {   // 멤버쉽 등급 변경 함수
+
+                    if (rsp.success) {
+                        $.ajax({
+                            url: '/membership/change/' + request.userId,
+                            type: 'patch',
+                            data: {
+                                userId: request.userId,
+                                rating: request.rating
+                            }
+
+                        });
+                    }
+                }).done(function () {
+                    if ([[${session.user != null}]] && rsp.success) {   // 알림 저장
+                        var targetEmail = $('#notifyBtn').data('email');
+                        var message =  "멤버십 등급 변경 결제가 완료되었습니다.";
+                        var url = "#";
+
+                        var notificationData = {
+                            targetEmail : targetEmail,
+                            message : message,
+                            notificationType : "payment",
+                            url : url
+                        };
+
+                        $.ajax({
+                            type : 'post',
+                            url : '/notify/save',
+                            data : JSON.stringify(notificationData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType : 'text',
+                        })
+
+                    }
+                }).done(function () {   // 상단 알림 표시
+                    if ([[${session.user != null}]] && rsp.success) {
+                        var targetEmail = $('#notifyBtn').data('email');
+                        var message = "멤버십 등급 변경 결제가 완료되었습니다.";
+                        var url = "#";
+                        if(socket){
+                            let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
+                            /*console.log("msgmsg : " + socketMsg);*/
+                            socket.send(socketMsg);
+                        }
+                    }
+
+                }).always(function (data) { // 결제 결과 alert
+                    console.log(data);
                     if (rsp.success) {
                         var msg = '결제가 완료되었습니다.\n';
                         msg += '고유ID : ' + rsp.imp_uid + '\n';
@@ -370,12 +426,20 @@
                         msg += '에러내용 : ' + rsp.error_msg;
                         swal("결제실패", msg);
                     }
-                })
-
-
-
-
+                });
             });
+        }
+
+        function cancelMembershipRequest(email) {
+            $.ajax({
+                url: '/payment/cancel',
+                type: 'post',
+                data : {
+                    email : email
+                }
+            }).done(function (data) {
+                console.log(data);
+            })
         }
 
         function connectWs(){

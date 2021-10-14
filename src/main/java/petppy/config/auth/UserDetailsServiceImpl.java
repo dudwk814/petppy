@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import petppy.config.auth.dto.LoginUserDTO;
 import petppy.domain.user.Role;
 import petppy.domain.user.User;
+import petppy.dto.user.UserDTO;
 import petppy.repository.user.UserRepository;
 
 import javax.servlet.http.HttpSession;
@@ -55,7 +56,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         loginUserDTO.setName(user.getName());
         loginUserDTO.setAddress(user.getAddress());
 
-        httpSession.setAttribute("user", loginUserDTO);
+        httpSession.setAttribute("user", new UserDTO(user));
         httpSession.setAttribute("userEmail", user.getEmail());
         httpSession.setAttribute("type", user.getType());
 

@@ -5,6 +5,12 @@
     <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
+        <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+          <!-- Position it -->
+          <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+          </div>
+        </div>
         <div class="row no-gutters slider-text align-items-end">
           <div class="col-md-9 ftco-animate pb-5">
             <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Membership <i class="ion-ios-arrow-forward"></i></span></p>
@@ -79,79 +85,27 @@
         </div>
       </div>
     </section>
-
-    <!-- 멤버쉽 모달 -->
-    <div class="modal fade" id="membershipModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-         aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-4 ml-auto">
-                  <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-              </div>
-              <div class="row no-gutters slider-text align-items-center justify-content-center"
-                   data-scrollax-parent="true">
-                <div class="col-md-11 text-center">
-                  <img th:src="@{'/petppy/images/logo.PNG'}">
-                </div>
-              </div>
-              <div>
-                <p class="float-right"></p>
-              </div>
-              <hr/>
-              <div class="form-group"></div>
-              <div class="roe slider-text align-items-center justify-content-center">
-                <form>
-                  <div class="form-group row align-items-center justify-content-center">
-                    <label for="inputEmail3" class="col-sm-4 col-form-label">카드번호</label>
-                    <div class="col-sm-6">
-                      <input class="form-control" id="inputEmail3" placeholder="**** **** **** ****">
-                    </div>
-                  </div>
-                  <div class="form-group row align-items-center justify-content-center">
-                    <label for="inputPassword3" class="col-sm-4 col-form-label">카드 유효기간</label>
-                    <div class="col-sm-6">
-                      <input class="form-control" id="inputPassword3" placeholder="MM/YY">
-                    </div>
-                  </div>
-                  <div class="form-group row align-items-center justify-content-center">
-                    <label for="inputPassword3" class="col-sm-4 col-form-label">생년월일 6자리</label>
-                    <div class="col-sm-6">
-                      <input class="form-control" id="inputPassword3" >
-                    </div>
-                    <div class="form-group form-check">
-                      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                      <label class="form-check-label" for="exampleCheck1">가짜 정보를 입력해주세요.</label>
-                    </div>
-                  </div>
-                  <button type="submit" id="login-btn" class="btn btn-success btn-lg btn-block"
-                          style="font-size: 20px;">결제정보 등록
-                  </button>
-                </form>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
   </th:block>
 </th:block>
 
 <script th:inline="javascript">
   $(document).ready(function (e) {
+
     $(".kakaoPay").on("click", function (e) {
       e.preventDefault();
 
 
       if ([[${session.user}]] == null) {
         $("#loginModal").modal("show");
+      } else {
+        if ([[${session.user.membershipDTO.rating}]] === $(this).data('membership').toUpperCase()) {
+          swal("결제실패", '이미 이용중인 멤버십 등급입니다.');
+          return false;
+        }
       }
+
+
+
 
       [# th:if = "${session.user != null}"]
 
@@ -167,11 +121,15 @@
           name : name,
           price : price
         }
+
+
+
+
         changeMembershipRequestKakaoPay(request);
       [/]
 
 
-    })
+    });
   });
 </script>
 </html>

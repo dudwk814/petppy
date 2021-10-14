@@ -62,4 +62,12 @@ public class PaymentController {
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<PaymentDTO> cancelPayment(String email) {
+
+        PaymentDTO result = paymentService.findPaymentByEmail(email);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

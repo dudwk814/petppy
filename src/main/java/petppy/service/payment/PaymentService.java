@@ -9,6 +9,21 @@ public interface PaymentService {
 
     public void createPaymentInfo(PaymentDTO paymentDTO);
 
+    public PaymentDTO findPaymentByEmail(String email);
+
+    default PaymentDTO entityToDTO(Payment payment) {
+        return PaymentDTO
+                .builder()
+                .email(payment.getUser().getEmail())
+                .id(payment.getId())
+                .detailMessage(payment.getDetailMessage())
+                .approvalNumber(payment.getApprovalNumber())
+                .pg(payment.getPg())
+                .transactionNumber(payment.getTransactionNumber())
+                .userId(payment.getId())
+                .build();
+    }
+
     default Payment dtoToEntity(PaymentDTO paymentDTO) {
 
         // 결제 성공 여부에 따른 분기
@@ -22,6 +37,7 @@ public interface PaymentService {
                     .detailMessage(paymentDTO.getDetailMessage())
                     .transactionNumber(paymentDTO.getTransactionNumber())
                     .approvalNumber(paymentDTO.getApprovalNumber())
+                    .settleCase("CARD")
                     .build();
         } else {
             return Payment
@@ -33,6 +49,7 @@ public interface PaymentService {
                     .detailMessage(paymentDTO.getDetailMessage())
                     .transactionNumber(paymentDTO.getTransactionNumber())
                     .approvalNumber(paymentDTO.getApprovalNumber())
+                    .settleCase("CARD")
                     .build();
         }
 

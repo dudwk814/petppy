@@ -56,6 +56,7 @@
                                             멤버십 기간: [[${#temporals.format(userDTO.membershipDTO.modifiedDate, 'yyyy.MM.dd')}]] ~  [[${#temporals.format(userDTO.membershipDTO.lastDate, 'yyyy.MM.dd')}]]
                                         </p>
                                         <p>아래 표에서 각 멤버십에 혜택을 확인할 수 있습니다.</p>
+                                        <p>※ <span style="color: red">환불</span>은 멤버십 가입 후 서비스를 이용하지 않은 경우만 가능합니다.</p>
                                     </div>
 
                                     <hr class="my-4">
@@ -64,7 +65,8 @@
                                             <div class="block-7">
                                                 <div class="text-center p-4">
                                                     <span class="excerpt d-block">Personal</span>
-                                                    <span class="price"><sup>$</sup> <span class="number">49</span> <sub>/mos</sub></span>
+                                                    <span class="price"><sup>₩</sup> <span class="number" style="font-size: 40px;">27,000</span> <sub>/월</sub></span>
+
                                                     <ul class="pricing-text mb-5">
                                                         <li><span class="fa fa-check mr-2"></span>3 Dog Walk</li>
                                                         <li><span class="fa fa-check mr-2"></span>1 Vet Visit</li>
@@ -78,7 +80,8 @@
                                             <div class="block-7">
                                                 <div class="text-center p-4">
                                                     <span class="excerpt d-block">Business</span>
-                                                    <span class="price"><sup>$</sup> <span class="number">79</span> <sub>/mos</sub></span>
+                                                    <span class="price"><sup>₩</sup> <span class="number" style="font-size: 40px;">43,000</span> <sub>/월</sub></span>
+
                                                     <ul class="pricing-text mb-5">
                                                         <li><span class="fa fa-check mr-2"></span>5 Dog Walk</li>
                                                         <li><span class="fa fa-check mr-2"></span>3 Vet Visit</li>
@@ -92,7 +95,8 @@
                                             <div class="block-7">
                                                 <div class="text-center p-4">
                                                     <span class="excerpt d-block">Ultimate</span>
-                                                    <span class="price"><sup>$</sup> <span class="number">109</span> <sub>/mos</sub></span>
+                                                    <span class="price"><sup>₩</sup> <span class="number" style="font-size: 40px;">78,000</span> <sub>/월</sub></span>
+
                                                     <ul class="pricing-text mb-5">
                                                         <li><span class="fa fa-check mr-2"></span>15 Dog Walk</li>
                                                         <li><span class="fa fa-check mr-2"></span>5 Vet Visit</li>
@@ -103,7 +107,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <a class="btn btn-outline-primary btn-lg" href="#" role="button">변경/해지</a>
+                                    <a th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="btn btn-outline-primary btn-lg membership-cancel-btn" href="#" role="button">해지</a>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="list-notify" role="tabpanel" aria-labelledby="list-membership-list">
@@ -200,10 +204,19 @@
        var email = [[${session.user.email}]];
 
 
+       $(document).on('click', '.membership-cancel-btn',  function (e) {
+           e.preventDefault();
+
+            var currentRating = [[${session.user.membershipDTO.rating}]];
+
+           console.log(currentRating);
+
+           cancelMembershipRequest(email);
+       });
 
 
 
-       $(document).on('click', '.notify-check-btn', function (e) {
+       $(document).on('click', '.notify-check-btn', function (e) {  // 알림 모두 읽음 표시로 변경
            e.preventDefault();
 
            if (confirm("모두 읽음 표시로 변경 하시겠습니까?") == true) {
