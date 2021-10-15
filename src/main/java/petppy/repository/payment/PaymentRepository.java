@@ -17,4 +17,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @EntityGraph(attributePaths = {"user"}, type = FETCH)
     public Optional<Payment> findFirstByUserEmailAndPaymentStatusOrderByIdDesc(String email,PaymentStatus paymentStatus);
 
+    @EntityGraph(attributePaths = {"user"}, type = FETCH)
+    public Optional<Payment> findByTransactionNumber(String imp_uid);
+
 }

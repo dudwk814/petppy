@@ -11,6 +11,7 @@ import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
+import static petppy.domain.payment.PaymentStatus.CANCEL;
 
 @Entity
 @Getter
@@ -48,6 +49,10 @@ public class Payment extends BaseTimeEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;  // 거래 회원
+
+    public void cancel() {
+        this.paymentStatus = CANCEL;
+    }
 
 
 }

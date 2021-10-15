@@ -21,6 +21,16 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
+    @Transactional
+    public void cancel(String imp_uid) {
+        Payment payment = paymentRepository
+                .findByTransactionNumber(imp_uid)
+                .orElseThrow(PaymentNotFoundException::new);
+
+        payment.cancel();
+    }
+
+    @Override
     public PaymentDTO findPaymentByEmail(String email) {
 
 

@@ -1,5 +1,5 @@
 package petppy.domain.payment;
 
 public enum PaymentStatus {
-    SUCCESS, FAIL
+    SUCCESS, FAIL, CANCEL
 }

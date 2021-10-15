@@ -2,6 +2,8 @@ package petppy.controller;
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.AccessToken;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import petppy.service.payment.PaymentService;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Locale;
 
 @RestController
@@ -63,11 +66,39 @@ public class PaymentController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @PostMapping("/cancel")
-    public ResponseEntity<PaymentDTO> cancelPayment(String email) {
+    // Access 토큰 발급
+    @RequestMapping("/accessToken/{imp_uid}")
+    public IamportResponse<AccessToken> getAccessToken(@PathVariable("imp_uid") String imp_uid) throws IamportResponseException, IOException {
+
+        System.out.println("imp_uid = " + imp_uid);
+        return client.getAuth();
+    }
+
+    // 이메일로 결제 정보 조회
+    @RequestMapping("/{email}")
+    public ResponseEntity<PaymentDTO> findPaymentByEmail(@PathVariable("email") String email) {
 
         PaymentDTO result = paymentService.findPaymentByEmail(email);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /**
+     * 아임포트 서버에 결제 취소 요청 후 DB에 해당 payment_status cancel로 변경
+     * @param imp_uid
+     * @param price
+     * @return
+     * @throws IamportResponseException
+     * @throws IOException
+     */
+    @RequestMapping("/cancel/{imp_uid}")
+    public IamportResponse<Payment> cancel(@PathVariable("imp_uid") String imp_uid, long price) throws IamportResponseException, IOException {
+        CancelData cancelData = new CancelData(imp_uid, true);
+        cancelData.setChecksum(BigDecimal.valueOf(price));
+
+        paymentService.cancel(imp_uid);
+
+
+        return client.cancelPaymentByImpUid(cancelData);
     }
 }

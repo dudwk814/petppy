@@ -11,6 +11,8 @@ public interface PaymentService {
 
     public PaymentDTO findPaymentByEmail(String email);
 
+    public void cancel(String imp_uid);
+
     default PaymentDTO entityToDTO(Payment payment) {
         return PaymentDTO
                 .builder()
@@ -20,7 +22,8 @@ public interface PaymentService {
                 .approvalNumber(payment.getApprovalNumber())
                 .pg(payment.getPg())
                 .transactionNumber(payment.getTransactionNumber())
-                .userId(payment.getId())
+                .userId(payment.getUser().getId())
+                .price(payment.getPrice())
                 .build();
     }
 

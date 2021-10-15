@@ -324,7 +324,6 @@
                 buyer_addr : '서울특별시 강남구 삼성동',
                 buyer_postcode : '123-456'
             }, function(rsp) {
-                console.log(rsp);
 
                 $.ajax({    // 결제 검증 함수
                     type: "POST",
@@ -413,7 +412,6 @@
                     }
 
                 }).always(function (data) { // 결제 결과 alert
-                    console.log(data);
                     if (rsp.success) {
                         var msg = '결제가 완료되었습니다.\n';
                         msg += '고유ID : ' + rsp.imp_uid + '\n';
@@ -432,15 +430,61 @@
 
         function cancelMembershipRequest(email) {
             $.ajax({
-                url: '/payment/cancel',
+                url: '/payment/' + email,
                 type: 'post',
-                data : {
-                    email : email
-                }
-            }).done(function (data) {
-                console.log(data);
-            })
-        }
+
+            }).done(function (paymentData) {
+                var imp_uid = paymentData.transactionNumber;
+
+                $.ajax({
+                    url: '/payment/accessToken/' + imp_uid,
+                    type : 'post'
+                }).done(function (token) {
+                    console.log(paymentData);
+                    console.log(token);
+                    console.log(token.response.token);
+
+                    $.ajax({
+                        url : "/payment/cancel/" + imp_uid,
+                        type : "post",
+                        data : {
+                            imp_uid : imp_uid,
+                            price : paymentData.price
+                        }
+                    }).done(function (getCancelData) {
+                        $.ajax({
+                            url: '/membership/change/' + paymentData.userId,
+                            type: 'patch',
+                            data: {
+                                userId : paymentData.userId,
+                                rating : 'NONE'
+                            }
+                        }).done(function () {   // 상단 알림 표시
+                            if (getCancelData.code == 0) {
+                                var targetEmail = paymentData.email;
+                                var message = "멤버십이 해지되었습니다.";
+                                var url = "/user/userPage";
+                                if(socket){
+                                    let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
+                                    /*console.log("msgmsg : " + socketMsg);*/
+                                    socket.send(socketMsg);
+                                }
+                            }
+
+                        }).always(function () {
+                            console.log(getCancelData);
+                            if (getCancelData.code == 0) {
+                                swal("결제 취소", "결제가 취소되었습니다.");
+                            } else {
+                                swal("결제 취소", getCancelData.message);
+                            }
+                        });
+
+                    });
+                });
+
+            });
+        };
 
         function connectWs(){
             sock = new SockJS( "/echo" );
@@ -449,12 +493,11 @@
             sock.onopen = function() {
                 console.log('info: connection opened.');
 
-                if ([[${session.user != null}]]) {
+                if ([[${session.user}]] != null) {
                     var email = $('#notifyBtn').data('email');
                     $.ajax({
                         url : '/notify/unChecked/' + email,
                         type : 'get',
-                        /*data: email,*/
                         dataType : 'json',
                         success : function (result) {
 
@@ -484,7 +527,6 @@
                 $.ajax({
                     url : '/notify/unChecked/' + email,
                     type : 'get',
-                    /*data: email,*/
                     dataType : 'json',
                     success : function (result) {
 
