@@ -59,18 +59,9 @@ class ServicesRepositoryTest {
 
         servicesRepository.save(Services
                 .builder()
-                .servicesType(CAT_SITTING)
-                .build());
-
-        servicesRepository.save(Services
-                .builder()
                 .servicesType(DOG_WALK)
                 .build());
 
-        servicesRepository.save(Services
-                .builder()
-                .servicesType(PET_SPA)
-                .build());
 
         servicesRepository.save(Services
                 .builder()
@@ -79,7 +70,7 @@ class ServicesRepositoryTest {
 
         servicesRepository.save(Services
                 .builder()
-                .servicesType(PET_DAYCARE)
+                .servicesType(VET_VISIT)
                 .build());
     }
 }

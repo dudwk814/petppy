@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import petppy.config.util.FormValidator;
 import petppy.domain.user.Type;
+import petppy.dto.user.MembershipDTO;
 import petppy.dto.user.UserDTO;
 import petppy.service.board.BoardService;
 import petppy.service.comment.CommentService;
@@ -139,11 +140,26 @@ public class UserController {
     }
 
     /**
-     * 회원가입 이메일 중복 검증
+     * 회원 이메일 중복 체크
+     * @param email
+     * @return
      */
     @ResponseBody
     @GetMapping(value = "/checkEmailExist/{email}")
     public ResponseEntity<Boolean> checkEmailExist(@PathVariable("email") String email) {
         return new ResponseEntity<>(userService.checkEmailExist(email), HttpStatus.OK);
+    }
+
+
+    /**
+     * 멤버십 등급 조회
+     * @param userId
+     * @return
+     */
+    @ResponseBody
+    @GetMapping(value = "/membership/{userId}")
+    public ResponseEntity<MembershipDTO> findMembership(@PathVariable("userId") Long userId) {
+
+        return new ResponseEntity<>(userService.findMembership(userId), HttpStatus.OK);
     }
 }

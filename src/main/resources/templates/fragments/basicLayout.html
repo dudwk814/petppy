@@ -347,7 +347,7 @@
                             })
                         })
                     } else {
-                        $.ajax({
+                        $.ajax({    // 결제 정보 DB에 저장
                             url: '/payment/complete',
                             type: 'post',
                             dataType: 'json',
@@ -378,7 +378,7 @@
                         });
                     }
                 }).done(function () {
-                    if ([[${session.user != null}]] && rsp.success) {   // 알림 저장
+                    if ([[${session.user != null}]] && rsp.success) {
                         var targetEmail = $('#notifyBtn').data('email');
                         var message =  "멤버십 등급 변경 결제가 완료되었습니다.";
                         var url = "#";
@@ -390,7 +390,7 @@
                             url : url
                         };
 
-                        $.ajax({
+                        $.ajax({ // 알림 저장
                             type : 'post',
                             url : '/notify/save',
                             data : JSON.stringify(notificationData),
@@ -428,15 +428,15 @@
             });
         }
 
-        function cancelMembershipRequest(email) {
-            $.ajax({
+        function cancelMembershipRequest(email) {   // 멤버십 취소 함수
+            $.ajax({    // 결제 정보 조회
                 url: '/payment/' + email,
                 type: 'post',
 
             }).done(function (paymentData) {
                 var imp_uid = paymentData.transactionNumber;
 
-                $.ajax({
+                $.ajax({ // 아임포트 서버에서 토큰 회득
                     url: '/payment/accessToken/' + imp_uid,
                     type : 'post'
                 }).done(function (token) {
@@ -444,7 +444,7 @@
                     console.log(token);
                     console.log(token.response.token);
 
-                    $.ajax({
+                    $.ajax({ // 토큰 획득 후 아임포트 서버에 결제 취소 요청
                         url : "/payment/cancel/" + imp_uid,
                         type : "post",
                         data : {
@@ -452,7 +452,7 @@
                             price : paymentData.price
                         }
                     }).done(function (getCancelData) {
-                        $.ajax({
+                        $.ajax({    // 멤버십 등급 'NONE'으로 변경
                             url: '/membership/change/' + paymentData.userId,
                             type: 'patch',
                             data: {
@@ -471,7 +471,7 @@
                                 }
                             }
 
-                        }).always(function () {
+                        }).always(function () { // 결제 취소 결과 alert
                             console.log(getCancelData);
                             if (getCancelData.code == 0) {
                                 swal("결제 취소", "결제가 취소되었습니다.");
@@ -512,7 +512,7 @@
 
             sock.onmessage = function(evt) {
                 var data = evt.data;
-                console.log("ReceivMessage : " + data + "\n");
+                /*console.log("ReceivMessage : " + data + "\n");*/
 
                 let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
                 toast += "<div class='toast-header'><i class='fa fa-bell-o mr-2'></i><strong class='mr-auto'>알림</strong>";

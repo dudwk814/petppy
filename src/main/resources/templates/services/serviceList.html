@@ -6,6 +6,12 @@
                  data-stellar-background-ratio="0.5">
             <div class="overlay"></div>
             <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+                    </div>
+                </div>
                 <div class="row no-gutters slider-text align-items-end">
                     <div class="col-md-9 ftco-animate pb-5">
                         <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i
@@ -149,7 +155,7 @@
                                                     <option data-id="4" value="PET_GROOMING">반려동물 미용</option>
                                                     <option data-id="5" value="PET_DAYCARE">반려동물 종일 돌봄</option>
                                                 </select>-->
-                                                <input name="servicesType" data-id="2" id="services-type" class="form-control" value="강아지 산책" disabled>
+                                                <input name="servicesType" data-id="1" data-type="DOG_WALK" id="services-type" class="form-control" value="강아지 산책" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +187,7 @@
                                         <div class="input-wrap">
                                             <div class="icon"><span class="fa fa-clock-o"></span></div>
                                             <select type="text"  class="form-control reserveStartTime" placeholder="Time">
-                                                <option selected>시간</option>
+                                                <option value="" selected>시간</option>
                                                 <option value="09:00" disabled style="color: red">09:00 AM - 예약 불가</option>
                                                 <option value="11:00">11:00 AM</option>
                                                 <option value="13:00">01:00 PM</option>
@@ -227,24 +233,59 @@
                 $("#loginModal").modal("show");
 
                 return;
+
+            } else {
+
+                $.ajax({
+                    url: '/user/membership/' + [[${session.user.id}]],
+                    type: 'get',
+                    success: function (membership) {
+                        if (membership.rating === 'NONE') { // 현재 멤버십등급이 NONE인 경우 alert 후 리턴
+
+                            // 멤버십 가입 유도 a태그 생성
+                            var createA = document.createElement('a');
+                            createA.setAttribute('href', "/membership");
+                            createA.innerHTML="<span>멤버십 가입하기</span>";
+
+                            swal({
+                                title: '멤버십 가입 필요',
+                                text: '멤버십에 가입후 이용가능합니다.',
+                                icon: 'error',
+                                content: createA
+                            });
+                            return;
+                        } else { // 현재 멤버십등급이 NONE이 아닌경우 예약 모달 생성
+                            // 각 서비스에 맞는 input value로 변경
+                            if ($(this).hasClass('dog-walking')) {
+                                $('#reserve-form')[0].reset();
+                                $("#reservationModal").find('#services-type').val('애완동물 미용');
+                                $("#reservationModal").find('#services-type').attr('data-id', '1');
+                                $("#reservationModal").find('#services-type').attr('data-type', 'DOG_WALK');
+                            } else if ($(this).hasClass('pet-grooming')) {
+                                $('#reserve-form')[0].reset();
+                                $("#reservationModal").find('#services-type').val('애완동물 미용');
+                                $("#reservationModal").find('#services-type').attr('data-id', '2');
+                                $("#reservationModal").find('#services-type').attr('data-type', 'PET_GROOMING');
+
+
+                            } else if ($(this).hasClass('vet-visit')) {
+                                $('#reserve-form')[0].reset();
+                                $("#reservationModal").find('#services-type').val('수의사 방문');
+                                $("#reservationModal").find('#services-type').attr('data-id', '3');
+                                $("#reservationModal").find('#services-type').attr('data-type', 'VET_VISIT');
+                            }
+
+
+
+                            $("#reservationModal").modal("show");
+                        }
+                    }
+                })
+
+
             }
 
-            // 각 서비스에 맞는 input value로 변경
-            if ($(this).hasClass('dog-walking')) {
-                $('#reserve-form')[0].reset();
-            } else if ($(this).hasClass('pet-grooming')) {
-                $('#reserve-form')[0].reset();
-                $("#reservationModal").find('#services-type').val('애완동물 미용');
 
-            } else if ($(this).hasClass('vet-visit')) {
-                $('#reserve-form')[0].reset();
-                $("#reservationModal").find('#services-type').val('수의사 방문');
-
-            }
-
-
-
-            $("#reservationModal").modal("show");
         });
 
 
@@ -254,52 +295,100 @@
         $(document).on('click', '.reserve-submit-btn', function (e) {
             e.preventDefault();
 
-            var userId = $('.reserve-form-email').data('id');
-            var email = $('.reserve-form-email').val();
-            var servicesId = $('#services-type-select').find('option:selected').data('id');
-            var servicesType = $('#services-type-select').val();
-            var reserveStartDate = $('.reserveStartDate').val();
-            var reserveStartTime = $('.reserveStartTime').val();
-            var reserveStartDateTime = (reserveStartDate + "-" + reserveStartTime).replace(':', '-');
-            var reserveRequest = $('#reserveRequest').val();
+
+            var userId = $('.reserve-form-email').data('id');   // 회원 번호
+            var email = $('.reserve-form-email').val();         // 회원 이메일
+            var servicesId = $('#services-type').data('id');    // 서비스 번호
+            var servicesType = $('#services-type').data('type');    // 서비스 타입
+            var serviceName = $("#services-type").val();
+            var reserveStartDate = $('.reserveStartDate').val();    // 예약일 (시작)
+            var reserveStartTime = $('.reserveStartTime').val();    // 예약일 (종료)
+            var reserveStartDateTime = (reserveStartDate + "-" + reserveStartTime).replace(':', '-');   // 예약일 + 예약시간
+            var reserveRequest = $('#reserveRequest').val();    // 요청사항
 
             var reserveDTO = JSON.stringify({   // 예약 데이터
-                userId : userId,
-                email : email,
-                servicesId : servicesId,
-                servicesType : servicesType,
-                reserveStartDate : reserveStartDateTime,
-                request : reserveRequest
+                userId: userId,
+                email: email,
+                servicesId: servicesId,
+                servicesType: servicesType,
+                reserveStartDate: reserveStartDateTime,
+                request: reserveRequest
             });
 
-            if (servicesType === "") {
-                swal("예약실패", "이용하실 서비스를 선택해주세요!");
-                return false;
-            } else if (reserveStartDate === "") {
+            if (reserveStartDate === "") { // 예약일 선택안할 시 alert후 리턴
                 swal("예약실패", "이용하실 날짜를 선택해주세요!");
+                return false;
+            } else if (reserveStartTime === "") { // 예약시간 선택안할 시 alert후 리턴
+                swal("예약실패", "이용하실 시간을 선택해주세요!");
                 return false;
             }
 
 
-
-
-            $.ajax({
-                url : '/reserve/create',
-                type : 'post',
-                data : reserveDTO,
+            $.ajax({    // 예약 생성 ajax
+                url: '/reserve/create',
+                type: 'post',
+                data: reserveDTO,
                 contentType: 'application/json',
-                dataType : 'json',
-                success : function (result) {
-                    console.log(result);
+                dataType: 'json',
+            }).done(function (reserveResult) {
+                var message = serviceName + "서비스를 예약하셨습니다.";
+                var url = "#"
 
-                    alert('예약이 완료되었습니다.');
+                var notificationData = {
+                    targetEmail: email,
+                    message: message,
+                    notificationType: "reserve",
+                    url: url
+                };
+
+                $.ajax({
+                    type: 'post',
+                    url: '/notify/save',
+                    data: JSON.stringify(notificationData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'text',
+                    success: function (data) {
+                        if (socket) {
+                            let socketMsg = "예약," + email + "," + message + "," + url;
+                            /*console.log("msgmsg : " + socketMsg);*/
+                            socket.send(socketMsg);
+                        }
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+            }).always(function (reserveResult) {
+
+                console.log(reserveResult);
+
+                if (reserveResult.reserveType === "RESERVE") {
+                    // 예약 완료 메시지
+                    var msg = '예약이 완료되었습니다\n';
+                    msg += '서비스: ' + serviceName + '\n';
+                    msg += '예약일: ' + reserveResult.reserveStartDate;
+
+                    swal({
+                        title: "예약완료",
+                        text: msg,
+                        icon: "success"
+                    });
+                } else {
+                    swal({
+                        title: "예약실패",
+                        icon: 'error'
+                    });
                 }
-
             });
+
+            $("#reservationModal").modal("hide");
+
+        })
 
         });
 
 
-    });
+
 </script>
 </html>
