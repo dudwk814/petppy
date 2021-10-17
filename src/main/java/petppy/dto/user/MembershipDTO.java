@@ -17,8 +17,13 @@ public class MembershipDTO {
     private LocalDateTime modifiedDate;
     private LocalDateTime lastDate;
 
+    // 서비스 이용가능 횟수
+    private int dogWalkCount = 0;
+    private int petGroomingCount = 0;
+    private int vetVisit = 0;
+
     @Builder
-    public MembershipDTO(Long id, String email, Rating rating, String name, LocalDateTime modifiedDate, LocalDateTime createdDate) {
+    public MembershipDTO(Long id, String email, Rating rating, String name, LocalDateTime modifiedDate, LocalDateTime createdDate, int dogWalkCount, int petGroomingCount, int vetVisit) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -26,5 +31,8 @@ public class MembershipDTO {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.lastDate = modifiedDate.plusMonths(1L);
+        this.dogWalkCount = dogWalkCount;
+        this.petGroomingCount = petGroomingCount;
+        this.vetVisit = vetVisit;
     }
 }

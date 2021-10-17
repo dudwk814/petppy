@@ -58,6 +58,26 @@
                                     <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}">현재 이용중인 멤버십이 없습니다. <a th:href="@{/membership}">가입하기</a></p>
                                     <div th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}">
                                         <p>[[${userDTO.name}]]님의 멤버십은 <span class="text-success">[[${userDTO.membershipDTO.rating}]]</span>입니다.</p>
+                                        <br/>
+
+                                        <table class="table table-borderless table-hover">
+                                            <thead>
+                                            <tr th:align="center">
+                                                <th scope="col">강아지 산책</th>
+                                                <th scope="col">애완동물 미용</th>
+                                                <th scope="col">수의사 방문</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:align="center">
+                                                <td><span class="text-success">[[${userDTO.membershipDTO.dogWalkCount}]]</span>회 이용가능</td>
+                                                <td><span class="text-success">[[${userDTO.membershipDTO.petGroomingCount}]]</span>회 이용가능</td>
+                                                <td><span class="text-success">[[${userDTO.membershipDTO.vetVisit}]]</span>회 이용가능</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <p>이용가능한 서비스 횟수는 위의 표와 같습니다.</p>
+                                        <br/>
                                         <p>
                                             멤버십 기간: [[${#temporals.format(userDTO.membershipDTO.modifiedDate, 'yyyy.MM.dd')}]] ~  [[${#temporals.format(userDTO.membershipDTO.lastDate, 'yyyy.MM.dd')}]]
                                         </p>

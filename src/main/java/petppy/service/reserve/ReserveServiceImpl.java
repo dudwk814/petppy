@@ -6,11 +6,16 @@ import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.ServicesType;
+import petppy.domain.user.Membership;
+import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.dto.reserve.ReserveDTO;
 import petppy.exception.ReserveNotFoundException;
+import petppy.exception.UserNotFoundException;
 import petppy.repository.reserve.ReserveRepository;
+import petppy.repository.user.MembershipRepository;
+import petppy.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
 
@@ -20,18 +25,24 @@ import java.time.LocalDateTime;
 public class ReserveServiceImpl implements ReserveService {
 
     private final ReserveRepository reserveRepository;
+    private final MembershipRepository membershipRepository;
+    private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public ReserveDTO createReserve(ReserveDTO dto) {
 
         dto.setReserveType(ReserveType.RESERVE);    // reserve 생성시 reserveType은 RESERVE
 
-        // 각 서비스 타입에 따라 종료일(setReserveEndDate) 설정
-        /*if (dto.getServicesType() == ServicesType.CAT_SITTING) {
-            dto.setReserveEndDate(dto.getReserveStartDate().plusHours(2));
-        }*/
+        Reserve reserve = reserveRepository.save(dtoToEntity(dto)); // 예약등록
 
-        Reserve reserve = reserveRepository.save(dtoToEntity(dto));
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(UserNotFoundException::new); // 유저 조회
+
+        Membership membership = membershipRepository.findByUser(user);  // 유저 멤버십 조회
+
+        membership.minusServiceCount(dto.getServicesId());
+
+
 
         return entityToDTO(reserve);
     }

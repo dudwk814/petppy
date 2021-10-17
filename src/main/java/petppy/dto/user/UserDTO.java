@@ -53,7 +53,11 @@ public class UserDTO implements Serializable {
                 .createdDate(user.getMembership().getCreatedDate())
                 .modifiedDate(user.getMembership().getModifiedDate())
                 .rating(user.getMembership().getRating())
-                .id(user.getMembership().getId()).build();
+                .id(user.getMembership().getId())
+                .dogWalkCount(user.getMembership().getDogWalkCount())
+                .petGroomingCount(user.getMembership().getPetGroomingCount())
+                .vetVisit(user.getMembership().getVetVisit())
+                .build();
 
         if (user.getAddress() != null) {
             this.postcode = user.getAddress().getPostcode();

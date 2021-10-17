@@ -236,6 +236,8 @@
 
             } else {
 
+                var reservationBtn = $(this);
+
                 $.ajax({
                     url: '/user/membership/' + [[${session.user.id}]],
                     type: 'get',
@@ -256,19 +258,19 @@
                             return;
                         } else { // 현재 멤버십등급이 NONE이 아닌경우 예약 모달 생성
                             // 각 서비스에 맞는 input value로 변경
-                            if ($(this).hasClass('dog-walking')) {
+                            if (reservationBtn.hasClass('dog-walking')) {
                                 $('#reserve-form')[0].reset();
-                                $("#reservationModal").find('#services-type').val('애완동물 미용');
+                                $("#reservationModal").find('#services-type').val('강아지 산책');
                                 $("#reservationModal").find('#services-type').attr('data-id', '1');
                                 $("#reservationModal").find('#services-type').attr('data-type', 'DOG_WALK');
-                            } else if ($(this).hasClass('pet-grooming')) {
+                            } else if (reservationBtn.hasClass('pet-grooming')) {
                                 $('#reserve-form')[0].reset();
                                 $("#reservationModal").find('#services-type').val('애완동물 미용');
                                 $("#reservationModal").find('#services-type').attr('data-id', '2');
                                 $("#reservationModal").find('#services-type').attr('data-type', 'PET_GROOMING');
 
 
-                            } else if ($(this).hasClass('vet-visit')) {
+                            } else if (reservationBtn.hasClass('vet-visit')) {
                                 $('#reserve-form')[0].reset();
                                 $("#reservationModal").find('#services-type').val('수의사 방문');
                                 $("#reservationModal").find('#services-type').attr('data-id', '3');

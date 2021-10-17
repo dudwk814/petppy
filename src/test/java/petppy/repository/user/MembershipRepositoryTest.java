@@ -1,95 +1,41 @@
-/*
-package petppy.repository;
+package petppy.repository.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-import petppy.domain.*;
-import petppy.domain.member.Member;
+import petppy.domain.user.Membership;
+import petppy.domain.user.Rating;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static petppy.domain.user.Rating.BUSINESS;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 class MembershipRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
     MembershipRepository membershipRepository;
 
-    @PersistenceContext
+    @Autowired
     EntityManager em;
 
     @Test
-    public void 멤버십_등록() throws Exception {
-        //given
-        Member member = addMember();
+    @Commit
+    public void 멤버십_등급_변경() throws Exception {
+        Membership membership = membershipRepository.findById(2L).get();
 
-        Membership membership = addMembership(member);
-
-        //when
-        Membership findMembership = membershipRepository.findById(membership.getId()).get();
-
-        //then
-        assertThat(findMembership).isEqualTo(membership);
-        assertThat(findMembership.getRating()).isEqualTo(membership.getRating());
-
-        System.out.println("findMembership.id = " + findMembership.getId());
-        System.out.println("findMembership.rating = " + findMembership.getRating());
-
-    }
-
-    @Test
-    public void 멤버십_변경() throws Exception {
-        //given
-
-        Member member = addMember();
-
-        Membership membership = addMembership(member);
+        membership.changeRating(Rating.PERSONAL);
 
         em.flush();
         em.clear();
 
-        System.out.println("membership = " + membership);
+        Membership findMembership = membershipRepository.findById(2L).get();
 
-        //when
-        membership.changeRating(BUSINESS);
-
-        //then
-        System.out.println("membership = " + membership);
+        assertEquals(3, findMembership.getDogWalkCount());
+        assertEquals(1, findMembership.getPetGroomingCount());
+        assertEquals(1, findMembership.getVetVisit());
     }
-
-    private Member addMember() {
-        Member member = Member.builder()
-                .id("aaa")
-                .password("bbb")
-                .name("hhh")
-                .address(Address.builder().city("111").street("222").zipcode("333").build())
-                .build();
-
-        memberRepository.save(member);
-        return member;
-    }
-
-    public Membership addMembership(Member member) {
-        Membership membership = Membership
-                .builder()
-                .member(member)
-                .build();
-
-        membershipRepository.save(membership);
-
-        return membership;
-
-    }
-
-
-
-}*/
+}
