@@ -12,16 +12,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import petppy.config.util.FormValidator;
 import petppy.domain.user.Type;
+import petppy.dto.reserve.ReserveDTO;
 import petppy.dto.user.MembershipDTO;
 import petppy.dto.user.UserDTO;
 import petppy.service.board.BoardService;
 import petppy.service.comment.CommentService;
 import petppy.service.notification.NotificationService;
+import petppy.service.reserve.ReserveService;
 import petppy.service.user.UserService;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.util.List;
 import java.util.Map;
 
 import static petppy.domain.user.Type.*;
@@ -36,6 +39,7 @@ public class UserController {
     private final CommentService commentService;
     private final NotificationService notificationService;
     private final FormValidator formValidator;
+    private final ReserveService reserveService;
 
     /**
      * 회원 설정 페이지
@@ -162,4 +166,5 @@ public class UserController {
 
         return new ResponseEntity<>(userService.findMembership(userId), HttpStatus.OK);
     }
+
 }

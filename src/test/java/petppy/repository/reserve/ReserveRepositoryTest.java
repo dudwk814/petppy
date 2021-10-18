@@ -3,6 +3,7 @@ package petppy.repository.reserve;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.reserve.Reserve;
@@ -10,6 +11,8 @@ import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.Services;
 import petppy.domain.user.Role;
 import petppy.domain.user.User;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.reserve.ReserveDTO;
 import petppy.repository.services.ServicesRepository;
 import petppy.repository.user.UserRepository;
 
@@ -70,6 +73,22 @@ class ReserveRepositoryTest {
 
         //then
         assertEquals(10, result.size()); // addReserve() * 10 총 100건의 예약
+    }
+
+    @Test
+    public void 예약_조회_emailAndType() throws Exception {
+        ReserveDTO reserveDTO = ReserveDTO.builder()
+                .reserveType(ReserveType.RESERVE)
+                .email("kj99658103@gmail.com")
+                .build();
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+
+        Page<Reserve> reserveList = reserveRepository.findReserveList(reserveDTO, pageRequestDTO);
+
+        List<Reserve> result = reserveList.getContent();
+
+        System.out.println("result = " + result);
     }
 
     @Test
