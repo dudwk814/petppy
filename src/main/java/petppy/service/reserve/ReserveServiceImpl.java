@@ -1,8 +1,10 @@
 package petppy.service.reserve;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import petppy.domain.board.Board;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.ServicesType;
@@ -10,6 +12,7 @@ import petppy.domain.user.Membership;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.dto.board.BoardDto;
 import petppy.dto.reserve.ReserveDTO;
 import petppy.exception.ReserveNotFoundException;
 import petppy.exception.UserNotFoundException;
@@ -18,6 +21,7 @@ import petppy.repository.user.MembershipRepository;
 import petppy.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -54,16 +58,40 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public PageResultDTO<ReserveDTO, Reserve> findReserveListWithPaging(String email, PageRequestDTO requestDTO) {
-        return null;
+    public PageResultDTO<ReserveDTO, Reserve> findReserveList(ReserveDTO reserveDTO, PageRequestDTO requestDTO) {
+
+        Page<Reserve> result = reserveRepository.findReserveList(reserveDTO, requestDTO);
+
+        // 페이징 변수들
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+
+
+        Function<Reserve, ReserveDTO> fn = (entity -> entityToDTO(entity));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
+
+    }
+
+    /**
+     * 예약 취소
+     * @param reserveDTO
+     */
+    @Override
+    @Transactional
+    public void cancelReserve(ReserveDTO reserveDTO) {
+        findReserveOrElseThrow(reserveDTO.getId()).cancelReserve();
+
+        membershipRepository.findByUser(
+                userRepository.findById(reserveDTO.getUserId()).orElseThrow(UserNotFoundException::new)
+        ).plusServiceCount(reserveDTO.getServicesId());
     }
 
     @Override
-    public void cancelReserve(Long id) {
-        findReserveOrElseThrow(id).cancelReserve();
-    }
-
-    @Override
+    @Transactional
     public void modifyReserveTime(Long id, LocalDateTime reserveStartDate) {
         findReserveOrElseThrow(id).changeReserveTime(reserveStartDate);
     }

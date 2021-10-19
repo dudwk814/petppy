@@ -17,9 +17,9 @@ public interface ReserveService {
 
     public ReserveDTO findReserve(Long id);
 
-    public PageResultDTO<ReserveDTO, Reserve> findReserveListWithPaging(String email, PageRequestDTO requestDTO);
+    public PageResultDTO<ReserveDTO, Reserve> findReserveList(ReserveDTO reserveDTO, PageRequestDTO requestDTO);
 
-    public void cancelReserve(Long id);
+    public void cancelReserve(ReserveDTO reserveDTO);
 
     public void modifyReserveTime(Long id, LocalDateTime reserveStartDate);
 

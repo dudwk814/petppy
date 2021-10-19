@@ -80,6 +80,7 @@ class ReserveRepositoryTest {
         ReserveDTO reserveDTO = ReserveDTO.builder()
                 .reserveType(ReserveType.RESERVE)
                 .email("kj99658103@gmail.com")
+                .reserveStartDate("2021-10-20-13-00")
                 .build();
 
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();

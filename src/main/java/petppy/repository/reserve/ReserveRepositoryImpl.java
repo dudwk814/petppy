@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import petppy.domain.notificaton.Notification;
 import petppy.domain.reserve.Reserve;
+import petppy.domain.services.QServices;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.reserve.ReserveDTO;
 
@@ -19,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static petppy.domain.reserve.QReserve.reserve;
+import static petppy.domain.services.QServices.services;
 
 public class ReserveRepositoryImpl implements ReserveRepositoryCustom {
 
@@ -35,6 +37,7 @@ public class ReserveRepositoryImpl implements ReserveRepositoryCustom {
 
         QueryResults<Reserve> results = queryFactory
                 .selectFrom(reserve)
+                .leftJoin(reserve.services, services)
                 .where(reserve.user.email.eq(reserveDTO.getEmail()).and(startEq(reserveDTO)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

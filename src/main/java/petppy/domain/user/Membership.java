@@ -62,12 +62,12 @@ public class Membership extends BaseTimeEntity {
      * 멤버십 서비스 사용가능 횟수 변경
      * @param dogWalkCount
      * @param petGroomingCount
-     * @param vetVisit
+     * @param vetVisitCount
      */
-    public void changeServiceCount(int dogWalkCount, int petGroomingCount, int vetVisit) {
+    public void changeServiceCount(int dogWalkCount, int petGroomingCount, int vetVisitCount) {
         this.dogWalkCount = dogWalkCount;
         this.petGroomingCount = petGroomingCount;
-        this.vetVisit = vetVisit;
+        this.vetVisit = vetVisitCount;
     }
 
     /**
@@ -98,6 +98,24 @@ public class Membership extends BaseTimeEntity {
             } else {
                 throw new NotEnoughServiceCountException("이용가능한 서비스 횟수를 모두 사용하셨습니다.");
             }
+        }
+    }
+
+
+    /**
+     * 예약 취소하면 servicesId에 따른 서비스 이용가능 횟수 증가
+     * @param servicesId
+     */
+    public void plusServiceCount(Long servicesId) {
+        if (servicesId == 1) {
+            this.dogWalkCount += 1;
+
+        } else if (servicesId == 2) {
+
+            this.petGroomingCount += 1;
+
+        } else if (servicesId == 3) {
+            this.vetVisit += 1;
         }
     }
 }

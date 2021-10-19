@@ -20,11 +20,12 @@ class ReserveServiceTest {
 
     @Test
     @Commit
-    public void 예약_생성() throws Exception {
-        //given
+    public void 예약_취소() throws Exception {
+        ReserveDTO reserveDTO = ReserveDTO.builder()
+                .id(2L)
+                .userId(1L)
+                .servicesId(1L).build();
 
-        //when
-
-        //then
+        reserveService.cancelReserve(reserveDTO);
     }
 }
