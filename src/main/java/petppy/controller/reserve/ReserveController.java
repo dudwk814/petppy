@@ -46,11 +46,12 @@ public class ReserveController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @ResponseBody
     @PostMapping("/cancel")
-    public String cancel(ReserveDTO reserveDTO) {
+    public ResponseEntity<Boolean> cancel(ReserveDTO reserveDTO) {
 
         reserveService.cancelReserve(reserveDTO);
 
-        return "redirect:/reserve/reserveList";
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

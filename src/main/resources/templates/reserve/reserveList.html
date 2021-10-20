@@ -28,8 +28,12 @@
                     <div class="col-md-12 col-sm-auto">
                         <div class="jumbotron bg-transparent">
                             <h3>예약 목록</h3>
-                            <br/>
-                            <p>예약 검색</p>
+
+                            <!--<p>예약 검색</p>
+                            <button class="btn btn-outline-primary">전체 예약 조회</button>
+                            <button class="btn btn-outline-primary">예약 중인 예약만 조회</button>-->
+                            <div class="row mt-5">
+                            </div>
 
                             <table class="table">
                                 <thead>
@@ -56,9 +60,9 @@
                                     <td th:text="${reserveList.reserveStartDate}"></td>
 
                                     <!-- 예약 상태 -->
-                                    <td th:if="${#strings.toString(reserveList.reserveType)} == 'RESERVE'">예약 중</td>
-                                    <td th:if="${#strings.toString(reserveList.reserveType)} == 'COMPLETE'">완료</td>
-                                    <td th:if="${#strings.toString(reserveList.reserveType)} == 'CANCEL'">예약 취소</td>
+                                    <td class="reserveStatus" th:if="${#strings.toString(reserveList.reserveType)} == 'RESERVE'">예약 중</td>
+                                    <td class="reserveStatus" th:if="${#strings.toString(reserveList.reserveType)} == 'COMPLETE'">완료</td>
+                                    <td class="reserveStatus" th:if="${#strings.toString(reserveList.reserveType)} == 'CANCEL'">예약 취소</td>
 
                                     <!-- 예약 취소 버튼 -->
                                     <td th:if="${#strings.toString(reserveList.reserveType)} == 'RESERVE'"><button type="button" class="btn btn-outline-secondary reserve-cancel-btn">취소</button></td>
@@ -66,6 +70,26 @@
                                 </tr>
                                 </tbody>
                             </table>
+
+                            <div class="row mt-5">
+
+                            </div>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    <li th:if="${reserveList.prev}" class="page-item">
+                                        <a class="page-link" th:href="@{/reserve/reserveList(page = ${reserveList.start - 1})}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li th:each="page : ${reserveList.pageList}" th:class="${reserveList.page == page ? 'active page-item':'page-item'}"><a th:href="@{/reserve/reserveList(page=${page}, size=${reserveList.size})}" th:data-page="${page}" class="page-link">[[${page}]]</a></li>
+                                    <li th:if="${reserveList.next}" class="page-item">
+                                        <a class="page-link" th:href="@{/reserve/reserveList(page = ${reserveList.end + 1})}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+
                         </div>
                     </div>
                 </div>
@@ -82,6 +106,9 @@
             var userId = $(this).closest('tr').data('user');
             var servicesId = $(this).closest('tr').data('service');
 
+            var reserveCancelBtn = $(this);
+            var reserveStatus = $(this).closest('tr').find('.reserveStatus');
+
             swal("예약을 취소하시겠습니까?", {
                 buttons: {
                     cancel: "닫기",
@@ -93,7 +120,7 @@
             }).then((value) => {
                     if (value) {
 
-                        var cancelForm = $('<form></form>');
+                       /* var cancelForm = $('<form></form>');
                         //set attribute (form)
                         cancelForm.attr("name","cancelForm");
                         cancelForm.attr("method","post");
@@ -108,7 +135,24 @@
                         cancelForm.appendTo('body');
 
                         // submit form
-                        cancelForm.submit();
+                        cancelForm.submit();*/
+
+                        $.ajax({
+                            url: '/reserve/cancel',
+                            type: 'post',
+                            data: {
+                                id: id,
+                                userId: userId,
+                                servicesId: servicesId
+                            }
+                        }).done(function (result) {
+                            if (result) {
+                                swal('예약 취소', '예약을 취소했습니다.');
+
+                                reserveCancelBtn.attr('disabled', true);
+                                reserveStatus.text('예약 취소');
+                            }
+                        })
 
                     }
                 });
