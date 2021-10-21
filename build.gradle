@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.15'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.querydsl:querydsl-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     compileOnly 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-websocket:2.5.5'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

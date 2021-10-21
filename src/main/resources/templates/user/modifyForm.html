@@ -3,55 +3,106 @@
 <th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
     <th:block th:fragment="content">
 
-        <div class="hero-wrap bg-transparent" data-stellar-background-ratio="0.5">
-            <div class="container-fluid">
-                <div class="row no-gutters slider-text align-items-center justify-content-center"
-                     data-scrollax-parent="true">
-                    <div class="col-md-11 ftco-animate text-center">
-
-                        <div class="row align-items-center justify-content-center">
-                            <div class="card border-white mb-3 w-50">
-                                <div class="card-body bg-transparent border-white"><h2></h2></div>
-                                <div class="card-body">
-                                    <h2 class="card-title">회원주소 설정</h2>
-                                    <form class="justify-content-start" method="post" action="/user/modifyUserAddress">
-                                        <input type="hidden" name="email" th:value="${session.user.email}"/>
-                                        <div class="form-row">
-                                            <div class="col-md-3 mb-3">
-
-                                                <input type="text" class="form-control" name="postcode" id="sample4_postcode" th:value="${address.postcode}"
-                                                       placeholder="우편번호">
-                                            </div>
-                                            <div class="col-auto">
-                                                <button type="button" class="btn btn-success" onclick="execDaumPostcode()">우편번호 찾기</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col-md-7 mb-3">
-                                                <input type="text" class="form-control" name="roadAddress" id="sample4_roadAddress" th:value="${address.roadAddress}" placeholder="도로명 주소" required>
-                                            </div>
-                                            <div class="col-md-5 mb-3">
-                                                <input type="text" class="form-control" name="jibunAddress" id="sample4_jibunAddress" th:value="${address.jibunAddress}" placeholder="지번 주소" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col-md-7 mb-3">
-                                                <input type="text" class="form-control" name="detailAddress" id="sample4_detailAddress" th:value="${address.detailAddress}" placeholder="상세 주소" required>
-                                            </div>
-                                            <div class="col-md-5 mb-3">
-                                                <input type="text" class="form-control" name="extraAddress" id="sample4_extraAddress" th:value="${address.extraAddress}" placeholder="참고사항" required>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-outline-secondary float-right">주소 설정</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
 
                     </div>
                 </div>
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">Home <i class="ion-ios-arrow-forward"></i></a></span>
+                            <span>ModifyForm <i class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">ModifyForm</h1>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="list-group" id="list-tab" role="tablist">
+                            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">주소 설정</a>
+                            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">비밀번호 변경</a>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                                <div class="card border-white mb-3 w-100">
+                                    <div class="card-body">
+                                        <form class="justify-content-start" method="post" action="/user/modifyUserAddress">
+                                            <input type="hidden" name="email" th:value="${session.user.email}"/>
+                                            <div class="form-row">
+                                                <div class="col-md-10 mb-3">
+
+                                                    <input type="text" class="form-control" name="postcode" id="sample4_postcode" th:value="${address.postcode}"
+                                                           placeholder="우편번호">
+                                                </div>
+                                                <div class="col-auto">
+                                                    <button type="button" class="btn btn-success" onclick="execDaumPostcode()">우편번호 찾기</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-7 mb-3">
+                                                    <input type="text" class="form-control" name="roadAddress" id="sample4_roadAddress" th:value="${address.roadAddress}" placeholder="도로명 주소" required>
+                                                </div>
+                                                <div class="col-md-5 mb-3">
+                                                    <input type="text" class="form-control" name="jibunAddress" id="sample4_jibunAddress" th:value="${address.jibunAddress}" placeholder="지번 주소" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-7 mb-3">
+                                                    <input type="text" class="form-control" name="detailAddress" id="sample4_detailAddress" th:value="${address.detailAddress}" placeholder="상세 주소" required>
+                                                </div>
+                                                <div class="col-md-5 mb-3">
+                                                    <input type="text" class="form-control" name="extraAddress" id="sample4_extraAddress" th:value="${address.extraAddress}" placeholder="참고사항" required>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-outline-secondary float-right">주소 설정</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                                <div class="card border-white mb-3 w-100">
+                                    <div class="card-body password-card-div">
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">비밀번호</label>
+                                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">비밀번호 확인</label>
+                                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                        </div>
+
+                                        <div class="form-group mb-3 w-50">
+                                            <label>이메일 인증</label>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control auth-number" placeholder="인증번호" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <button class="btn btn-outline-secondary auth-btn" type="button" id="button-addon2">인증번호 요청</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary password-btn">비밀번호 변경하기</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </th:block>
 </th:block>
 
@@ -110,6 +161,34 @@
             }
         }).open();
     }
+
+    $(document).ready(function (e) {
+        var id;
+        var authentication = false;
+
+        $('.auth-btn').on('click', function (e) {
+
+            if ([[${session.user}]] != null) {
+                $.ajax({
+                    url: '/email/send',
+                    type: 'post',
+                    data: JSON.stringify ({
+                        email: [[${session.user.email}]]
+                    }),
+                    contentType: 'application/json;charset=utf-8',
+                    success: function (result) {
+                        id = result;
+                        var msg = '';
+                        msg += '인증 코드를 회원님이 가입하신 이메일로 발송했습니다.\n';
+                        msg += '메일이 도착하지 않은 경우 스펨함을 확인해주세요.';
+
+                        swal('이메일 인증', msg);
+                    }
+                });
+            }
+
+        });
+    });
 </script>
 </script>
 </html>
