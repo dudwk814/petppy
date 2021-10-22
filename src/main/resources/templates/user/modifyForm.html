@@ -72,14 +72,16 @@
                             <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
                                 <div class="card border-white mb-3 w-100">
                                     <div class="card-body password-card-div">
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">비밀번호</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                        <div class="form-group" id="password-group1">
+                                            <label for="password">비밀번호</label>
+                                            <input type="password" name="password" class="form-control password"  placeholder="Password">
+                                            <small class="form-text text-muted">4글자 이상의 비밀번호를 입력해주세요.</small>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">비밀번호 확인</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                        <div class="form-group" id="password-group2">
+                                            <label for="password2">비밀번호 확인</label>
+                                            <input type="password" class="form-control password2"  placeholder="Password확인">
+                                            <small class="form-text text-muted">4글자 이상의 비밀번호를 입력해주세요.</small>
                                         </div>
 
                                         <div class="form-group mb-3 w-50">
@@ -94,7 +96,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-outline-primary password-btn">비밀번호 변경하기</button>
+                                        <button type="button" class="btn btn-outline-primary password-change-btn">비밀번호 변경하기</button>
                                     </div>
                                 </div>
                             </div>
@@ -163,31 +165,136 @@
     }
 
     $(document).ready(function (e) {
-        var id;
-        var authentication = false;
+        let id;
+        let authentication = false;
+        var email = [[${session.user.email}]];
 
         $('.auth-btn').on('click', function (e) {
 
             if ([[${session.user}]] != null) {
+
+                var msg = '';
+                msg += '인증 코드를 회원님이 가입하신 이메일로 발송했습니다.\n';
+                msg += '메일이 도착하지 않은 경우 스펨함을 확인해주세요.';
+
+                swal('이메일 인증', msg);
+
                 $.ajax({
                     url: '/email/send',
                     type: 'post',
                     data: JSON.stringify ({
-                        email: [[${session.user.email}]]
+                        email: email
                     }),
                     contentType: 'application/json;charset=utf-8',
                     success: function (result) {
                         id = result;
-                        var msg = '';
-                        msg += '인증 코드를 회원님이 가입하신 이메일로 발송했습니다.\n';
-                        msg += '메일이 도착하지 않은 경우 스펨함을 확인해주세요.';
-
-                        swal('이메일 인증', msg);
                     }
                 });
             }
 
         });
+
+        $(document).on('click', '.password-change-btn', function (e) {
+
+            var password1 = $(".password").val().trim();
+            var password2 = $(".password2").val().trim();
+
+            if (!passwordCheck(password1, password2)) {
+                return false;
+            }
+
+            let authNumber = $('.auth-number').val().trim();
+
+            if (id == null) {
+                swal('비밀번호 변경 실패', '이메일 인증을 먼저 받아주세요.');
+                return false;
+            }
+
+            if (authNumber === "") {
+                swal('비밀번호 변경 실패', '인증번호를 입력해주세요.');
+                return false;
+            }
+
+
+
+            $.ajax({
+                url: '/email/' + id,
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: id,
+                    authCode: authNumber
+                })
+            }).done(function (result) {
+
+                if (!result) {   // resuelt가 false라면 swal후 return false;
+                    swal('비밀번호 변경 실패', '인증번호가 틀립니다.');
+                    return false;
+                }
+
+                $.ajax({
+                    url: '/user/' + email,
+                    type: 'patch',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        email: email,
+                        password: password1
+                    }),
+                    success: function (result) {
+                        if (result) {
+                            swal('비밀번호 변경 성공', '비밀번호를 성공적으로 변경하였습니다.');
+                            password1.val("");
+                            password2.val("");
+                            authNumber.val("");
+                        } else {
+                            swal('비밀번호 변경 실패', '비밀번호 변경에 실패했습니다.');
+                        }
+                    }
+                })
+
+
+
+            })
+        });
+
+        // 비밀번호 유효성 검증
+        function passwordCheck(password1, password2) {
+
+            if ($(".password").hasClass("is-invalid") === true) {
+                $(".password").removeClass("is-invalid");
+                $(".password1-invalid-div").remove();
+            }
+
+            if ($(".password2").hasClass("is-invalid") === true) {
+                $(".password2").removeClass("is-invalid");
+                $(".password2-invalid-div").remove();
+            }
+
+            if (password1 == "" || password1.length < 4 || password2 == "" || password2.length < 4 || password1 !== password2) {
+                if (password1 == "" || password1.length < 4) {
+                    $(".password").addClass("is-invalid");
+                    $("#password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
+                }
+
+                if (password2 == "" || password2.length < 4) {
+                    $(".password2").addClass("is-invalid");
+                    $("#password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
+                }
+
+                if (password1 !== password2) {
+
+                    $("#password").addClass("is-invalid");
+                    $("#password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
+
+                    $("#password2").addClass("is-invalid");
+                    $("#password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
+                }
+                return false;
+            } else {
+                return true;
+            }
+        }
+
     });
 </script>
 </script>

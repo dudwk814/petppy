@@ -116,6 +116,7 @@ public class UserController {
     /**
      * 회원 정보 변경 form으로 이동
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modifyForm")
     public String modifyForm(HttpSession session, Model model) {
 
@@ -166,5 +167,17 @@ public class UserController {
 
         return new ResponseEntity<>(userService.findMembership(userId), HttpStatus.OK);
     }
+
+    @ResponseBody
+    @PatchMapping(value = "/{email}")
+    public ResponseEntity<Boolean> changePassword(@PathVariable("email") String email, @RequestBody UserDTO userDTO) {
+
+        if (userService.changePassword(userDTO)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+    }
+
 
 }

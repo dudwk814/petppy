@@ -71,6 +71,10 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
     public void addMembership(Membership membership) {
         this.membership = membership;
     }

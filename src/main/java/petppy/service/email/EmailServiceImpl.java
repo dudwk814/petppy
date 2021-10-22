@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.email.Email;
 import petppy.dto.email.EmailDTO;
+import petppy.exception.EmailNotFoundException;
 import petppy.repository.email.EmailRepository;
 
 import java.util.Random;
@@ -24,6 +25,23 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
     private final EmailRepository emailRepository;
+
+    /**
+     * 이메일로 발송한 인증코드와 DB에 저장된 인증코드 비교
+     * @param emailDTO
+     * @return
+     */
+    @Override
+    public boolean checkAuthCode(EmailDTO emailDTO) {
+
+        Email email = emailRepository.findById(emailDTO.getId()).orElseThrow(EmailNotFoundException::new);
+
+        if (email.getAuthCode().equals(emailDTO.getAuthCode())) {   // view화면에서 입력한 인증코드와 조회한 email의 인증코드가 같다면 true
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * 이메일 발송

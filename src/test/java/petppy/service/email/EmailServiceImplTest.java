@@ -23,6 +23,20 @@ class EmailServiceImplTest {
                 .email("kj99658103@gmail.com")
                 .build();
 
-        emailService.sendEmail(emailDTO);
+        EmailDTO email = emailService.sendEmail(emailDTO);
+
+        System.out.println("email.getId() = " + email.getId());
+    }
+
+    @Test
+    public void 인증코드_비교() throws Exception {
+        EmailDTO emailDTO = EmailDTO.builder()
+                .id(35L)
+                .authCode("282771")
+                .build();
+
+        boolean result = emailService.checkAuthCode(emailDTO);
+
+        assertEquals(true, result);    // 해당 emailDTO id값으로 조회한 데이터의 auth_code값과 emailDTO를 생성할때 입력한 authCode값이 같아야 한다.
     }
 }

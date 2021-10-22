@@ -7,6 +7,8 @@ public interface EmailService {
 
     public EmailDTO sendEmail(EmailDTO emailDTO);
 
+    public boolean checkAuthCode(EmailDTO emailDTO);
+
     default EmailDTO entityToDTO(Email email) {
         return EmailDTO
                 .builder()

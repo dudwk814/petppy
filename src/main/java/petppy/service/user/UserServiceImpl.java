@@ -38,6 +38,11 @@ public class UserServiceImpl implements UserService {
     private final MembershipRepository membershipRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * 멤버십 등급 변경
+     * @param userId
+     * @param rating
+     */
     @Override
     @Transactional
     public void changeMembership(Long userId, String rating) {
@@ -46,6 +51,7 @@ public class UserServiceImpl implements UserService {
 
         Rating changeRating = Rating.NONE;
 
+        // 넘어온 멤버십 값에 따라 changeRating 세팅
         if (rating.equals("Personal")) {
             changeRating = Rating.PERSONAL;
         } else if (rating.equals("Business")) {
@@ -163,7 +169,11 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    // 회원가입 이메일 항목 중복 체크
+    /**
+     * 이메일 중복 체크
+     * @param email
+     * @return
+     */
     public boolean checkEmailExist(String email) {
         Optional<User> findMember = userRepository.findByEmail(email);
 
@@ -174,6 +184,23 @@ public class UserServiceImpl implements UserService {
         return findMember.isPresent();
     }
 
+    /**
+     *
+     * @param userDTO
+     */
+    @Override
+    @Transactional
+    public boolean changePassword(UserDTO userDTO) {
 
-    
+        if (userDTO.getPassword().length() < 4 || userDTO.getPassword().length() > 16) {
+            return false;
+        }
+
+        User user = userRepository.findByEmail(userDTO.getEmail()).orElseThrow(UserNotFoundException::new);
+        user.changePassword(passwordEncoder.encode(userDTO.getPassword()));
+
+        return true;
+    }
+
+
 }

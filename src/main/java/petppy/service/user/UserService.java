@@ -35,6 +35,8 @@ public interface UserService {
 
     public boolean checkEmailExist(String email);
 
+    public boolean changePassword(UserDTO userDTO);
+
     default User dtoToEntity(UserDTO dto) {
         User user = User.builder()
                 .email(dto.getEmail())
