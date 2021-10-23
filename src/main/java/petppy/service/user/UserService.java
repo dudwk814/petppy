@@ -17,7 +17,7 @@ public interface UserService {
 
     public String joinedMember(UserDTO dto);
 
-    public void ModifyUserAddress(UserDTO dto);
+    public boolean ModifyUserAddress(UserDTO dto);
 
     public void deleteMember(String email);
 

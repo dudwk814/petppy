@@ -16,13 +16,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${resources.location}")
     private String resourcesLocation;
-    @Value("${resources.uri_path}")
+    @Value("${resources.uri_path:}")
     private String resourcesUriPath;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(resourcesUriPath + "/**")
-                .addResourceLocations("file:///" + resourcesLocation + "/");
+        registry.addResourceHandler(resourcesUriPath +"/**")
+                .addResourceLocations("file:///" + resourcesLocation);
 
     }
 

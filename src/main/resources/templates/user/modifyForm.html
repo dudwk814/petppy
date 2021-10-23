@@ -64,7 +64,7 @@
                                                     <input type="text" class="form-control" name="extraAddress" id="sample4_extraAddress" th:value="${address.extraAddress}" placeholder="참고사항" required>
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-outline-secondary float-right">주소 설정</button>
+                                            <button type="submit" class="btn btn-outline-secondary float-right address-modify-btn">주소 설정</button>
                                         </form>
                                     </div>
                                 </div>
@@ -169,13 +169,46 @@
         let authentication = false;
         var email = [[${session.user.email}]];
 
+        $('.address-modify-btn').on('click', function (e) {
+            e.preventDefault();
+
+            var postcode = $('input[name="postcode"]').val().trim();
+            var roadAddress = $('input[name="roadAddress"]').val().trim();
+            var jibunAddress = $('input[name="jibunAddress"]').val().trim();
+            var detailAddress = $('input[name="detailAddress"]').val().trim();
+            var extraAddress = $('input[name="extraAddress"]').val().trim();
+
+            $.ajax({
+                url: '/user/modifyUserAddress',
+                type: 'post',
+                data: JSON.stringify ({
+                    email: email,
+                    postcode: postcode,
+                    roadAddress: roadAddress,
+                    jibunAddress: jibunAddress,
+                    detailAddress: detailAddress,
+                    extraAddress: extraAddress
+                }),
+                contentType: 'application/json;charset=utf-8',
+                success: function (result) {
+                    if (result) {
+                        swal('주소 변경 성공', '회원님의 주소를 변경했습니다.');
+                    } else {
+                        swal('주소 변경 실패', '주소 변경의 실패하였습니다.\n' +
+                            '다시 시도하시거나 계정을 확인해주세요.');
+                    }
+                }
+
+            })
+        })
+
         $('.auth-btn').on('click', function (e) {
 
             if ([[${session.user}]] != null) {
 
                 var msg = '';
                 msg += '인증 코드를 회원님이 가입하신 이메일로 발송했습니다.\n';
-                msg += '메일이 도착하지 않은 경우 스펨함을 확인해주세요.';
+                msg += '메일이 도착하지 않은 경우 다시 시도하시거나 스펨함을 확인해주세요.';
 
                 swal('이메일 인증', msg);
 

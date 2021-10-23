@@ -134,14 +134,14 @@ public class UserController {
     /**
      * 회원 주소 설정
      */
+    @PreAuthorize("isAuthenticated()")
+    @ResponseBody
     @PostMapping("/modifyUserAddress")
-    public String modifyUserAddress(UserDTO userDTO) {
+    public ResponseEntity<Boolean> modifyUserAddress(@RequestBody UserDTO userDTO) {
 
         System.out.println("userDTO = " + userDTO);
 
-        userService.ModifyUserAddress(userDTO);
-
-        return "redirect:/user/modifyForm";
+        return new ResponseEntity<>(userService.ModifyUserAddress(userDTO), HttpStatus.OK);
     }
 
     /**

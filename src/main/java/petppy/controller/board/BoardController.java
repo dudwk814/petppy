@@ -202,7 +202,7 @@ public class BoardController {
             String defaultPath = req.getSession().getServletContext().getRealPath("/");
 
 
-            String ckUploadPath =  resourcesLocation + File.separator +  uuid + "_" + fileName; // linux
+            String ckUploadPath =  resourcesLocation + File.separator +  uuid + "_" + fileName; // 실제 업로드되는 물리 경로
 
             out = new FileOutputStream(new File(ckUploadPath));
             out.write(bytes);
@@ -210,7 +210,7 @@ public class BoardController {
 
             String callback = req.getParameter("CKEditorFuncNum");
             printWriter = res.getWriter();
-            String fileUrl = resourcesLocation + "/" + uuid + "_" + fileName;  // 작성화면
+            String fileUrl = resourcesUriPath + "/" + uuid + "_" + fileName;  // DB에 저장되는 url 경로
 
 
 

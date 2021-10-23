@@ -109,9 +109,14 @@ public class UserServiceImpl implements UserService {
         return dto.getName();
     }
 
+    /**
+     * User Address 변경
+     * @param dto
+     * @return
+     */
     @Override
     @Transactional
-    public void ModifyUserAddress(UserDTO dto) {
+    public boolean ModifyUserAddress(UserDTO dto) {
         Optional<User> result = userRepository.findByEmail(dto.getEmail());
 
         if (result.isPresent()) {
@@ -125,8 +130,11 @@ public class UserServiceImpl implements UserService {
                             .detailAddress(dto.getDetailAddress())
                             .extraAddress(dto.getExtraAddress())
                             .build());
-        }
 
+            return true;
+        } else {
+            return false;
+        }
 
     }
 
