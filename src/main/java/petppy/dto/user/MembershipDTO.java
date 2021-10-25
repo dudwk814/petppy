@@ -30,7 +30,7 @@ public class MembershipDTO {
         this.rating = rating;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
-        this.lastDate = modifiedDate.plusMonths(1L);
+        this.lastDate = modifiedDate.plusDays(30);
         this.dogWalkCount = dogWalkCount;
         this.petGroomingCount = petGroomingCount;
         this.vetVisit = vetVisit;

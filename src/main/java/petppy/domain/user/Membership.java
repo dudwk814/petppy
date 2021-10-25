@@ -6,6 +6,8 @@ import petppy.exception.NotEnoughServiceCountException;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
+
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static petppy.domain.user.Rating.NONE;
@@ -27,6 +29,7 @@ public class Membership extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Rating rating;
+
 
     private int dogWalkCount = 0;
     private int petGroomingCount = 0;

@@ -10,6 +10,9 @@ import petppy.domain.user.Rating;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -38,4 +41,31 @@ class MembershipRepositoryTest {
         assertEquals(1, findMembership.getPetGroomingCount());
         assertEquals(1, findMembership.getVetVisit());
     }
+
+    @Test
+    @Commit
+    public void 멤버십_등급_변경_벌크연산() throws Exception {
+        //given
+        List<Membership> result = membershipRepository.findAll();
+        List<Long> membershipIds = new ArrayList<>();
+
+        for (Membership membership : result) {
+            membershipIds.add(membership.getId());
+        }
+
+        membershipRepository.changeRatingToNone(Rating.NONE, membershipIds);
+
+    }
+    
+    @Test
+    public void 기한지난_멤버십_조회() throws Exception {
+        /*Membership membership = membershipRepository.findById(2L).get();
+
+        System.out.println("membership.getModifiedDate() = " + membership.getModifiedDate());
+        System.out.println("membership.getModifiedDate() = " + membership.getModifiedDate().plusDays(30));*/
+
+        List<Membership> result = membershipRepository.findByRatingNot(Rating.NONE);
+
+        System.out.println("result.size() = " + result.size());
+    }    
 }
