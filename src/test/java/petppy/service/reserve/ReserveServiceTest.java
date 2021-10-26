@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import petppy.domain.Address;
+import petppy.domain.reserve.ReserveType;
 import petppy.dto.reserve.ReserveDTO;
 
 import java.time.LocalDateTime;
@@ -28,4 +30,6 @@ class ReserveServiceTest {
 
         reserveService.cancelReserve(reserveDTO);
     }
+
+    
 }

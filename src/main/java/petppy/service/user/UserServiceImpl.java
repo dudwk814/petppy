@@ -154,6 +154,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO findById(Long id) {
+        return entityToDto(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+    }
+
+    @Override
     public List<UserDTO> findMemberListByName(String name, Pageable pageable) {
 
         List<User> findUsers = userRepository.findByNameContaining(name, pageable);

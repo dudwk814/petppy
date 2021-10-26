@@ -155,6 +155,17 @@ public class UserController {
         return new ResponseEntity<>(userService.checkEmailExist(email), HttpStatus.OK);
     }
 
+    /**
+     * ajax로 회원 조회
+     * @param userId
+     * @return
+     */
+    @ResponseBody
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<UserDTO> findUserWithAjax(@PathVariable("userId") Long userId) {
+        return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
+    }
+
 
     /**
      * 멤버십 등급 조회
@@ -167,6 +178,7 @@ public class UserController {
 
         return new ResponseEntity<>(userService.findMembership(userId), HttpStatus.OK);
     }
+
 
     @ResponseBody
     @PatchMapping(value = "/{email}")

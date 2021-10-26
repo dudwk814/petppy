@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import petppy.domain.Address;
 import petppy.domain.BaseTimeEntity;
 import petppy.domain.services.Services;
 import petppy.domain.services.ServicesType;
@@ -38,6 +39,9 @@ public class Reserve extends BaseTimeEntity {
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "service_id")
     private Services services;
+
+    @Embedded
+    private Address address;
 
     @Column(name = "request")
     private String request;

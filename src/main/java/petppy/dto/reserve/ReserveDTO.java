@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import petppy.domain.Address;
 import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.ServicesType;
 
@@ -32,5 +33,7 @@ public class ReserveDTO {
     private String reserveEndDate;
 
     private ReserveType reserveType;
+
+    private Address address;
 
 }

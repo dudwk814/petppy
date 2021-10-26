@@ -18,7 +18,9 @@ import petppy.repository.user.UserRepository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static petppy.domain.services.ServicesType.CAT_SITTING;
@@ -118,6 +120,29 @@ class ReserveRepositoryTest {
 
         //when
         reserve.changeReserveTime(LocalDateTime.now());
+
+    }
+
+    @Test
+    public void 예약날짜_지난_예약_조회() throws Exception {
+        List<Reserve> result = reserveRepository.findByReserveTypeAndReserveEndDateBefore(ReserveType.RESERVE, LocalDateTime.now());
+
+        for (Reserve reserve : result) {
+            System.out.println("reserve.getReserveStartDate() = " + reserve.getReserveStartDate());
+            System.out.println("reserve.getUser().getName() = " + reserve.getUser().getName());
+        }
+    }
+
+    @Test
+    public void 예약날짜_지난_예약_예약상태_COMPLETE로_변경() throws Exception {
+        List<Reserve> result = reserveRepository.findByReserveTypeAndReserveEndDateBefore(ReserveType.RESERVE, LocalDateTime.now());
+
+        List<Long> ids = new ArrayList<>();
+        ReserveType reserveType = ReserveType.COMPLETE;
+
+        result.stream().forEach(reserve -> ids.add(reserve.getId()));
+
+        reserveRepository.changeReserveTypeToComplete(reserveType, ids);
 
     }
 

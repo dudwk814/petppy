@@ -35,6 +35,7 @@ public interface ReserveService {
                 .reserveEndDate(reserve.getReserveEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")))
                 .reserveStartDate(reserve.getReserveStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")))
                 .request(reserve.getRequest())
+                .address(reserve.getAddress())
                 .build();
     }
 
@@ -64,6 +65,7 @@ public interface ReserveService {
                 .reserveEndDate(reserveStartDate.plusHours(2))
                 .reserveType(dto.getReserveType())
                 .request(dto.getRequest())
+                .address(dto.getAddress())
                 .build();
     }
 }

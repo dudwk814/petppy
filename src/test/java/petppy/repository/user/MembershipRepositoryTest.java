@@ -10,6 +10,7 @@ import petppy.domain.user.Rating;
 
 import javax.persistence.EntityManager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,5 +68,6 @@ class MembershipRepositoryTest {
         List<Membership> result = membershipRepository.findByRatingNot(Rating.NONE);
 
         System.out.println("result.size() = " + result.size());
-    }    
+
+    }
 }

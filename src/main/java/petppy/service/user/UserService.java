@@ -23,6 +23,8 @@ public interface UserService {
 
     public UserDTO findByEmail(String email);
 
+    public UserDTO findById(Long id);
+
     public UserDTO findByEmailAndType(String email, Type type);
 
     public List<UserDTO> findMemberListByName(String name, Pageable pageable);

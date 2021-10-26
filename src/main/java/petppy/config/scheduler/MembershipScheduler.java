@@ -26,7 +26,8 @@ public class MembershipScheduler {
      * 매일 새벽2시에 오늘 자로 끝나는 멤버십 등급 NONE으로 초기화
      */
     @Scheduled(cron = "0 0 0 * * *")
-    public void changeMembership() {
+    @Transactional
+    public void changeMembershipRating() {
         List<Membership> result = membershipRepository.findByRatingNot(Rating.NONE);
         List<Long> membershipIds = new ArrayList<>();
 
@@ -37,6 +38,7 @@ public class MembershipScheduler {
                 log.info(membership.getUser().getEmail() + "님의 멤버십등급 기한이 끝나 멤버십 등급을 NONE으로 조정");
             }
         }
+
 
         membershipRepository.changeRatingToNone(Rating.NONE, membershipIds);
     }

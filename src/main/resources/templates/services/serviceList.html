@@ -174,6 +174,7 @@
                                         <input type="text" th:unless="${session.user != null}" class="form-control reserve-form-email" placeholder="Vehicle number">
                                     </div>
                                 </div>
+
                                 <div class="col-md-6 reserve-start-date-col">
                                     <div class="form-group">
                                         <div class="input-wrap">
@@ -198,6 +199,37 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-12 address-div">
+                                    <div class="hr-sect">주소</div>
+                                    <div class="form-row">
+                                        <div class="col-md-8 mb-3">
+
+                                            <input type="text" class="form-control" name="postcode" id="sample4_postcode"
+                                                   placeholder="우편번호">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn btn-success" onclick="execDaumPostcode()">우편번호 찾기</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-7 mb-3">
+                                            <input type="text" class="form-control" name="roadAddress" id="sample4_roadAddress" placeholder="도로명 주소" required>
+                                        </div>
+                                        <div class="col-md-5 mb-3">
+                                            <input type="text" class="form-control" name="jibunAddress" id="sample4_jibunAddress" placeholder="지번 주소" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-7 mb-3">
+                                            <input type="text" class="form-control" name="detailAddress" id="sample4_detailAddress" placeholder="상세 주소" required>
+                                        </div>
+                                        <div class="col-md-5 mb-3">
+                                            <input type="text" class="form-control" name="extraAddress" id="sample4_extraAddress" placeholder="참고사항" required>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <textarea name="" id="reserveRequest" cols="30" rows="7" class="form-control"
@@ -224,7 +256,7 @@
 <script th:inline="javascript">
     $(document).ready(function (e) {
 
-
+        var userId = null;
 
         $(".reservation-btn").on("click", function (e) {
             e.preventDefault();
@@ -232,17 +264,19 @@
             if ([[${session.user == null}]]) {
                 $("#loginModal").modal("show");
 
-                return;
+                return false;
 
             } else {
 
                 var reservationBtn = $(this);
 
+                userId = [[${session.user.id}]];
+
                 $.ajax({
-                    url: '/user/membership/' + [[${session.user.id}]],
+                    url: '/user/' + userId,
                     type: 'get',
-                    success: function (membership) {
-                        if (membership.rating === 'NONE') { // 현재 멤버십등급이 NONE인 경우 alert 후 리턴
+                    success: function (result) {
+                        if (result.membershipDTO.rating === 'NONE') { // 현재 멤버십등급이 NONE인 경우 alert 후 리턴
 
                             // 멤버십 가입 유도 a태그 생성
                             var createA = document.createElement('a');
@@ -269,6 +303,7 @@
                                 $("#reservationModal").find('#services-type').attr('data-id', '2');
                                 $("#reservationModal").find('#services-type').attr('data-type', 'PET_GROOMING');
 
+                                $('.address-div').hide();
 
                             } else if (reservationBtn.hasClass('vet-visit')) {
                                 $('#reserve-form')[0].reset();
@@ -282,7 +317,7 @@
                             $("#reservationModal").modal("show");
                         }
                     }
-                })
+                });
 
 
             }
