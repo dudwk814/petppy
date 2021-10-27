@@ -157,13 +157,13 @@ public class UserController {
 
     /**
      * ajax로 회원 조회
-     * @param userId
+     * @param email
      * @return
      */
     @ResponseBody
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<UserDTO> findUserWithAjax(@PathVariable("userId") Long userId) {
-        return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<UserDTO> findUserWithAjax(@PathVariable("email") String email) {
+        return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
     }
 
 

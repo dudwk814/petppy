@@ -83,7 +83,7 @@
                                 <span class="flaticon-blind"></span>
                             </div>
                             <div class="media-body p-4">
-                                <h3 class="heading">Dog Walking</h3>
+                                <h3 class="heading">반려견 산책</h3>
                                 <p>Far far away, behind the word mountains, far from the countries Vokalia and
                                     Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
                                     right.</p>
@@ -99,7 +99,7 @@
                                 <span class="flaticon-grooming"></span>
                             </div>
                             <div class="media-body p-4">
-                                <h3 class="heading">Pet Grooming</h3>
+                                <h3 class="heading">반려동물 미용</h3>
                                 <p>Far far away, behind the word mountains, far from the countries Vokalia and
                                     Consonantia, there live the blind texts. Separated they live in Bookmarksgrove
                                     right.</p>
@@ -143,23 +143,17 @@
                     <div class="modal-body">
                         <form action="#" class="reserve-form" id="reserve-form">
                             <div class="row">
+                                <div class="hr-sect">예약하실 서비스</div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="form-field">
                                             <div class="select-wrap">
-                                                <!--<select name="servicesType" id="services-type-select" class="form-control">
-                                                    <option value="">Select services</option>
-                                                    <option data-id="1" value="CAT_SITTING">고양이 돌봄</option>
-                                                    <option data-id="2" value="DOG_WALK">강아지 산책</option>
-                                                    <option data-id="3" value="PET_SPA">반려동물 목욕</option>
-                                                    <option data-id="4" value="PET_GROOMING">반려동물 미용</option>
-                                                    <option data-id="5" value="PET_DAYCARE">반려동물 종일 돌봄</option>
-                                                </select>-->
-                                                <input name="servicesType" data-id="1" data-type="DOG_WALK" id="services-type" class="form-control" value="강아지 산책" disabled>
+                                                <input name="servicesType" data-id="1" data-type="DOG_WALK" id="services-type" class="form-control" value="반려견 산책" disabled>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="hr-sect">인적사항</div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <input th:if="${session.user != null}" type="text" class="form-control"
@@ -174,6 +168,8 @@
                                         <input type="text" th:unless="${session.user != null}" class="form-control reserve-form-email" placeholder="Vehicle number">
                                     </div>
                                 </div>
+
+                                <div class="hr-sect">예약 날짜 및 시간</div>
 
                                 <div class="col-md-6 reserve-start-date-col">
                                     <div class="form-group">
@@ -256,7 +252,6 @@
 <script th:inline="javascript">
     $(document).ready(function (e) {
 
-        var userId = null;
 
         $(".reservation-btn").on("click", function (e) {
             e.preventDefault();
@@ -270,10 +265,10 @@
 
                 var reservationBtn = $(this);
 
-                userId = [[${session.user.id}]];
+                var email = $('#notifyBtn').data('email');
 
                 $.ajax({
-                    url: '/user/' + userId,
+                    url: '/user/' + email,
                     type: 'get',
                     success: function (result) {
                         if (result.membershipDTO.rating === 'NONE') { // 현재 멤버십등급이 NONE인 경우 alert 후 리턴
@@ -291,14 +286,24 @@
                             });
                             return;
                         } else { // 현재 멤버십등급이 NONE이 아닌경우 예약 모달 생성
+
+                            $('#reserve-form')[0].reset();
+                            // 회원 주소로 주소 input 추가
+                            $('input[name="roadAddress"]').val(result.roadAddress);
+                            $('input[name="postcode"]').val(result.postcode);
+                            $('input[name="jibunAddress"]').val(result.jibunAddress);
+                            $('input[name="detailAddress"]').val(result.detailAddress);
+                            $('input[name="extraAddress"]').val(result.extraAddress);
+
                             // 각 서비스에 맞는 input value로 변경
                             if (reservationBtn.hasClass('dog-walking')) {
-                                $('#reserve-form')[0].reset();
+
                                 $("#reservationModal").find('#services-type').val('강아지 산책');
                                 $("#reservationModal").find('#services-type').attr('data-id', '1');
                                 $("#reservationModal").find('#services-type').attr('data-type', 'DOG_WALK');
+
+                                $('.address-div').show();
                             } else if (reservationBtn.hasClass('pet-grooming')) {
-                                $('#reserve-form')[0].reset();
                                 $("#reservationModal").find('#services-type').val('애완동물 미용');
                                 $("#reservationModal").find('#services-type').attr('data-id', '2');
                                 $("#reservationModal").find('#services-type').attr('data-type', 'PET_GROOMING');
@@ -306,10 +311,10 @@
                                 $('.address-div').hide();
 
                             } else if (reservationBtn.hasClass('vet-visit')) {
-                                $('#reserve-form')[0].reset();
                                 $("#reservationModal").find('#services-type').val('수의사 방문');
                                 $("#reservationModal").find('#services-type').attr('data-id', '3');
                                 $("#reservationModal").find('#services-type').attr('data-type', 'VET_VISIT');
+                                $('.address-div').show();
                             }
 
 
@@ -332,7 +337,7 @@
         $(document).on('click', '.reserve-submit-btn', function (e) {
             e.preventDefault();
 
-
+            // ReserveDTO 변수
             var userId = $('.reserve-form-email').data('id');   // 회원 번호
             var email = $('.reserve-form-email').val();         // 회원 이메일
             var servicesId = $('#services-type').data('id');    // 서비스 번호
@@ -343,13 +348,31 @@
             var reserveStartDateTime = (reserveStartDate + "-" + reserveStartTime).replace(':', '-');   // 예약일 + 예약시간
             var reserveRequest = $('#reserveRequest').val();    // 요청사항
 
+            // 주소 변수
+            var roadAddress =  $('input[name="roadAddress"]').val();
+            var postcode =  $('input[name="postcode"]').val();
+            var jibunAddress =  $('input[name="jibunAddress"]').val();
+            var detailAddress =  $('input[name="detailAddress"]').val();
+            var extraAddress =  $('input[name="extraAddress"]').val();
+
+            // 주소 객체
+            var address = {
+                roadAddress: roadAddress,
+                postcode: postcode,
+                jibunAddress: jibunAddress,
+                detailAddress: detailAddress,
+                extraAddress: extraAddress
+            }
+
+
             var reserveDTO = JSON.stringify({   // 예약 데이터
                 userId: userId,
                 email: email,
                 servicesId: servicesId,
                 servicesType: servicesType,
                 reserveStartDate: reserveStartDateTime,
-                request: reserveRequest
+                request: reserveRequest,
+                address: address
             });
 
             if (reserveStartDate === "") { // 예약일 선택안할 시 alert후 리턴
@@ -358,6 +381,11 @@
             } else if (reserveStartTime === "") { // 예약시간 선택안할 시 alert후 리턴
                 swal("예약실패", "이용하실 시간을 선택해주세요!");
                 return false;
+            } else if(servicesId == "1" || servicesId == "3") {
+                if (postcode.trim() === "" || roadAddress.trim()  === "" || jibunAddress.trim()  === "") {
+                    swal("예약실패", "주소를 정확히 입력해주세요!");
+                    return false;
+                }
             }
 
 
@@ -369,7 +397,7 @@
                 dataType: 'json',
             }).done(function (reserveResult) {
                 var message = serviceName + "서비스를 예약하셨습니다.";
-                var url = "#"
+                var url = "/reserve/reserveList"
 
                 var notificationData = {
                     targetEmail: email,
