@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             "/user/modifyForm",
                             "/user/dashboard",
                             "/board/edit")
-                        .hasRole("MEMBER")
+                        .hasAnyRole("MEMBER", "ADMIN")
                 .and()
                 .formLogin()
                     .usernameParameter("email")

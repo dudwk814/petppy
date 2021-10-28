@@ -90,20 +90,9 @@
                             <h6 class="dropdown-header">[[${session.user.name}]]님 반갑습니다!</h6>
                             <h6></h6>
                             <div class="dropdown-divider"></div>
-                            <!--<a href="#" class="dropdown-item"><h6><i class="fa fa-shopping-cart fa-lg"
-                                                                     aria-hidden="true"></i>&nbsp;&nbsp;장바구니</h6></a>
 
-                            <a href="#" class="dropdown-item"><h6><i class="fa fa-truck fa-lg"
-                                                                     aria-hidden="true"></i>&nbsp;&nbsp;주문조회</h6></a>-->
-                            <!--<form action="/user" method="post">
-                                <input type="hidden" name="email" th:value="${session.user.email}">
-                                <input type="hidden" name="type" th:value="${session.user.type}">
-                                <input type="hidden" name="id" th:value="${session.user.id}">
-                                <button type="submit" id="user-page-btn" class="dropdown-item"><h6><i
-                                        class="fa fa-cog fa-lg"
-                                        aria-hidden="true"></i>&nbsp;&nbsp;회원설정
-                                </h6></button>
-                            </form>-->
+                            <a th:if=" ${#strings.equals(session.user.role, 'ADMIN')}" class="dropdown-item"><h6><i class="fa fa-lock fa-lg"
+                                                                                                                    aria-hidden="true"></i>&nbsp;관리자 메뉴</h6></a>
 
                             <a class="dropdown-item" th:href="@{/user}"><h6><i class="fa fa-cog fa-lg"
                                                                      aria-hidden="true"></i>&nbsp;&nbsp;회원설정</h6></a>
