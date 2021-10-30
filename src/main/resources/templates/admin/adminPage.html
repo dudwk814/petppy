@@ -1,10 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    zzz
-</body>
-</html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
+                 data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+                    </div>
+                </div>
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i
+                                class="ion-ios-arrow-forward"></i></a></span> <span>Admin<i
+                                class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">Admin</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ftco-section bg-light">
+            <div class="container">
+                <div class="card-deck">
+                    <div class="card text-center border-primary rounded">
+                        <div class="card-body">
+                            <p class="card-title text-primary">회원 수</p>
+                            <h5>55</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center border-primary rounded">
+                        <div class="card-body">
+                            <p class="card-title text-primary">예약</p>
+                            <h5>55</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center border-primary rounded">
+                        <div class="card-body">
+                            <p class="card-title text-primary">문의</p>
+                            <h5>55</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <!--<div class="col text-center">
+                        <div class="block-27">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>-->
+                </div>
+
+                <ul class="nav nav-pills nav-fill justify-content-center nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">회원</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">예약</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">문의</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row mt-5">
+                        </div>
+                        <div class="card-deck">
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">총 회원 수</p>
+                                    <h5>55</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">NONE</p>
+                                    <h5>55</h5>
+                                </div>
+                            </div>
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">PERSONAL</p>
+                                    <h5>55</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">BUSINESS</p>
+                                    <h5>55</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">ULTIMATE</p>
+                                    <h5>55</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                </div>
+
+            </div>
+        </section>
+    </th:block>
+</th:block>

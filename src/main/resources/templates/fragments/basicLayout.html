@@ -91,7 +91,7 @@
                             <h6></h6>
                             <div class="dropdown-divider"></div>
 
-                            <a th:if=" ${#strings.equals(session.user.role, 'ADMIN')}" class="dropdown-item"><h6><i class="fa fa-lock fa-lg"
+                            <a th:if=" ${#strings.equals(session.user.role, 'ADMIN')}" th:href="@{/admin/}" class="dropdown-item"><h6><i class="fa fa-lock fa-lg"
                                                                                                                     aria-hidden="true"></i>&nbsp;관리자 메뉴</h6></a>
 
                             <a class="dropdown-item" th:href="@{/user}"><h6><i class="fa fa-cog fa-lg"
