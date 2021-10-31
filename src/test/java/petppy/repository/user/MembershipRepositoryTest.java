@@ -7,6 +7,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.user.Membership;
 import petppy.domain.user.Rating;
+import petppy.dto.user.MembershipCountDTO;
 
 import javax.persistence.EntityManager;
 
@@ -69,5 +70,15 @@ class MembershipRepositoryTest {
 
         System.out.println("result.size() = " + result.size());
 
+    }
+
+    @Test
+    public void 멤버십별_회원수_카운트트() throws Exception {
+        List<MembershipCountDTO> membershipCountDTOS = membershipRepository.countByMembershipWithRating();
+
+        for (MembershipCountDTO membershipCountDTO : membershipCountDTOS) {
+            System.out.println("membershipCountDTO = " + membershipCountDTO);
+            System.out.println("membershipCountDTO.getRating().toString() = " + membershipCountDTO.getRating().toString());
+        }
     }
 }

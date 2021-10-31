@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import petppy.domain.user.Rating;
 import petppy.domain.user.User;
 import petppy.domain.user.Membership;
+import petppy.dto.user.MembershipCountDTO;
 
 import java.util.List;
 
@@ -24,8 +25,11 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Membership m set m.rating = :rating, m.dogWalkCount = 0, m.petGroomingCount = 0, m.vetVisit = 0 where m.id in :ids")
-    public void changeRatingToNone(@Param("rating")Rating rating, @Param("ids") List<Long> ids);
+    void changeRatingToNone(@Param("rating")Rating rating, @Param("ids") List<Long> ids);
 
     @EntityGraph(attributePaths = {"user"}, type = FETCH)
-    public List<Membership> findByRatingNot(Rating rating);
+    List<Membership> findByRatingNot(Rating rating);
+
+    @Query("select new petppy.dto.user.MembershipCountDTO(m.rating, count(m)) from Membership m group by m.rating")
+    List<MembershipCountDTO> countByMembershipWithRating();
 }

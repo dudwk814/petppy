@@ -29,8 +29,8 @@
                 <div class="card-deck">
                     <div class="card text-center border-primary rounded">
                         <div class="card-body">
-                            <p class="card-title text-primary">회원 수</p>
-                            <h5>55</h5>
+                            <p class="card-title text-primary">회수</p>
+                            <h5>[[${ratingCount}]]</h5>
                         </div>
                     </div>
                     <div class="card text-center border-primary rounded">
@@ -76,34 +76,38 @@
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">총 회원 수</p>
-                                    <h5>55</h5>
+                                    <h5>[[${ratingCount}]]</h5>
                                 </div>
                             </div>
 
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">NONE</p>
-                                    <h5>55</h5>
+                                    <h5 th:if="${NONE} != null">[[${NONE.count}]]</h5>
+                                    <h5 th:unless="${NONE} != null">0</h5>
                                 </div>
                             </div>
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">PERSONAL</p>
-                                    <h5>55</h5>
+                                    <h5 th:if="${PERSONAL} != null">[[${PERSONAL.count}]]</h5>
+                                    <h5 th:unless="${PERSONAL} != null">0</h5>
                                 </div>
                             </div>
 
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">BUSINESS</p>
-                                    <h5>55</h5>
+                                    <h5 th:if="${BUSINESS} != null">[[${BUSINESS.count}]]</h5>
+                                    <h5 th:unless="${BUSINESS} != null">0</h5>
                                 </div>
                             </div>
 
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">ULTIMATE</p>
-                                    <h5>55</h5>
+                                    <h5 th:if="${ULTIMATE} != null">[[${ULTIMATE.count}]]</h5>
+                                    <h5 th:unless="${ULTIMATE} != null">0</h5>
                                 </div>
                             </div>
                         </div>
