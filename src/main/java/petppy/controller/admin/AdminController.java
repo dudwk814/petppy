@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import petppy.dto.user.MembershipCountDTO;
 import petppy.repository.user.MembershipRepository;
+import petppy.service.user.UserService;
 
 import java.util.List;
 
@@ -17,20 +18,22 @@ import java.util.List;
 public class AdminController {
 
     private final MembershipRepository membershipRepository;
+    private final UserService userService;
 
     @GetMapping("")
     @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
     public String adminPage(Model model) {
 
         List<MembershipCountDTO> result = membershipRepository.countByMembershipWithRating();
-        int ratingCount = 0;
+        int userCount = 0;
 
         for (MembershipCountDTO membershipCountDTO : result) {
-            ratingCount += membershipCountDTO.getCount();
+            userCount += membershipCountDTO.getCount();
             model.addAttribute(membershipCountDTO.getRating().toString(), membershipCountDTO);  // key : NONE, PERSONAL ... value : membershipCountDTO
         }
 
-        model.addAttribute("ratingCount", ratingCount);
+
+        model.addAttribute("userCount", userCount);
 
 
 

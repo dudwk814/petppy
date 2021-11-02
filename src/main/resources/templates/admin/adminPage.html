@@ -29,8 +29,8 @@
                 <div class="card-deck">
                     <div class="card text-center border-primary rounded">
                         <div class="card-body">
-                            <p class="card-title text-primary">회수</p>
-                            <h5>[[${ratingCount}]]</h5>
+                            <p class="card-title text-primary">회원</p>
+                            <h5>[[${userCount}]]</h5>
                         </div>
                     </div>
                     <div class="card text-center border-primary rounded">
@@ -76,38 +76,38 @@
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">총 회원 수</p>
-                                    <h5>[[${ratingCount}]]</h5>
+                                    <h5>[[${userCount}]]</h5>
                                 </div>
                             </div>
 
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">NONE</p>
-                                    <h5 th:if="${NONE} != null">[[${NONE.count}]]</h5>
-                                    <h5 th:unless="${NONE} != null">0</h5>
+                                    <h5 class="noneCount" th:if="${NONE} != null">[[${NONE.count}]]</h5>
+                                    <h5 class="noneCount" th:unless="${NONE} != null">0</h5>
                                 </div>
                             </div>
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">PERSONAL</p>
-                                    <h5 th:if="${PERSONAL} != null">[[${PERSONAL.count}]]</h5>
-                                    <h5 th:unless="${PERSONAL} != null">0</h5>
+                                    <h5 class="personalCount" th:if="${PERSONAL} != null">[[${PERSONAL.count}]]</h5>
+                                    <h5 class="personalCount" th:unless="${PERSONAL} != null">0</h5>
                                 </div>
                             </div>
 
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">BUSINESS</p>
-                                    <h5 th:if="${BUSINESS} != null">[[${BUSINESS.count}]]</h5>
-                                    <h5 th:unless="${BUSINESS} != null">0</h5>
+                                    <h5 class="businessCount" th:if="${BUSINESS} != null">[[${BUSINESS.count}]]</h5>
+                                    <h5 class="businessCount" th:unless="${BUSINESS} != null">0</h5>
                                 </div>
                             </div>
 
                             <div class="card text-center border-primary rounded">
                                 <div class="card-body">
                                     <p class="card-title text-primary">ULTIMATE</p>
-                                    <h5 th:if="${ULTIMATE} != null">[[${ULTIMATE.count}]]</h5>
-                                    <h5 th:unless="${ULTIMATE} != null">0</h5>
+                                    <h5 class="ultimateCount" th:if="${ULTIMATE} != null">[[${ULTIMATE.count}]]</h5>
+                                    <h5 class="ultimateCount" th:unless="${ULTIMATE} != null">0</h5>
                                 </div>
                             </div>
                         </div>
@@ -116,6 +116,9 @@
                         <div class="row">
                             <div class="col-sm-8">
                                 <div class="card">
+                                    <div class="card-header text-center">
+                                        회원 차트
+                                    </div>
                                     <div class="card-body">
                                         <canvas id="membershipChart1" width="400" height="200"></canvas>
                                     </div>
@@ -123,14 +126,76 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="card">
-                                    <canvas id="membershipChart2" width="400" height="300"></canvas>
+                                    <div class="card-header text-center">
+                                        회원 차트
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="membershipChart2" width="400" height="300"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-5">
+                        <div class="row mt-5 mb-5">
                         </div>
                         <div class="row">
-                            <!-- 회원들 테이블 -->
+                            <div class="col-sm-12">
+                                <div class="card-header text-center">
+                                    회원 테이블
+                                </div>
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First</th>
+                                            <th scope="col">Last</th>
+                                            <th scope="col">Handle</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>@mdo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>Jacob</td>
+                                            <td>Thornton</td>
+                                            <td>@fat</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td>Larry</td>
+                                            <td>the Bird</td>
+                                            <td>@twitter</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="card-footer">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
@@ -142,28 +207,42 @@
     </th:block>
 </th:block>
 <script th:inline="javascript">
+
+    <!-- 각 멤버십 등급별 회원 수 카운트 -->
+    const userCount = [[${userCount}]];
+    const noneCount = $('.noneCount').text();
+    const personalCount = $('.personalCount').text();
+    const businessCount = $('.businessCount').text();
+    const ultimateCount = $('.ultimateCount').text();
+
+
+
+    // $(document).ready(function () {
+    //     console.log(userCount);
+    //     console.log(noneCount);
+    //     console.log(personalCount);
+    //     console.log(businessCount);
+    //     console.log(ultimateCount)
+    // });
+
     const membershipChart1 = new Chart($('#membershipChart1'), {
         type: 'bar',
         data: {
             labels: ['NONE', 'PERSONAL', 'BUSINESS', 'ULTIMATE'],
             datasets: [{
                 label: '회원 수',
-                data: [12, 19, 3, 5],
+                data: [noneCount, personalCount, businessCount, ultimateCount],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(75, 192, 192, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(75, 192, 192, 1)'
                 ],
                 borderWidth: 1
             }]
@@ -181,17 +260,19 @@
         type: 'doughnut',
         data: {
             labels: [
-                'Red',
-                'Blue',
-                'Yellow'
+                'NONE',
+                'PERSONAL',
+                'BUSINESS',
+                'ULTIMATE'
             ],
             datasets: [{
                 label: 'My First Dataset',
-                data: [300, 50, 100],
+                data: [noneCount, personalCount, businessCount, ultimateCount],
                 backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)',
-                    'rgb(255, 205, 86)'
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
                 ],
                 hoverOffset: 4
             }]

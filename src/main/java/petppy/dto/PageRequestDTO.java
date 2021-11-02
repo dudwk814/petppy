@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import petppy.domain.user.Rating;
 
 @Data
 @AllArgsConstructor
@@ -19,9 +20,7 @@ public class PageRequestDTO {
     private String type;
     private String keyword;
 
-
-    private Integer priceGoe;
-    private Integer priceLoe;
+    private Rating rating;
 
     public PageRequestDTO() {
         this.page = 1;

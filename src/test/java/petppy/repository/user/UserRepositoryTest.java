@@ -4,17 +4,22 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.Address;
 import petppy.domain.user.*;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.user.UserDTO;
 import petppy.exception.UserNotFoundException;
 import petppy.repository.user.MembershipRepository;
 import petppy.repository.user.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import java.util.List;
 
 import static petppy.domain.user.Role.MEMBER;
 
@@ -69,6 +74,18 @@ class UserRepositoryTest {
         User findUser = userRepository.findByEmail("kj99658103@gmail.com").orElseThrow(UserNotFoundException::new);
 
         System.out.println("findUser.rating = " + findUser.getMembership().getRating());
+    }
+
+    @Test
+    public void 유저_검색_어드민() throws Exception {
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setRating(Rating.PERSONAL);
+
+        Page<User> users = userRepository.searchUser(pageRequestDTO);
+
+        List<User> content = users.getContent();
+
+        System.out.println("content = " + content);
     }
 
 
