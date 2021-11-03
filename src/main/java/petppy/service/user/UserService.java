@@ -6,6 +6,8 @@ import org.springframework.validation.FieldError;
 import petppy.domain.user.Type;
 import petppy.domain.user.User;
 import petppy.domain.user.Rating;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.dto.user.MembershipDTO;
 import petppy.dto.user.UserDTO;
 
@@ -32,6 +34,8 @@ public interface UserService {
     public List<UserDTO> findAll(Pageable pageable);
 
     public void changeMembership(Long userId, String rating);
+
+    public PageResultDTO<UserDTO, User> searchUser(PageRequestDTO pageRequestDTO);
 
     public MembershipDTO findMembership(Long userId);
 

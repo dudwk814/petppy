@@ -10,10 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import petppy.domain.*;
+import petppy.domain.board.Board;
 import petppy.domain.user.Membership;
 import petppy.domain.user.Rating;
 import petppy.domain.user.Type;
 import petppy.domain.user.User;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
+import petppy.dto.board.BoardDto;
 import petppy.dto.user.MembershipDTO;
 import petppy.dto.user.UserDTO;
 import petppy.exception.UserNotFoundException;
@@ -24,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static petppy.domain.user.Role.MEMBER;
@@ -60,6 +65,29 @@ public class UserServiceImpl implements UserService {
             changeRating = Rating.ULTIMATE;
         }
         findMembership.changeRating(changeRating);
+
+    }
+
+    /**
+     * 유저 검색 어드민용
+     * @return
+     */
+    @Override
+    public PageResultDTO<UserDTO, User> searchUser(PageRequestDTO pageRequestDTO) {
+
+        Page<User> result = userRepository.searchUser(pageRequestDTO);
+
+        // 페이징 변수들
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+
+
+        Function<User, UserDTO> fn = (entity -> entityToDto(entity));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
 
     }
 

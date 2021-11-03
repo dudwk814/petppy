@@ -143,59 +143,42 @@
                                     회원 테이블
                                 </div>
                                 <div class="card-body">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="card-footer">
-                                    <nav aria-label="Page navigation">
-                                        <ul class="pagination justify-content-center">
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">회원번호</th>
+                                                <th scope="col" class="text-center">이름</th>
+                                                <th scope="col" class="text-center">이메일</th>
+                                                <th scope="col" class="text-center">멤버십</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
@@ -215,16 +198,7 @@
     const businessCount = $('.businessCount').text();
     const ultimateCount = $('.ultimateCount').text();
 
-
-
-    // $(document).ready(function () {
-    //     console.log(userCount);
-    //     console.log(noneCount);
-    //     console.log(personalCount);
-    //     console.log(businessCount);
-    //     console.log(ultimateCount)
-    // });
-
+    <!-- 멤버십 차트 1 -->
     const membershipChart1 = new Chart($('#membershipChart1'), {
         type: 'bar',
         data: {
@@ -256,6 +230,7 @@
         }
     });
 
+    <!-- 멤버십 차트 2 -->
     const membershipChart2 = new Chart($('#membershipChart2'), {
         type: 'doughnut',
         data: {
@@ -284,6 +259,42 @@
                 }
             }
         }
+    });
+
+    $(document).ready(function (e) {
+
+        userList(1);
+
+       function userList(page) {
+           var page = page || 1;
+
+           let userListTable = "";
+           let pagination = "";
+
+           let pageRequestDto = {
+               page : page
+           }
+
+           $.ajax({
+               url: '/admin/user/' + page,
+               type: 'get',
+               data : {'page':page},
+               dataType: 'json',
+               success: function (result) {
+                   $.each(result.dtoList, function (index, userList) {
+                       userListTable += '<tr>' +
+                           '<th scope="row" class="text-center">'+ userList.id +'</th>' +
+                           '<td class="text-center">'+ userList.name +'</td>' +
+                           '<td class="text-center">' + userList.email + '</td>' +
+                           '<td class="text-center">' + userList.membershipDTO.rating + '</td>' +
+                           '</tr>';
+                   });
+
+                   $('tbody').html(userListTable);
+               }
+           })
+
+       }
     });
 </script>
 </html>
