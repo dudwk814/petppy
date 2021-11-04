@@ -58,13 +58,16 @@
 
                 <ul class="nav nav-pills nav-fill justify-content-center nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">회원</a>
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                           aria-controls="home" aria-selected="true">회원</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">예약</a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                           aria-controls="profile" aria-selected="false">예약</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">문의</a>
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                           aria-controls="contact" aria-selected="false">문의</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -142,7 +145,20 @@
                                 <div class="card-header text-center">
                                     회원 테이블
                                 </div>
-                                <div class="card-body">
+                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 400px !important;">
+                                    <select class="custom-select" name="rating" id="inputGroupSelect02" style="height: 52px !important;">
+                                        <option selected>멤버십</option>
+                                        <option value="NONE">NONE</option>
+                                        <option value="PERSONAL">PERSONAL</option>
+                                        <option value="BUSINESS">BUSINESS</option>
+                                        <option value="ULTIMATE">ULTIMATE</option>
+                                    </select>
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2">
                                     <div class="table-responsive-md">
                                         <table class="table">
                                             <thead>
@@ -158,7 +174,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="card-footer">
+                                    <div class="card-footer user-table-pagination">
                                         <nav aria-label="Page navigation">
                                             <ul class="pagination justify-content-center">
                                                 <li class="page-item">
@@ -191,7 +207,7 @@
 </th:block>
 <script th:inline="javascript">
 
-    <!-- 각 멤버십 등급별 회원 수 카운트 -->
+    <!-- 각 멤버십 등급 별 회원수 카운트 -->
     const userCount = [[${userCount}]];
     const noneCount = $('.noneCount').text();
     const personalCount = $('.personalCount').text();
@@ -262,39 +278,88 @@
     });
 
     $(document).ready(function (e) {
-
         userList(1);
 
-       function userList(page) {
-           var page = page || 1;
+        <!-- 회원 검색 -->
+        function userList(page) {
+            var page = page || 1;
 
-           let userListTable = "";
-           let pagination = "";
+            let userListTable = "";
+            let pagination = "";
 
-           let pageRequestDto = {
-               page : page
-           }
+            let pageRequestDto = {
+                page: page
+            }
 
-           $.ajax({
-               url: '/admin/user/' + page,
-               type: 'get',
-               data : {'page':page},
-               dataType: 'json',
-               success: function (result) {
-                   $.each(result.dtoList, function (index, userList) {
-                       userListTable += '<tr>' +
-                           '<th scope="row" class="text-center">'+ userList.id +'</th>' +
-                           '<td class="text-center">'+ userList.name +'</td>' +
-                           '<td class="text-center">' + userList.email + '</td>' +
-                           '<td class="text-center">' + userList.membershipDTO.rating + '</td>' +
-                           '</tr>';
-                   });
+            $.ajax({
+                url: '/admin/user/' + page,
+                type: 'get',
+                data: {'page': page},
+                dataType: 'json',
+                success: function (result) {
+                    // 회원 테이블
+                    $.each(result.dtoList, function (index, userList) {
+                        userListTable += '<tr>' +
+                            '<th scope="row" class="text-center">' + userList.id + '</th>' +
+                            '<td class="text-center">' + userList.name + '</td>' +
+                            '<td class="text-center">' + userList.email + '</td>' +
+                            '<td class="text-center">' + userList.membershipDTO.rating + '</td>' +
+                            '</tr>';
+                    });
 
-                   $('tbody').html(userListTable);
-               }
-           })
+                    $('tbody').html(userListTable);
 
-       }
+                    // 회원 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        var active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.user-table-pagination').html(pagination);
+
+                }
+            });
+
+        }
+
+        /* 댓글 페이지 버튼 클릭 시 페이지 변경 */
+        $(document).on('click', '.page-link', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('page');
+
+            userList(page);
+        });
+
+        /* 댓글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-prev', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('preve');
+
+            userList(page);
+        });
     });
 </script>
 </html>
