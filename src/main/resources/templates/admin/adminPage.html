@@ -147,7 +147,7 @@
                                 </div>
                                 <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 400px !important;">
                                     <select class="custom-select" name="rating" id="inputGroupSelect02" style="height: 52px !important;">
-                                        <option selected>멤버십</option>
+                                        <option value="" selected>멤버십</option>
                                         <option value="NONE">NONE</option>
                                         <option value="PERSONAL">PERSONAL</option>
                                         <option value="BUSINESS">BUSINESS</option>
@@ -155,7 +155,7 @@
                                     </select>
                                     <input style="width: 150px !important;"  name="keyword" type="text" class="form-control" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="submit" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                        <button class="btn btn-outline-secondary search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
                                     </div>
                                 </div>
                                 <div class="card-body pt-2">
@@ -278,7 +278,16 @@
     });
 
     $(document).ready(function (e) {
-        userList(1);
+
+        userList(1);    // 페이지 로딩시 유저 리스트 조회
+
+        $('.search-btn').on('click', function (e) {
+            e.preventDefault();
+
+            userList(1);
+        });
+
+
 
         <!-- 회원 검색 -->
         function userList(page) {
@@ -286,17 +295,30 @@
 
             let userListTable = "";
             let pagination = "";
+            let rating = $('select[name="rating"] option:selected').val().trim() === "" ? "" : $('select[name="rating"] option:selected').val().trim();
+            let keyword = $('input[name="keyword"]').val().trim() === "" ? "" : $('input[name="keyword"]').val().trim();
 
             let pageRequestDto = {
-                page: page
+                page: page,
+                rating: rating,
+                keyword: keyword
             }
 
             $.ajax({
                 url: '/admin/user/' + page,
                 type: 'get',
-                data: {'page': page},
-                dataType: 'json',
+                data: {
+                    'keyword': keyword,
+                    'rating': rating,
+                    'page': page
+                },
+                contentType: 'application/json; charset=utf-8',
                 success: function (result) {
+
+                    if (result.totalElements == 0){
+                        swal('회원 검색', '조건에 맞는 회원이 없습니다.');
+                        return false;
+                    }
                     // 회원 테이블
                     $.each(result.dtoList, function (index, userList) {
                         userListTable += '<tr>' +

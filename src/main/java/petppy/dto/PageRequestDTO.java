@@ -25,6 +25,7 @@ public class PageRequestDTO {
     public PageRequestDTO() {
         this.page = 1;
         this.size = 10;
+        this.rating = Rating.NONE;
     }
 
     public Pageable getPageable(Sort sort) {

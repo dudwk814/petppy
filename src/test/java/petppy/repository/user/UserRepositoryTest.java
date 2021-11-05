@@ -79,7 +79,8 @@ class UserRepositoryTest {
     @Test
     public void 유저_검색_어드민() throws Exception {
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        pageRequestDTO.setRating(Rating.PERSONAL);
+//        pageRequestDTO.setRating(Rating.PERSONAL);
+        pageRequestDTO.setKeyword("박찬양");
 
         Page<User> users = userRepository.searchUser(pageRequestDTO);
 

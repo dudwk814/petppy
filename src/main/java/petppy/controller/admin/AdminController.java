@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import petppy.domain.user.Rating;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
@@ -46,10 +47,12 @@ public class AdminController {
     @GetMapping("/user/{page}")
     @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
     @ResponseBody
-    public ResponseEntity<PageResultDTO<UserDTO, User>> userList(@PathVariable("page") int page) {
+    public ResponseEntity<PageResultDTO<UserDTO, User>> userList(@PathVariable("page") int page, String keyword, Rating rating) {
 
         PageRequestDTO requestDTO = new PageRequestDTO();
         requestDTO.setPage(page);
+        requestDTO.setKeyword(keyword);
+        requestDTO.setRating(rating);
 
         return new ResponseEntity<>(userService.searchUser(requestDTO), HttpStatus.OK);
     }
