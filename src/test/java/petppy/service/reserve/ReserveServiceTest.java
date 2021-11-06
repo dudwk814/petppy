@@ -31,5 +31,13 @@ class ReserveServiceTest {
         reserveService.cancelReserve(reserveDTO);
     }
 
+    @Test
+    public void 예약중인_건수_조회() throws Exception {
+
+        Long result = reserveService.countReserveToReserveTypeEqualReserve(ReserveType.RESERVE);
+
+        assertEquals(1, result);
+    }
+
     
 }

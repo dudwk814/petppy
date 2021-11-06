@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
+import petppy.dto.reserve.ReserveCountDTO;
+import petppy.dto.reserve.ReserveDTO;
+import petppy.dto.user.MembershipCountDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +30,11 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long>, Reserve
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Reserve r set r.reserveType = :reserveType where r.id in :ids")
     void changeReserveTypeToComplete(@Param("reserveType") ReserveType reserveType, @Param("ids") List<Long> ids);
+
+    Long countByReserveType(ReserveType reserveType);
+
+    @Query("select new petppy.dto.reserve.ReserveCountDTO(count(r), r.services.servicesType) from Reserve r where r.reserveType = :reserveType group by r.services.servicesType")
+    List<ReserveCountDTO> countByServicesType(@Param("reserveType") ReserveType reserveType);
 
 
 }

@@ -36,7 +36,7 @@
                     <div class="card text-center border-primary rounded">
                         <div class="card-body">
                             <p class="card-title text-primary">예약</p>
-                            <h5>55</h5>
+                            <h5>[[${reserveCount}]]</h5>
                         </div>
                     </div>
                     <div class="card text-center border-primary rounded">
@@ -62,7 +62,7 @@
                            aria-controls="home" aria-selected="true">회원</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        <a class="nav-link" id="reserve-tab" data-toggle="tab" href="#reserve" role="tab"
                            aria-controls="profile" aria-selected="false">예약</a>
                     </li>
                     <li class="nav-item">
@@ -197,7 +197,99 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                    <div class="tab-pane fade" id="reserve" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row mt-5">
+                        </div>
+                        <div class="card-deck">
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">총 예약 수</p>
+                                    <h5>[[${reserveCount}]]</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">강아지 산책</p>
+                                    <h5 class="dogWalkCount" th:if="${DOG_WALK} != null">[[${DOG_WALK.count}]]</h5>
+                                    <h5 class="dogWalkCount" th:unless="${DOG_WALK} != null">0</h5>
+                                </div>
+                            </div>
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">반려동물 미용</p>
+                                    <h5 class="petGroomingCount" th:if="${PET_GROOMING} != null">[[${PET_GROOMING.count}]]</h5>
+                                    <h5 class="personalCount" th:unless="${PET_GROOMING} != null">0</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">수의사 방문</p>
+                                    <h5 class="vetVisitCount" th:if="${VET_VISIT} != null">[[${VET_VISIT.count}]]</h5>
+                                    <h5 class="vetVisitCount" th:unless="${VET_VISIT} != null">0</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-header text-center">
+                                    예약 테이블
+                                </div>
+                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 400px !important;">
+                                    <select class="custom-select" name="rating" id="inputGroupSelect02" style="height: 52px !important;">
+                                        <option value="" selected>멤버십</option>
+                                        <option value="NONE">NONE</option>
+                                        <option value="PERSONAL">PERSONAL</option>
+                                        <option value="BUSINESS">BUSINESS</option>
+                                        <option value="ULTIMATE">ULTIMATE</option>
+                                    </select>
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2">
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">회원번호</th>
+                                                <th scope="col" class="text-center">이름</th>
+                                                <th scope="col" class="text-center">이메일</th>
+                                                <th scope="col" class="text-center">멤버십</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer user-table-pagination">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                 </div>
 
@@ -364,6 +456,10 @@
             });
 
         }
+
+        $('#reserve-tab').on('click', function () {
+            console.log('zzz');
+        })
 
         /* 댓글 페이지 버튼 클릭 시 페이지 변경 */
         $(document).on('click', '.page-link', function (e) {

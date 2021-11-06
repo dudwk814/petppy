@@ -1,6 +1,7 @@
 package petppy.service.reserve;
 
 import petppy.domain.reserve.Reserve;
+import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.Services;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
@@ -22,6 +23,8 @@ public interface ReserveService {
     public void cancelReserve(ReserveDTO reserveDTO);
 
     public void modifyReserveTime(Long id, LocalDateTime reserveStartDate);
+
+    public Long countReserveToReserveTypeEqualReserve(ReserveType reserveType);
 
     default ReserveDTO entityToDTO(Reserve reserve) {
         return ReserveDTO

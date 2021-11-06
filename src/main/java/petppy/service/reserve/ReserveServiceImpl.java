@@ -32,6 +32,18 @@ public class ReserveServiceImpl implements ReserveService {
     private final MembershipRepository membershipRepository;
     private final UserRepository userRepository;
 
+    /**
+     * ReserveType이 Reserve인 예약 카운트
+     * @param reserveType
+     * @return
+     */
+    @Override
+    public Long countReserveToReserveTypeEqualReserve(ReserveType reserveType) {
+
+        return reserveRepository.countByReserveType(reserveType);
+    }
+
+
     @Override
     @Transactional
     public ReserveDTO createReserve(ReserveDTO dto) {

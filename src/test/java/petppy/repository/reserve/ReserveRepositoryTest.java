@@ -12,6 +12,7 @@ import petppy.domain.services.Services;
 import petppy.domain.user.Role;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
+import petppy.dto.reserve.ReserveCountDTO;
 import petppy.dto.reserve.ReserveDTO;
 import petppy.repository.services.ServicesRepository;
 import petppy.repository.user.UserRepository;
@@ -47,6 +48,15 @@ class ReserveRepositoryTest {
 
         addReserve();
 
+    }
+
+    @Test
+    public void 서비스별_예약() throws Exception {
+        List<ReserveCountDTO> result = reserveRepository.countByServicesType(ReserveType.RESERVE);
+
+        for (ReserveCountDTO reserveCountDTO : result) {
+            System.out.println("reserveCountDTO = " + reserveCountDTO);
+        }
     }
 
     @Test
