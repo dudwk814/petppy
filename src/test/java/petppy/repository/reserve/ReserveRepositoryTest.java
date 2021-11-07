@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.Services;
+import petppy.domain.services.ServicesType;
 import petppy.domain.user.Role;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
@@ -56,6 +57,18 @@ class ReserveRepositoryTest {
 
         for (ReserveCountDTO reserveCountDTO : result) {
             System.out.println("reserveCountDTO = " + reserveCountDTO);
+        }
+    }
+
+    @Test
+    public void 관리자_예약_조회() throws Exception {
+
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        ReserveDTO reserveDTO = ReserveDTO.builder().reserveType(ReserveType.CANCEL).servicesType(ServicesType.DOG_WALK).build();
+
+        Page<Reserve> reserves = reserveRepository.searchReserve(reserveDTO, pageRequestDTO);
+        for (Reserve reserve : reserves) {
+            System.out.println("reserve = " + reserve);
         }
     }
 

@@ -46,7 +46,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .fetchJoin()
                 .where(
                         ratingEq(pageRequestDTO),
-                        keywordEq(pageRequestDTO)
+                        keywordContains(pageRequestDTO)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -73,7 +73,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return user.membership.rating.eq(pageRequestDTO.getRating());
     }
 
-    private BooleanExpression keywordEq(PageRequestDTO pageRequestDTO) {
+    private BooleanExpression keywordContains(PageRequestDTO pageRequestDTO) {
 
         if (pageRequestDTO.getKeyword() == null) {
             return null;

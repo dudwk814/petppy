@@ -7,16 +7,20 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
+import petppy.domain.services.ServicesType;
 import petppy.domain.user.Rating;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.dto.reserve.ReserveCountDTO;
+import petppy.dto.reserve.ReserveDTO;
 import petppy.dto.user.MembershipCountDTO;
 import petppy.dto.user.UserDTO;
 import petppy.repository.reserve.ReserveRepository;
 import petppy.repository.user.MembershipRepository;
+import petppy.service.reserve.ReserveService;
 import petppy.service.user.UserService;
 
 import java.util.List;
@@ -29,6 +33,7 @@ public class AdminController {
     private final MembershipRepository membershipRepository;
     private final UserService userService;
     private final ReserveRepository reserveRepository;
+    private final ReserveService reserveService;
 
     @GetMapping("")
     @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
@@ -68,5 +73,20 @@ public class AdminController {
         requestDTO.setRating(rating);
 
         return new ResponseEntity<>(userService.searchUser(requestDTO), HttpStatus.OK);
+    }
+
+    @GetMapping("/reserve/{page}")
+    @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
+    @ResponseBody
+    public ResponseEntity<PageResultDTO<ReserveDTO, Reserve>> reserveList(@PathVariable("page") int page, String keyword, ReserveType reserveType, ServicesType servicesType) {
+
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setPage(page);
+        pageRequestDTO.setKeyword(keyword);
+
+        ReserveDTO reserveDTO = ReserveDTO.builder().reserveType(reserveType).servicesType(servicesType).build();
+
+
+        return new ResponseEntity<>(reserveService.searchReserve(reserveDTO, pageRequestDTO), HttpStatus.OK);
     }
 }

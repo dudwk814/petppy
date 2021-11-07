@@ -69,6 +69,12 @@ public class ReserveServiceImpl implements ReserveService {
         return entityToDTO(findReserveOrElseThrow(id));
     }
 
+    /**
+     * 회원 이메일과 예약일로 예약 조회
+     * @param reserveDTO
+     * @param requestDTO
+     * @return
+     */
     @Override
     public PageResultDTO<ReserveDTO, Reserve> findReserveList(ReserveDTO reserveDTO, PageRequestDTO requestDTO) {
 
@@ -86,6 +92,29 @@ public class ReserveServiceImpl implements ReserveService {
 
         return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
 
+    }
+
+    /**
+     * 관리자용 예약 조회 (이름, 이메일, 예약 종류, 서비스 종류 등으로 예약 조회)
+     * @param reserveDTO
+     * @param requestDTO
+     * @return
+     */
+    @Override
+    public PageResultDTO<ReserveDTO, Reserve> searchReserve(ReserveDTO reserveDTO, PageRequestDTO requestDTO) {
+        Page<Reserve> result = reserveRepository.searchReserve(reserveDTO, requestDTO);
+
+        // 페이징 변수들
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+
+
+        Function<Reserve, ReserveDTO> fn = (entity -> entityToDTO(entity));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
     }
 
     /**

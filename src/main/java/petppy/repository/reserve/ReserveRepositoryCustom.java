@@ -8,4 +8,6 @@ import petppy.dto.reserve.ReserveDTO;
 public interface ReserveRepositoryCustom {
 
     Page<Reserve> findReserveList(ReserveDTO reserveDTO, PageRequestDTO pageRequestDTO);
+
+    Page<Reserve> searchReserve(ReserveDTO reserveDTO, PageRequestDTO pageRequestDTO);
 }

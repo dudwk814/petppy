@@ -22,6 +22,8 @@ public class ReserveDTO {
 
     private String email;
 
+    private String name;
+
     private Long servicesId;
 
     private ServicesType servicesType;

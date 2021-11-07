@@ -20,6 +20,8 @@ public interface ReserveService {
 
     public PageResultDTO<ReserveDTO, Reserve> findReserveList(ReserveDTO reserveDTO, PageRequestDTO requestDTO);
 
+    public PageResultDTO<ReserveDTO, Reserve> searchReserve(ReserveDTO reserveDTO, PageRequestDTO requestDTO);
+
     public void cancelReserve(ReserveDTO reserveDTO);
 
     public void modifyReserveTime(Long id, LocalDateTime reserveStartDate);
@@ -34,6 +36,7 @@ public interface ReserveService {
                 .servicesId(reserve.getServices().getId())
                 .servicesType(reserve.getServices().getServicesType())
                 .userId(reserve.getUser().getId())
+                .name(reserve.getUser().getName())
                 .email(reserve.getUser().getEmail())
                 .reserveEndDate(reserve.getReserveEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")))
                 .reserveStartDate(reserve.getReserveStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")))
