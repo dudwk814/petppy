@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import petppy.domain.notificaton.Notification;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.services.QServices;
+import petppy.domain.user.QMembership;
 import petppy.domain.user.QUser;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.reserve.ReserveDTO;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import static petppy.domain.reserve.QReserve.reserve;
 import static petppy.domain.services.QServices.services;
+import static petppy.domain.user.QMembership.membership;
 import static petppy.domain.user.QUser.user;
 
 public class ReserveRepositoryImpl implements ReserveRepositoryCustom {
@@ -74,6 +76,7 @@ public class ReserveRepositoryImpl implements ReserveRepositoryCustom {
                 .selectFrom(reserve)
                 .leftJoin(reserve.services, services)
                 .leftJoin(reserve.user, user)
+                .fetchJoin()
                 .where(
                         keywordContains(pageRequestDTO),
                         reserveTypeEq(reserveDTO),

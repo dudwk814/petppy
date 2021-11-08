@@ -20,10 +20,10 @@ public class MembershipDTO {
     // 서비스 이용가능 횟수
     private int dogWalkCount = 0;
     private int petGroomingCount = 0;
-    private int vetVisit = 0;
+    private int vetVisitCount = 0;
 
     @Builder
-    public MembershipDTO(Long id, String email, Rating rating, String name, LocalDateTime modifiedDate, LocalDateTime createdDate, int dogWalkCount, int petGroomingCount, int vetVisit) {
+    public MembershipDTO(Long id, String email, Rating rating, String name, LocalDateTime modifiedDate, LocalDateTime createdDate, int dogWalkCount, int petGroomingCount, int vetVisitCount) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -33,6 +33,6 @@ public class MembershipDTO {
         this.lastDate = modifiedDate.plusDays(30);
         this.dogWalkCount = dogWalkCount;
         this.petGroomingCount = petGroomingCount;
-        this.vetVisit = vetVisit;
+        this.vetVisitCount = vetVisitCount;
     }
 }

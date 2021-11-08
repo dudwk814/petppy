@@ -153,9 +153,9 @@
                                         <option value="BUSINESS">BUSINESS</option>
                                         <option value="ULTIMATE">ULTIMATE</option>
                                     </select>
-                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control user-keyword" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                        <button class="btn btn-outline-secondary user-search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
                                     </div>
                                 </div>
                                 <div class="card-body pt-2">
@@ -238,17 +238,22 @@
                                 <div class="card-header text-center">
                                     예약 테이블
                                 </div>
-                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 400px !important;">
+                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 500px !important;">
                                     <select class="custom-select" name="reserveType" id="inputGroupSelect03" style="height: 52px !important;">
-                                        <option value="" selected>멤버십</option>
-                                        <option value="NONE">NONE</option>
-                                        <option value="PERSONAL">PERSONAL</option>
-                                        <option value="BUSINESS">BUSINESS</option>
-                                        <option value="ULTIMATE">ULTIMATE</option>
+                                        <option value="" selected>예약 타입</option>
+                                        <option value="RESERVE">예약</option>
+                                        <option value="COMPLETE">완료</option>
+                                        <option value="CANCEL">취소</option>
                                     </select>
-                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <select class="custom-select" name="servicesType" id="inputGroupSelect04" style="height: 52px !important;">
+                                        <option value="" selected>서비스</option>
+                                        <option value="DOG_WALK">강아지 산책</option>
+                                        <option value="PET_GROOMING">반려동물 미용</option>
+                                        <option value="VET_VISIT">수의사 방문</option>
+                                    </select>
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control reserve-keyword" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                        <button class="btn btn-outline-secondary reserve-search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
                                     </div>
                                 </div>
                                 <div class="card-body pt-2">
@@ -374,22 +379,21 @@
 
         userList(1);    // 페이지 로딩시 유저 리스트 조회
 
-        $('.search-btn').on('click', function (e) {
+        $('.user-search-btn').on('click', function (e) {    // 회원 검색 버튼 클릭시 회원 조회
             e.preventDefault();
 
             userList(1);
         });
 
-
-
-        <!-- 회원 검색 -->
+        
+        /* 회원 검색 */
         function userList(page) {
             var page = page || 1;
 
             let userListTable = "";
             let pagination = "";
             let rating = $('select[name="rating"] option:selected').val().trim() === "" ? "" : $('select[name="rating"] option:selected').val().trim();
-            let keyword = $('input[name="keyword"]').val().trim() === "" ? "" : $('input[name="keyword"]').val().trim();
+            let keyword = $('.user-keyword').val().trim() === "" ? "" : $('user-keyword').val().trim();
 
             let pageRequestDto = {
                 page: page,
@@ -458,74 +462,84 @@
 
         }
 
+        /* 예약 검색 버튼 클릭시 예약 조회 */
+        $('.reserve-search-btn').on('click', function (e) {
+            e.preventDefault();
+
+            reserveList(1);
+
+        })
+
         /* 예약 탭 클릭 시 예약 테이블 정보 조회 */
         $('#reserve-tab').on('click', function () {
 
             reserveList(1);
 
-            // 예약 리스트 조회
-            function reserveList(page) {
-                var page = page || 1;
-
-                let reserveListTable = "";
-                let pagination = "";
-                let reserveType = $('select[name="reserveType"] option:selected').val().trim() === "" ? "" : $('select[name="reserveType"] option:selected').val().trim();
-                let keyword = $('input[name="keyword"]').val().trim() === "" ? "" : $('input[name="keyword"]').val().trim();
-
-                $.ajax({
-                    url: '/admin/reserve/' + page,
-                    type: 'get',
-                    contentType:'application/json; charset=utf-8',
-                    data: {
-                        'page' : page,
-                        'keyword' : keyword,
-                        'servicesType' : "",
-                        'reserveType' : ""
-                    },
-                    success: function (result) {
-                        if (result.totalElements == 0){
-                            swal('예약 검색', '조건에 맞는 예약이 없습니다.');
-                            return false;
-                        }
-                        // 회원 테이블
-                        $.each(result.dtoList, function (index, reserveList) {
-                            let serviceType = "";
-                            let reserveType = "";
-
-                            // 서비스에 타입에 따른 서비스 한글화
-                            if (reserveList.servicesType == "DOG_WALK") {
-                                serviceType = "강아지 산책";
-                            } else if(reserveList.servicesType == "PET_GROOMING") {
-                                serviceType = "반려동물 미용";
-                            } else if(reserveList.servicesType == "VET_VISIT") {
-                                serviceType = "수의사 방문";
-                            }
-
-                            // 예약 상태 한글화
-                            if (reserveList.reserveType == "RESERVE"){
-                                reserveType = "예약";
-                            } else if(reserveList.reserveType == "CANCEL"){
-                                reserveType = "취소";
-                            } else if (reserveList.reserveType == "COMPLETE"){
-                                reserveType = "완료";
-                            }
-
-                            reserveListTable += '<tr aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">' +
-                                '<th scope="row" class="text-center">' + reserveList.id + '</th>' +
-                                '<td class="text-center">' + reserveList.name + '</td>' +
-                                '<td class="text-center">' + serviceType + '</td>' +
-                                '<td class="text-center">' + reserveList.reserveStartDate + '</td>' +
-                                '<td class="text-center">' + reserveType + '</td>' +
-                                '</tr> ';
-                        });
-
-                        $('.reserve-tbody').html(reserveListTable);
-
-                        console.log(result);
-                    }
-                })
-            }
         })
+
+        /* 예약 리스트 조회 */
+        function reserveList(page) {
+            var page = page || 1;
+
+            let reserveListTable = "";
+            let pagination = "";
+            let reserveType = $('select[name="reserveType"] option:selected').val().trim() === "" ? "" : $('select[name="reserveType"] option:selected').val().trim();
+            let servicesType = $('select[name="servicesType"] option:selected').val().trim() === "" ? "" : $('select[name="servicesType"] option:selected').val().trim();
+            let keyword = $('.reserve-keyword').val().trim() === "" ? "" : $('.reserve-keyword').val().trim();
+
+            $.ajax({
+                url: '/admin/reserve/' + page,
+                type: 'get',
+                contentType:'application/json; charset=utf-8',
+                data: {
+                    'page' : page,
+                    'keyword' : keyword,
+                    'servicesType' : servicesType,
+                    'reserveType' : reserveType
+                },
+                success: function (result) {
+                    if (result.totalElements == 0){
+                        swal('예약 검색', '조건에 맞는 예약이 없습니다.');
+                        return false;
+                    }
+                    // 회원 테이블
+                    $.each(result.dtoList, function (index, reserveList) {
+                        let serviceType = "";
+                        let reserveType = "";
+
+                        // 서비스에 타입에 따른 서비스 한글화
+                        if (reserveList.servicesType == "DOG_WALK") {
+                            serviceType = "강아지 산책";
+                        } else if(reserveList.servicesType == "PET_GROOMING") {
+                            serviceType = "반려동물 미용";
+                        } else if(reserveList.servicesType == "VET_VISIT") {
+                            serviceType = "수의사 방문";
+                        }
+
+                        // 예약 상태 한글화
+                        if (reserveList.reserveType == "RESERVE"){
+                            reserveType = "예약";
+                        } else if(reserveList.reserveType == "CANCEL"){
+                            reserveType = "취소";
+                        } else if (reserveList.reserveType == "COMPLETE"){
+                            reserveType = "완료";
+                        }
+
+                        reserveListTable += '<tr aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">' +
+                            '<th scope="row" class="text-center">' + reserveList.id + '</th>' +
+                            '<td class="text-center">' + reserveList.name + '</td>' +
+                            '<td class="text-center">' + serviceType + '</td>' +
+                            '<td class="text-center">' + reserveList.reserveStartDate + '</td>' +
+                            '<td class="text-center">' + reserveType + '</td>' +
+                            '</tr> ';
+                    });
+
+                    $('.reserve-tbody').html(reserveListTable);
+
+                    console.log(result);
+                }
+            })
+        }
 
 
         /* 댓글 페이지 버튼 클릭 시 페이지 변경 */

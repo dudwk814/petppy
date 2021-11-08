@@ -56,7 +56,7 @@ public class UserDTO implements Serializable {
                 .id(user.getMembership().getId())
                 .dogWalkCount(user.getMembership().getDogWalkCount())
                 .petGroomingCount(user.getMembership().getPetGroomingCount())
-                .vetVisit(user.getMembership().getVetVisit())
+                .vetVisitCount(user.getMembership().getVetVisit())
                 .build();
 
         if (user.getAddress() != null) {
