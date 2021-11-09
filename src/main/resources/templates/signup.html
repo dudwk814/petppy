@@ -92,7 +92,7 @@
                     return;
                 }
 
-                var email = $('#email').val().trim();
+                let email = $('#email').val().trim();
 
                 $.ajax({
                     url : '/user/checkEmailExist/' + email,
@@ -117,10 +117,10 @@
 
 
 
-            var name = $("#name").val().trim();
-            var email = $("#email").val().trim();
-            var password1 = $("#password").val().trim();
-            var password2 = $("#password2").val().trim();
+            let name = $("#name").val().trim();
+            let email = $("#email").val().trim();
+            let password1 = $("#password").val().trim();
+            let password2 = $("#password2").val().trim();
 
             /* 이미 invalid 클래스가 있는 경우 제거 */
             if ($("#name").hasClass("is-invalid") === true) {
@@ -144,7 +144,7 @@
             }
 
             /* 이메일 포맷 유효성 */
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
             /* 각 작성항목이 공백이거나 이메일 유효성 검사 탈락시 invalid-feedback 클래스 추가 */
             if (name == "" || email == "" || !re.test($("#email").val()) || password1 == "" || password2 == "") {

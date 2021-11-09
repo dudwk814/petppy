@@ -60,6 +60,7 @@ public class UserController {
     /**
      * 회원 DashBoard
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session,  Model model) {
 
@@ -180,6 +181,7 @@ public class UserController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @PatchMapping(value = "/{email}")
     public ResponseEntity<Boolean> changePassword(@PathVariable("email") String email, @RequestBody UserDTO userDTO) {

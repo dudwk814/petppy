@@ -114,16 +114,16 @@
     $(document).ready(function (e) {
         let id;
         let authentication = false;
-        var email = [[${session.user.email}]];
+        let email = [[${session.user.email}]];
 
         $('.address-modify-btn').on('click', function (e) {
             e.preventDefault();
 
-            var postcode = $('input[name="postcode"]').val().trim();
-            var roadAddress = $('input[name="roadAddress"]').val().trim();
-            var jibunAddress = $('input[name="jibunAddress"]').val().trim();
-            var detailAddress = $('input[name="detailAddress"]').val().trim();
-            var extraAddress = $('input[name="extraAddress"]').val().trim();
+            let postcode = $('input[name="postcode"]').val().trim();
+            let roadAddress = $('input[name="roadAddress"]').val().trim();
+            let jibunAddress = $('input[name="jibunAddress"]').val().trim();
+            let detailAddress = $('input[name="detailAddress"]').val().trim();
+            let extraAddress = $('input[name="extraAddress"]').val().trim();
 
             $.ajax({
                 url: '/user/modifyUserAddress',
@@ -176,8 +176,8 @@
 
         $(document).on('click', '.password-change-btn', function (e) {
 
-            var password1 = $(".password").val().trim();
-            var password2 = $(".password2").val().trim();
+            let password1 = $(".password").val().trim();
+            let password2 = $(".password2").val().trim();
 
             if (!passwordCheck(password1, password2)) {
                 return false;

@@ -227,13 +227,13 @@
     $(document).ready(function (e) {
 
 
-       var email = [[${session.user.email}]];
+       let email = [[${session.user.email}]];
 
 
        $(document).on('click', '.membership-cancel-btn',  function (e) {
            e.preventDefault();
 
-            var currentRating = [[${session.user.membershipDTO.rating}]];
+            let currentRating = [[${session.user.membershipDTO.rating}]];
 
            console.log(currentRating);
 
@@ -271,8 +271,8 @@
 
            var page = page || 1;
 
-           var notifyList = "";
-           var pagination = "";
+           let notifyList = "";
+           let pagination = "";
 
            $.ajax({
                 url : '/notify/' + email + '/' + page,
@@ -281,7 +281,7 @@
 
                    $.each(result.dtoList, function (index, notify) {
 
-                       var notificationType = notify.notificationType;
+                       let notificationType = notify.notificationType;
 
                        if (notify.isRead.toString() === 'Y') {
                            notifyList += '<a href="' + notify.url + '" class="list-group-item list-group-item-action p-3 notify_url bg-light checked" data-id="' + notify.id +'">\n';
@@ -317,7 +317,7 @@
 
                     $.each(result.pageList, function (index, page) {
 
-                        var active = result.page == page ? 'active' : '';
+                        let active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
                         pagination += '<a class="page-link page-num" data-page="' + page + '" href="#">' + page + '</a></li>'
                     })
@@ -349,8 +349,8 @@
                data : {'email':email, 'page':page},
                dataType: 'json',
                success : function (result) {
-                   var boardList = "";
-                   var pagination = "";
+                   let boardList = "";
+                   let pagination = "";
 
                    if (result.totalElements === 0) {    // 댓글이 없는 경우
                        boardList += '<div class="jumbotron bg-transparent">\n' +
@@ -365,8 +365,8 @@
                    } else {
                        $.each(result.dtoList, function (index, board) {
 
-                           var name = board.email.split('@')[0];
-                           var date = board.createdDate.split('T')[0];
+                           let name = board.email.split('@')[0];
+                           let date = board.createdDate.split('T')[0];
 
                            boardList += '<a href="/board/read?id=' + board.boardId + '" class="list-group-item list-group-item-action">' +
                                '<div class="d-flex w-100 justify-content-between">' +
@@ -392,7 +392,7 @@
 
                        $.each(result.pageList, function (index, page) {
 
-                           var active = result.page == page ? 'active' : '';
+                           let active = result.page == page ? 'active' : '';
                            pagination += '<li class="page-item ' + active + '">';
                            pagination += '<a class="page-link page-num" data-page="' + page + '" href="#">' + page + '</a></li>'
                        })
@@ -475,9 +475,9 @@
                data : {'email':email, 'page':page},
                dataType: 'json',
                success : function (result) {
-                   var commentList = "";
+                   let commentList = "";
 
-                   var pagination = "";
+                   let pagination = "";
 
                    if (result.totalElements === 0) {    // 댓글이 없는 경우
                         commentList += '<div class="jumbotron bg-transparent">\n' +
@@ -492,8 +492,8 @@
                    } else {
                        $.each(result.dtoList, function (index, comment) { // 댓글이 존재하면 댓글 관리창에 표시
 
-                           var name = comment.email.split('@')[0];
-                           var date = comment.createdDate.split('T')[0];
+                           let name = comment.email.split('@')[0];
+                           let date = comment.createdDate.split('T')[0];
 
                            if (comment.deleteStatus === 'Y') {  // 댓글이 삭제된 경우
                                commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
@@ -556,7 +556,7 @@
 
                    $.each(result.pageList, function (index, page) {
 
-                       var active = result.page == page ? 'active' : '';
+                       let active = result.page == page ? 'active' : '';
                        pagination += '<li class="page-item ' + active + '">';
                        pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
                    })
@@ -578,10 +578,10 @@
            $(document).on('click', '.comment-remove-btn', function (e) {
                e.preventDefault();
 
-               var commentId = $(this).data("comment");
-               var boardId = $(this).data("board");
+               let commentId = $(this).data("comment");
+               let boardId = $(this).data("board");
 
-               var commentDTO = {
+               let commentDTO = {
                    boardId: boardId,
                    id: commentId
                }
@@ -606,7 +606,7 @@
            $(document).on('click', '.reply', function (e) {
                e.preventDefault();
 
-               var parentId = $(this).data('comment');
+               let parentId = $(this).data('comment');
 
                console.log(parentId);
 
@@ -620,14 +620,14 @@
                        if ($('#comment' + parentId).find('.children').length) {
                            $('#comment' + parentId).find('.children').remove();
                        } else {
-                           var childrenList = '<ul class="children">';
+                           let childrenList = '<ul class="children">';
 
                            console.log(result);
 
                            $.each(result, function (index, children) {
 
-                               var name = children.email.split('@')[0];
-                               var date = children.createdDate.split('T')[0];
+                               let name = children.email.split('@')[0];
+                               let date = children.createdDate.split('T')[0];
 
 
                                childrenList += '                                            <li class="comment">\n' +
