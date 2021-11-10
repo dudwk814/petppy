@@ -273,7 +273,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="card-footer user-table-pagination">
+                                    <div class="card-footer reserve-table-pagination">
                                         <nav aria-label="Page navigation">
                                             <ul class="pagination justify-content-center">
                                                 <li class="page-item">
@@ -434,21 +434,21 @@
 
                     if (result.prev) {
                         pagination +='                            <li className="page-item disabled">\n' +
-                            '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                                <a class="page-link page-prev" data-type="user" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
                             '                            </li>\n';
                     }
 
 
                     $.each(result.pageList, function (index, page) {
 
-                        var active = result.page == page ? 'active' : '';
+                        let active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
-                        pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
+                        pagination += '<a class="page-link page-num" data-type="user" data-page="' + page +'" href="#">' + page + '</a></li>'
                     })
 
                     if (result.next) {
                         pagination += '                            <li class="page-item">\n' +
-                            '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                                <a class="page-link page-next" data-type="user" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
                             '                            </li>\n';
                     }
 
@@ -536,28 +536,89 @@
 
                     $('.reserve-tbody').html(reserveListTable);
 
+                    // 예약 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="reserve" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" data-type="reserve" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="reserve" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.reserve-table-pagination').html(pagination);
+
                     console.log(result);
                 }
             })
         }
 
 
-        /* 댓글 페이지 버튼 클릭 시 페이지 변경 */
+        /* 페이지 버튼 클릭 시 페이지 변경 */
         $(document).on('click', '.page-link', function (e) {
             e.preventDefault();
 
-            var page = $(this).data('page');
+            let page = $(this).data('page');
 
-            userList(page);
+            let type = $(this).data("type");
+
+
+            if (type == "user") {
+                userList(page);
+            } else if (type == "reserve") {
+                reserveList(page)
+            }
+
+
         });
 
-        /* 댓글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+        /* 이전 페이지 클릭 시 start - 1 페이지로 변경 */
         $(document).on('click', '.page-prev', function (e) {
             e.preventDefault();
 
-            var page = $(this).data('preve');
+            let page = $(this).data('preve');
 
-            userList(page);
+            let type = $(this).data("type");
+
+
+            if (type == "user") {
+                userList(page);
+            } else if (type == "reserve") {
+                reserveList(page)
+            }
+        });
+
+        /* 다음 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-next', function (e) {
+            e.preventDefault();
+
+            let page = $(this).data('end');
+
+            let type = $(this).data("type");
+
+
+            if (type == "user") {
+                userList(page);
+            } else if (type == "reserve") {
+                reserveList(page)
+            }
         });
     });
 </script>
