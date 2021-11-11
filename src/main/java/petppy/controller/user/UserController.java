@@ -161,10 +161,19 @@ public class UserController {
      * @param email
      * @return
      */
+    @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @GetMapping(value = "/{email}")
-    public ResponseEntity<UserDTO> findUserWithAjax(@PathVariable("email") String email) {
-        return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
+    public ResponseEntity<UserDTO> findUserWithAjax(@PathVariable("email") String email, HttpSession session) {
+
+        String userEmail = (String)session.getAttribute("userEmail");
+
+        if (userEmail.equals(email)) {  // 세션에서 조회한 이메일(로그인시 이메일)과 ajax로 넘어온 이메일이 같아야함
+            return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 

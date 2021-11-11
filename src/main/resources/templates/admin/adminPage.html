@@ -167,6 +167,7 @@
                                                 <th scope="col" class="text-center">이름</th>
                                                 <th scope="col" class="text-center">이메일</th>
                                                 <th scope="col" class="text-center">멤버십</th>
+                                                <th scope="col" class="text-center"></th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -301,6 +302,89 @@
 
             </div>
         </section>
+
+        <div class="modal fade" tabindex="-1" id="userModal" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">회원 정보</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="user-modal-form">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="userEmail">이메일</label>
+                                    <input type="email" class="form-control" id="userEmail" placeholder="이메일" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="userName">이름</label>
+                                    <input type="text" class="form-control" id="userName" placeholder="이름" disabled>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="postcode">우편번호</label>
+                                    <input type="text" class="form-control" id="postcode" placeholder="우편번호" disabled>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label for="roadAddress">도로명 주소</label>
+                                    <input type="text" class="form-control" id="roadAddress" placeholder="도로명 주소" disabled>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label for="jibunAddress">지번 주소</label>
+                                    <input type="text" class="form-control" id="jibunAddress" placeholder="지번 주소" disabled>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="detailAddress">상세 주소</label>
+                                    <input type="text" class="form-control" id="detailAddress" placeholder="상세 주소" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="extraAddress">참고 사항</label>
+                                    <input type="text" class="form-control" id="extraAddress" placeholder="참고 사항" disabled>
+                                </div>
+                            </div>
+
+                            <div class="hr-sect">멤버십</div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="userEmail">멤버십 등급</label>
+                                    <input type="text" class="form-control" id="membershipRating" placeholder="멤버십 등급" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="userName">멤버십 기간</label>
+                                    <input type="text" class="form-control" id="membershipDate" placeholder="멤버십 기간" disabled>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="postcode">이용가능 강아지 산책 횟수</label>
+                                    <input type="text" class="form-control" id="dogWalk" placeholder="강아지 산책" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="roadAddress">이용가능 반려동물 미용 횟수</label>
+                                    <input type="text" class="form-control" id="petGrooming" placeholder="반려동물 미용" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="jibunAddress">이용가능 수의사 방문 횟수</label>
+                                    <input type="text" class="form-control" id="vetVisit" placeholder="수의사 방문" disabled>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </th:block>
 </th:block>
 <script th:inline="javascript">
@@ -423,6 +507,7 @@
                             '<td class="text-center">' + userList.name + '</td>' +
                             '<td class="text-center">' + userList.email + '</td>' +
                             '<td class="text-center">' + userList.membershipDTO.rating + '</td>' +
+                            '<td class="text-center"><a href="#" class="user-modal-btn" data-email="' + userList.email +'">자세히 보기</a></td>' +
                             '</tr>';
                     });
 
@@ -462,7 +547,68 @@
 
         }
 
-        /* 예약 검색 버튼 클릭시 예약 조회 */
+        /* date형을 string형 yyyy-mm-dd로 변환 */
+        function get_date_str(date) {
+
+            return date.substring(0,10);
+        }
+
+
+        /* 회원 자세히 보기 버튼 클릭시 회원 조회 후 모달 생성성 */
+        $(document).on('click', '.user-modal-btn', function (e) {
+            e.preventDefault();
+
+            let email = $(this).data('email');
+            let form = $('.user-modal-form');
+
+            // 모달 input 초기화
+            form[0].reset();
+            
+            let modal = $('#userModal');
+
+            // 모달 input 변수
+            let emailInput = $('#userEmail');
+            let nameInput = $('#userName');
+            let postcodeInput = $('#postcode');
+            let roadAddressInput = $('#roadAddress');
+            let jibunAddressInput = $('#jibunAddress');
+            let detailAddressInput = $('#detailAddress');
+            let extraAddressInput = $('#extraAddress');
+            let membershipRatingInput = $('#membershipRating');
+            let membershipDateInput = $('#membershipDate');
+            let dogWalkInput = $('#dogWalk');
+            let petGroomingInput = $('#petGrooming');
+            let vetVisitInput = $('#vetVisit');
+
+            $.ajax({
+                url: '/user/' + email,
+                type: 'get',
+                success: function (result) {
+                    emailInput.val(result.email);
+                    nameInput.val(result.name);
+                    postcodeInput.val(result.postcode);
+                    roadAddressInput.val(result.roadAddress);
+                    jibunAddressInput.val(result.jibunAddress);
+                    detailAddressInput.val(result.detailAddress);
+                    extraAddressInput.val(result.extraAddress);
+                    membershipRatingInput.val(result.membershipDTO.rating);
+                    if (result.membershipDTO.rating !== 'NONE') {
+                        membershipDateInput.val(get_date_str(result.membershipDTO.modifiedDate) + ' ~ ' + get_date_str(result.membershipDTO.lastDate));
+                    }
+
+                    dogWalkInput.val(result.membershipDTO.dogWalkCount);
+                    petGroomingInput.val(result.membershipDTO.petGroomingCount);
+                    vetVisitInput.val(result.membershipDTO.vetVisitCount);
+                }
+            })
+
+
+
+
+            $('#userModal').modal('show');
+        })
+
+       /* 예약 검색 버튼 클릭시 예약 조회 */
         $('.reserve-search-btn').on('click', function (e) {
             e.preventDefault();
 
