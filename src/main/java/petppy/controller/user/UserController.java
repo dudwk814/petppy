@@ -167,8 +167,9 @@ public class UserController {
     public ResponseEntity<UserDTO> findUserWithAjax(@PathVariable("email") String email, HttpSession session) {
 
         String userEmail = (String)session.getAttribute("userEmail");
+        UserDTO user = (UserDTO) session.getAttribute("user");
 
-        if (userEmail.equals(email)) {  // 세션에서 조회한 이메일(로그인시 이메일)과 ajax로 넘어온 이메일이 같아야함
+        if (userEmail.equals(email) || user.getRole().getKey().equals("ROLE_ADMIN")) {  // 세션에서 조회한 이메일(로그인시 이메일)과 ajax로 넘어온 이메일이 같아야함
             return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
         }
 

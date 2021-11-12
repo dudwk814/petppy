@@ -47,6 +47,14 @@ public class ReserveController {
 
     @PreAuthorize("isAuthenticated()")
     @ResponseBody
+    @GetMapping("/{id}")
+    public ResponseEntity<ReserveDTO> findReserve(@PathVariable("id") Long id) {
+
+        return new ResponseEntity<>(reserveService.findReserve(id), HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @ResponseBody
     @PostMapping("/cancel")
     public ResponseEntity<Boolean> cancel(ReserveDTO reserveDTO) {
 

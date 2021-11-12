@@ -267,6 +267,7 @@
                                                 <th scope="col" class="text-center">예약 서비스</th>
                                                 <th scope="col" class="text-center">예약 일</th>
                                                 <th scope="col" class="text-center">예약 상태</th>
+                                                <th scope="col" class="text-center"></th>
                                             </tr>
                                             </thead>
                                             <tbody class="reserve-tbody">
@@ -385,6 +386,81 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" tabindex="-1" id="reserveModal" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">예약 정보 정보</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="reserve-modal-form">
+                            <div class="reserve-div">
+                                <div class="hr-sect">예약</div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="reserveId">예약번호</label>
+                                        <input type="text" class="form-control" id="reserveId" placeholder="예약번호" disabled>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="reserveName">이름</label>
+                                        <input type="text" class="form-control" id="reserveName" placeholder="이름" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        <label for="servicesType">예약 서비스</label>
+                                        <input type="text" class="form-control" id="servicesType" placeholder="예약 서비스" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="reserveDate">예약 날짜</label>
+                                        <input type="text" class="form-control" id="reserveDate" placeholder="예약 날짜" disabled>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="reserveType">예약 상태</label>
+                                        <input type="text" class="form-control" id="reserveType" placeholder="예약상태" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="address-div">
+                                <div class="hr-sect">주소 정보</div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="reservePostcode">우편번호</label>
+                                        <input type="text" class="form-control" id="reservePostcode" placeholder="우편번호" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="reserveRoadAddress">도로명 주소</label>
+                                        <input type="text" class="form-control" id="reserveRoadAddress" placeholder="도로명 주소" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="reserveJibunAddress">지번 주소</label>
+                                        <input type="text" class="form-control" id="reserveJibunAddress" placeholder="지번 주소" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="reserveDetailAddress">상세 주소</label>
+                                        <input type="text" class="form-control" id="reserveDetailAddress" placeholder="상세 주소" disabled>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="reserveExtraAddress">참고 사항</label>
+                                        <input type="text" class="form-control" id="reserveExtraAddress" placeholder="참고 사항" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </th:block>
 </th:block>
 <script th:inline="javascript">
@@ -677,6 +753,7 @@
                             '<td class="text-center">' + serviceType + '</td>' +
                             '<td class="text-center">' + reserveList.reserveStartDate + '</td>' +
                             '<td class="text-center">' + reserveType + '</td>' +
+                            '<td class="text-center"><a href="#" class="reserve-modal-btn" data-id="' + reserveList.id +'">자세히 보기</a></td>' +
                             '</tr> ';
                     });
 
@@ -715,6 +792,54 @@
                 }
             })
         }
+
+        /* 예약 자세히 보기 버튼 클릭시 예약 조회 후 모달 생성성 */
+        $(document).on('click', '.reserve-modal-btn', function (e) {
+            e.preventDefault();
+
+            let id = $(this).data('id');
+            let form = $('.reserve-modal-form');
+
+            // 모달 input 초기화
+            form[0].reset();
+
+            let modal = $('#reserveModal');
+
+            // 모달 input 변수
+            let idInput = $("#reserveId")
+            let nameInput = $('#reserveName');
+            let servicesTypeInput = $("#servicesType")
+            let reserveDateInput = $("#reserveDate");
+            let reserveTypeInput = $("#reserveType");
+            let postcodeInput = $('#reservePostcode');
+            let roadAddressInput = $('#reserveRoadAddress');
+            let jibunAddressInput = $('#reserveJibunAddress');
+            let detailAddressInput = $('#reserveDetailAddress');
+            let extraAddressInput = $('#reserveExtraAddress');
+
+            $.ajax({
+                url: '/reserve/' + id,
+                type: 'get',
+                success: function (result) {
+                    idInput.val(result.id);
+                    nameInput.val(result.name);
+                    servicesTypeInput.val(result.servicesType);
+                    reserveDateInput.val(result.reserveStartDate);
+                    reserveTypeInput.val(result.reserveType);
+                    postcodeInput.val(result.address.postcode);
+                    roadAddressInput.val(result.address.roadAddress);
+                    jibunAddressInput.val(result.address.jibunAddress);
+                    detailAddressInput.val(result.address.detailAddress);
+                    extraAddressInput.val(result.address.extraAddress);
+                }
+
+            })
+
+
+            $(modal).modal('show');
+
+
+        })
 
 
         /* 페이지 버튼 클릭 시 페이지 변경 */
