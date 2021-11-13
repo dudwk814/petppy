@@ -424,11 +424,11 @@
                     }
                 }).done(function () {
                     if ([[${session.user != null}]] && rsp.success) {
-                        var targetEmail = $('#notifyBtn').data('email');
-                        var message =  "멤버십 등급 변경 결제가 완료되었습니다.";
-                        var url = "#";
+                        let targetEmail = $('#notifyBtn').data('email');
+                        let message =  "멤버십 등급 변경 결제가 완료되었습니다.";
+                        let url = "#";
 
-                        var notificationData = {
+                        let notificationData = {
                             targetEmail : targetEmail,
                             message : message,
                             notificationType : "payment",
@@ -446,9 +446,9 @@
                     }
                 }).done(function () {   // 상단 알림 표시
                     if ([[${session.user != null}]] && rsp.success) {
-                        var targetEmail = $('#notifyBtn').data('email');
-                        var message = "멤버십 등급 변경 결제가 완료되었습니다.";
-                        var url = "#";
+                        let targetEmail = $('#notifyBtn').data('email');
+                        let message = "멤버십 등급 변경 결제가 완료되었습니다.";
+                        let url = "#";
                         if(socket){
                             let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
                             /*console.log("msgmsg : " + socketMsg);*/
@@ -458,14 +458,14 @@
 
                 }).always(function (data) { // 결제 결과 alert
                     if (rsp.success) {
-                        var msg = '결제가 완료되었습니다.\n';
+                        let msg = '결제가 완료되었습니다.\n';
                         msg += '고유ID : ' + rsp.imp_uid + '\n';
                         msg += '상점 거래ID : ' + rsp.merchant_uid + '\n';
                         msg += '결제 금액 : ' + rsp.paid_amount + '\n';
                         msg += '카드 승인번호 : 실제 결제는 되지않습니다.\n';
                         swal("결제 성공", msg);
                     } else {
-                        var msg = '결제에 실패하였습니다.\n';
+                        let msg = '결제에 실패하였습니다.\n';
                         msg += '에러내용 : ' + rsp.error_msg;
                         swal("결제실패", msg);
                     }
@@ -479,7 +479,7 @@
                 type: 'post',
 
             }).done(function (paymentData) {
-                var imp_uid = paymentData.transactionNumber;
+                let imp_uid = paymentData.transactionNumber;
 
                 $.ajax({ // 아임포트 서버에서 토큰 회득
                     url: '/payment/accessToken/' + imp_uid,
@@ -506,9 +506,9 @@
                             }
                         }).done(function () {   // 상단 알림 표시
                             if (getCancelData.code == 0) {
-                                var targetEmail = paymentData.email;
-                                var message = "멤버십이 해지되었습니다.";
-                                var url = "/user/userPage";
+                                let targetEmail = paymentData.email;
+                                let message = "멤버십이 해지되었습니다.";
+                                let url = "/user/userPage";
                                 if(socket){
                                     let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
                                     /*console.log("msgmsg : " + socketMsg);*/
@@ -539,7 +539,7 @@
                 console.log('info: connection opened.');
 
                 if ([[${session.user}]] != null) {
-                    var email = $('#notifyBtn').data('email');
+                    let email = $('#notifyBtn').data('email');
                     $.ajax({
                         url : '/notify/unChecked/' + email,
                         type : 'get',
@@ -556,7 +556,7 @@
             };
 
             sock.onmessage = function(evt) {
-                var data = evt.data;
+                let data = evt.data;
                 /*console.log("ReceivMessage : " + data + "\n");*/
 
                 let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
@@ -568,7 +568,7 @@
                 $(".toast").toast({"animation": true, "autohide": false});
                 $('.toast').toast('show');
 
-                var email = $('#notifyBtn').data('email');
+                let email = $('#notifyBtn').data('email');
                 $.ajax({
                     url : '/notify/unChecked/' + email,
                     type : 'get',
@@ -624,9 +624,9 @@
             // 알림 벨 버튼 클릭시 알람 dropdown show
             $('#notifyBtn').on('click', function (e) {
 
-                var email = $(this).data('email');
-                var notifyList = "";
-                var unCheckedNotify = $('.badge-notify').text();
+                let email = $(this).data('email');
+                let notifyList = "";
+                let unCheckedNotify = $('.badge-notify').text();
 
                 $.ajax({
                     url: '/notify/recent/' + email,
@@ -642,7 +642,7 @@
 
                         $.each(result, function (index, notify) {
 
-                            var notificationType = notify.notificationType;
+                            let notificationType = notify.notificationType;
 
                             if (notify.isRead.toString() === 'Y') {
                                 notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url bg-light" data-id="' + notify.id +'">\n';
@@ -673,8 +673,8 @@
             $(document).on('click', '.notify_url', function (e) {
                 e.preventDefault();
 
-                var url = $(this).attr('href');
-                var id = $(this).data('id');
+                let url = $(this).attr('href');
+                let id = $(this).data('id');
 
                 $.ajax({
                     url : '/notify/' + id,
@@ -693,7 +693,7 @@
             $(".logout-btn").on("click", function (e) {
                 e.preventDefault();
 
-                var logoutForm = $('<form></form>');
+                let logoutForm = $('<form></form>');
                 //set attribute (form)
                 logoutForm.attr("name", "logoutForm");
                 logoutForm.attr("method", "post");
@@ -724,7 +724,7 @@
             function loginFormCheck() {
 
                 /* 이메일 포맷 유효성 */
-                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
                 if ($("#login-modal-email").hasClass("is-invalid") === true) {
                     $("#login-modal-email").removeClass("is-invalid");

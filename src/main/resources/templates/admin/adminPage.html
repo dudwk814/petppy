@@ -400,9 +400,13 @@
                             <div class="reserve-div">
                                 <div class="hr-sect">예약</div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-3">
                                         <label for="reserveId">예약번호</label>
                                         <input type="text" class="form-control" id="reserveId" placeholder="예약번호" disabled>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="reserveId">회원번호</label>
+                                        <input type="text" class="form-control" id="userId" placeholder="회원번호" disabled>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="reserveName">이름</label>
@@ -455,7 +459,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-danger reserve-cancel-btn" data-services="">예약 취소</button>
                     </div>
                 </div>
             </div>
@@ -806,7 +810,8 @@
             let modal = $('#reserveModal');
 
             // 모달 input 변수
-            let idInput = $("#reserveId")
+            let idInput = $("#reserveId");
+            let userIdInput = $("#userId");
             let nameInput = $('#reserveName');
             let servicesTypeInput = $("#servicesType")
             let reserveDateInput = $("#reserveDate");
@@ -816,12 +821,14 @@
             let jibunAddressInput = $('#reserveJibunAddress');
             let detailAddressInput = $('#reserveDetailAddress');
             let extraAddressInput = $('#reserveExtraAddress');
+            let cancelBtn = $('.reserve-cancel-btn');
 
             $.ajax({
                 url: '/reserve/' + id,
                 type: 'get',
                 success: function (result) {
                     idInput.val(result.id);
+                    userIdInput.val(result.userId);
                     nameInput.val(result.name);
                     servicesTypeInput.val(result.servicesType);
                     reserveDateInput.val(result.reserveStartDate);
@@ -831,14 +838,50 @@
                     jibunAddressInput.val(result.address.jibunAddress);
                     detailAddressInput.val(result.address.detailAddress);
                     extraAddressInput.val(result.address.extraAddress);
+                    cancelBtn.attr('data-services', result.servicesId);
                 }
 
             })
 
 
             $(modal).modal('show');
+        });
+        
+        /* 예약 모달에서 예약 취소 버튼 클릭시 예약 취소 */
+        $(document).on('click', '.reserve-cancel-btn', function () {
+            let id = $("#reserveId").val();
+            let userId = $("#userId").val();
+            let servicesId = $('.reserve-cancel-btn').data('services');
+
+            swal("예약을 취소하시겠습니까?", {
+                buttons: {
+                    cancel: "닫기",
+                    catch: {
+                        text: "예약 취소",
+                        value: "cancel",
+                    }
+                },
+            }).then((value) => {
+                if (value) {
 
 
+                    $.ajax({
+                        url: '/reserve/cancel',
+                        type: 'post',
+                        data: {
+                            id: id,
+                            userId: userId,
+                            servicesId: servicesId
+                        }
+                    }).done(function (result) {
+                        if (result) {
+                            swal('예약 취소', '예약을 취소했습니다.');
+
+                        }
+                    })
+
+                }
+            });
         })
 
 

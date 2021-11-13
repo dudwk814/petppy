@@ -120,22 +120,6 @@
             }).then((value) => {
                     if (value) {
 
-                       /* var cancelForm = $('<form></form>');
-                        //set attribute (form)
-                        cancelForm.attr("name","cancelForm");
-                        cancelForm.attr("method","post");
-                        cancelForm.attr("action","/reserve/cancel");
-
-                        // create element & set attribute (input)
-                        cancelForm.append($('<input/>', {type: 'hidden', name: 'id', value:id }));
-                        cancelForm.append($('<input/>', {type: 'hidden', name: 'userId', value:userId }));
-                        cancelForm.append($('<input/>', {type: 'hidden', name: 'servicesId', value:servicesId }));
-
-                        // append form (to body)
-                        cancelForm.appendTo('body');
-
-                        // submit form
-                        cancelForm.submit();*/
 
                         $.ajax({
                             url: '/reserve/cancel',
