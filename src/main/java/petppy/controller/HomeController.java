@@ -30,5 +30,10 @@ public class HomeController {
         return "vet";
     }
 
+    @GetMapping("/QnA")
+    public String QnA() {
+        return "QnA";
+    }
+
 
 }

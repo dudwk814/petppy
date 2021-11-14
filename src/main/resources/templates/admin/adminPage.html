@@ -839,6 +839,10 @@
                     detailAddressInput.val(result.address.detailAddress);
                     extraAddressInput.val(result.address.extraAddress);
                     cancelBtn.attr('data-services', result.servicesId);
+
+                    if (result.reserveType != 'RESERVE') {
+                        cancelBtn.attr('disabled', true);
+                    }
                 }
 
             })
@@ -849,6 +853,7 @@
         
         /* 예약 모달에서 예약 취소 버튼 클릭시 예약 취소 */
         $(document).on('click', '.reserve-cancel-btn', function () {
+
             let id = $("#reserveId").val();
             let userId = $("#userId").val();
             let servicesId = $('.reserve-cancel-btn').data('services');
