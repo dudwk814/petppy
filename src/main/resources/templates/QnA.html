@@ -38,37 +38,98 @@
                     <div class="col-lg-6">
                         <div class="heading-section mb-5 mt-5 mt-lg-0">
                             <h2 class="mb-3">Frequently Asks Questions</h2>
-                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                            <p>아래 항목들을 클릭하여 PETPPY의 이용방법과 문의를 할 수 있습니다.</p>
                         </div>
                         <div id="accordion" class="myaccordion w-100" aria-multiselectable="true">
                             <div class="card">
                                 <div class="card-header p-0" id="headingOne">
                                     <h2 class="mb-0">
-                                        <button href="#collapseOne" class="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link" data-parent="#accordion" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
-                                            <p class="mb-0">멤버십 가능 방법</p>
+                                        <button href="#membershipStart" class="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseOne">
+                                            <p class="mb-0">멤버십 가입</p>
                                             <i class="fa" aria-hidden="true"></i>
                                         </button>
                                     </h2>
                                 </div>
-                                <div class="collapse show" id="collapseOne" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="collapse" id="membershipStart" role="tabpanel" aria-labelledby="headingOne">
                                     <div class="card-body py-3 px-0">
                                         <ol>
                                             <li>
-<!--                                                <div class="img img-2 mr-md-2" style="background-image:url('/petppy/images/about-2.jpg');"></div>-->
                                                 <figure class="figure">
-                                                    <img src="/petppy/images/about-2.jpg" class="figure-img img-fluid rounded" alt="...">
-                                                    <figcaption class="figure-caption">A caption for the above image.</figcaption>
+                                                    <img src="/petppy/images/QnAMembership01.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">홈페이지 상단의 <a target="_blank" th:href="@{/membership}">MEMBERSHIP</a> 메뉴를 클릭</figcaption>
                                                 </figure>
                                             </li>
                                             <li>
                                                 <figure class="figure">
-                                                    <img src="/petppy/images/about-2.jpg" class="figure-img img-fluid rounded" alt="...">
-                                                    <figcaption class="figure-caption">A caption for the above image.</figcaption>
+                                                    <img src="/petppy/images/QnAMembership02.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">원하는 멤버십 등급을 선택 후 카카오 페이로 간편결제 진행</figcaption>
                                                 </figure>
                                             </li>
-                                            <li>When she reached the first hills of the Italic Mountains</li>
-                                            <li>Bookmarksgrove, the headline of Alphabet Village</li>
-                                            <li>Separated they live in Bookmarksgrove right</li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAMembership03.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">QR코드 또는 카카오톡 메시지로 간편결제 진행</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAMembership04.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">화면 안내에 따라 카카오톡 간편결제 진행</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                <img src="/petppy/images/QnAMembership05.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                <figcaption class="figure-caption">결제 완료</figcaption>
+                                            </figure>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header p-0" id="headingOne">
+                                    <h2 class="mb-0">
+                                        <button href="#membershipCancel" class="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseOne">
+                                            <p class="mb-0">멤버십 해지</p>
+                                            <i class="fa" aria-hidden="true"></i>
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div class="collapse" id="membershipCancel" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="card-body py-3 px-0">
+                                        <ol>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAMembership01.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">홈페이지 상단의 <a target="_blank" th:href="@{/membership}">MEMBERSHIP</a> 메뉴를 클릭</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAMembership02.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">원하는 멤버십 등급을 선택 후 카카오 페이로 간편결제 진행</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAMembership03.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">QR코드 또는 카카오톡 메시지로 간편결제 진행</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAMembership04.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">화면 안내에 따라 카카오톡 간편결제 진행</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAMembership05.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">결제 완료</figcaption>
+                                                </figure>
+                                            </li>
                                         </ol>
                                     </div>
                                 </div>
@@ -77,20 +138,47 @@
                             <div class="card">
                                 <div class="card-header p-0" id="headingTwo" role="tab">
                                     <h2 class="mb-0">
-                                        <button href="#collapseTwo" class="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseTwo">
-                                            <p class="mb-0">How to manage your pets?</p>
+                                        <button href="#servicesReserve" class="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseTwo">
+                                            <p class="mb-0">서비스 예약</p>
                                             <i class="fa" aria-hidden="true"></i>
                                         </button>
                                     </h2>
                                 </div>
-                                <div class="collapse" id="collapseTwo" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="collapse" id="servicesReserve" role="tabpanel" aria-labelledby="headingTwo">
                                     <div class="card-body py-3 px-0">
                                         <ol>
-                                            <li>Far far away, behind the word mountains</li>
-                                            <li>Consonantia, there live the blind texts</li>
-                                            <li>When she reached the first hills of the Italic Mountains</li>
-                                            <li>Bookmarksgrove, the headline of Alphabet Village</li>
-                                            <li>Separated they live in Bookmarksgrove right</li>
+                                            <li>
+                                                <figure class="figure">
+<!--                                                    <img src="/petppy/images/QnAReserve01.PNG" class="figure-img img-fluid rounded" alt="...">-->
+                                                    <figcaption class="figure-caption"><a href="#membershipStart" data-parent="#accordion" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">멤버십</a>에 가입</figcaption>
+                                                </figure>
+                                            </li>
+
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAReserve01.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">홈페이지 상단의 <a target="_blank" th:href="@{/services}">SERVICES</a> 메뉴를 클릭</figcaption>
+                                                </figure>
+                                            </li>
+
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAReserve02.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">원하는 서비스를 선택</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAReserve03.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">예약 정보(날짜, 시간, 주소, 요청사항)를 입력 후 예약버튼 클릭</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/QnAReserve04.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">예약완료</figcaption>
+                                                </figure>
+                                            </li>
                                         </ol>
                                     </div>
                                 </div>
@@ -100,19 +188,44 @@
                                 <div class="card-header p-0" id="headingThree" role="tab">
                                     <h2 class="mb-0">
                                         <button href="#collapseThree" class="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseThree">
-                                            <p class="mb-0">What is the best grooming for your pets?</p>
-                                            <i class="fa" aria-hidden="true"></i>
+                                            <p class="mb-0">서비스 예약 취소</p>
+                                           <i class="fa" aria-hidden="true"></i>
                                         </button>
                                     </h2>
                                 </div>
                                 <div class="collapse" id="collapseThree" role="tabpanel" aria-labelledby="headingTwo">
                                     <div class="card-body py-3 px-0">
                                         <ol>
-                                            <li>Far far away, behind the word mountains</li>
-                                            <li>Consonantia, there live the blind texts</li>
-                                            <li>When she reached the first hills of the Italic Mountains</li>
-                                            <li>Bookmarksgrove, the headline of Alphabet Village</li>
-                                            <li>Separated they live in Bookmarksgrove right</li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/reserve_cancel01.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">로그인 후 상단 메뉴에서 PETPPY 이모티콘을 클릭하여 <a target="_blank" th:href="@{/user}">회원설정</a> 메뉴 클릭 </figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/reserve_cancel03.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption"><a target="_blank" th:href="@{/user}">회원설정</a> 페이지에서 <a target="_blank" th:href="@{/reserve/reserveList}">service 예약확인</a> 메뉴 클릭 </figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/reserve_cancel04.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">예약 목록에서 취소하고 싶은 예약의 취소버튼 클릭</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/reserve_cancel05.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">예약취소 버튼 클릭</figcaption>
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure class="figure">
+                                                    <img src="/petppy/images/reserve_cancel06.PNG" class="figure-img img-fluid rounded" alt="...">
+                                                    <figcaption class="figure-caption">예약취소 완료</figcaption>
+                                                </figure>
+                                            </li>
                                         </ol>
                                     </div>
                                 </div>
@@ -122,14 +235,42 @@
                                 <div class="card-header p-0" id="headingFour" role="tab">
                                     <h2 class="mb-0">
                                         <button href="#collapseFour" class="d-flex py-3 px-4 align-items-center justify-content-between btn btn-link" data-parent="#accordion" data-toggle="collapse" aria-expanded="false" aria-controls="collapseFour">
-                                            <p class="mb-0">What are those requirements for sitting pets?</p>
+                                            <p class="mb-0">문의하기</p>
                                             <i class="fa" aria-hidden="true"></i>
                                         </button>
                                     </h2>
                                 </div>
                                 <div class="collapse" id="collapseFour" role="tabpanel" aria-labelledby="headingTwo">
                                     <div class="card-body py-3 px-0">
-                                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+                                        <form action="#" class="appointment">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="form-field">
+                                                            <div class="select-wrap">
+                                                                <div class="icon"><span class="fa fa-chevron-down"></span></div>
+                                                                <select name="" id="" class="form-control">
+                                                                    <option value="" selected>문의 종류 선택</option>
+                                                                    <option value="">멤버십</option>
+                                                                    <option value="">예약</option>
+                                                                    <option value="">기타</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <input type="submit" value="문의하기" class="btn btn-outline-primary py-3 px-4">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
