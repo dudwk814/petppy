@@ -26,14 +26,6 @@
         <section class="ftco-section bg-light ftco-faqs">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
-                    <!--<div class="col-lg-4 order-md-last">
-                        <div class="img img-video d-flex align-self-stretch align-items-center justify-content-center justify-content-md-center mb-4 mb-sm-0" style="background-image:url('/petppy/images/about.jpg');">
-                        </div>
-                        <div class="d-flex mt-3">
-                            <div class="img img-2 mr-md-2" style="background-image:url('/petppy/images/about-2.jpg');"></div>
-                            <div class="img img-2 ml-md-2" style="background-image:url('/petppy/images/about-3.jpg');"></div>
-                        </div>
-                    </div>-->
 
                     <div class="col-lg-6">
                         <div class="heading-section mb-5 mt-5 mt-lg-0">
@@ -149,7 +141,6 @@
                                         <ol>
                                             <li>
                                                 <figure class="figure">
-<!--                                                    <img src="/petppy/images/QnAReserve01.PNG" class="figure-img img-fluid rounded" alt="...">-->
                                                     <figcaption class="figure-caption"><a href="#membershipStart" data-parent="#accordion" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">멤버십</a>에 가입</figcaption>
                                                 </figure>
                                             </li>
@@ -241,35 +232,21 @@
                                     </h2>
                                 </div>
                                 <div class="collapse" id="collapseFour" role="tabpanel" aria-labelledby="headingTwo">
-                                    <div class="card-body py-3 px-0">
-                                        <form action="#" class="appointment">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <div class="form-field">
-                                                            <div class="select-wrap">
-                                                                <div class="icon"><span class="fa fa-chevron-down"></span></div>
-                                                                <select name="" id="" class="form-control">
-                                                                    <option value="" selected>문의 종류 선택</option>
-                                                                    <option value="">멤버십</option>
-                                                                    <option value="">예약</option>
-                                                                    <option value="">기타</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <input type="submit" value="문의하기" class="btn btn-outline-primary py-3 px-4">
-                                                    </div>
-                                                </div>
+                                    <div class="card-body py-3 px-0 d-flex justify-content-center">
+                                        <form class="w-75">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1">문의 종류</label>
+                                                <select class="form-control" id="exampleFormControlSelect1">
+                                                    <option>멤버십</option>
+                                                    <option>예약</option>
+                                                    <option>기타</option>
+                                                </select>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">문의 내용</label>
+                                                <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="문의하실 내용을 입력해주세요." rows="5"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary py-3 px-4 text-white">문의하기</button>
                                         </form>
                                     </div>
                                 </div>

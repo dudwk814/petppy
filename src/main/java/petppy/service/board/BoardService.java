@@ -3,7 +3,7 @@ package petppy.service.board;
 import org.springframework.data.domain.Pageable;
 import petppy.domain.board.Board;
 import petppy.domain.user.User;
-import petppy.dto.board.BoardDto;
+import petppy.dto.board.BoardDTO;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 
@@ -11,24 +11,24 @@ import java.util.List;
 
 public interface BoardService {
 
-    public void createBoard(BoardDto dto);
+    public void createBoard(BoardDTO dto);
 
-    public void modifyBoard(BoardDto dto);
+    public void modifyBoard(BoardDTO dto);
 
     public void deleteBoard(Long id);
 
     public Long commentCount(Long id);
 
-    public PageResultDTO<BoardDto, Board> searchBoardList(PageRequestDTO requestDTO);
+    public PageResultDTO<BoardDTO, Board> searchBoardList(PageRequestDTO requestDTO);
 
-    public BoardDto searchBoard(Long id);
+    public BoardDTO searchBoard(Long id);
 
-    public List<BoardDto> findRecentBoardList(Pageable pageable);
+    public List<BoardDTO> findRecentBoardList(Pageable pageable);
 
-    public PageResultDTO<BoardDto, Board> findByUserEmail(PageRequestDTO requestDTO, String email);
+    public PageResultDTO<BoardDTO, Board> findByUserEmail(PageRequestDTO requestDTO, String email);
 
-    default BoardDto entityToDto(Board board) {
-        return BoardDto
+    default BoardDTO entityToDto(Board board) {
+        return BoardDTO
                 .builder()
                 .boardId(board.getId())
                 .title(board.getTitle())
@@ -41,7 +41,7 @@ public interface BoardService {
                 .build();
     }
 
-    default Board dtoToEntity(BoardDto dto) {
+    default Board dtoToEntity(BoardDTO dto) {
         return Board
                 .builder()
                 .id(dto.getBoardId())

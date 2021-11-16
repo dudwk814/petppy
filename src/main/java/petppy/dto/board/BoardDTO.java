@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
-public class BoardDto {
+public class BoardDTO {
 
     private Long boardId;
 
@@ -27,7 +27,7 @@ public class BoardDto {
 
     @Builder
     @QueryProjection
-    public BoardDto(Long boardId, Long userId, String title, String content, Integer hit, Integer commentCount, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public BoardDTO(Long boardId, Long userId, String title, String content, Integer hit, Integer commentCount, String email, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.boardId = boardId;
         this.userId = userId;
         this.title = title;

@@ -6,10 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.user.User;
-import petppy.dto.board.BoardDto;
+import petppy.dto.board.BoardDTO;
 import petppy.repository.board.BoardRepository;
 import petppy.repository.user.UserRepository;
-import petppy.service.board.BoardService;
 
 import javax.persistence.EntityManager;
 
@@ -40,7 +39,7 @@ class BoardServiceImplTest {
 
         //when
         for (int i = 0; i < 1000; i++) {
-            BoardDto boardDto = BoardDto.builder()
+            BoardDTO boardDto = BoardDTO.builder()
                     .email(user.getEmail())
                     .title("testTitle" + i)
                     .content("testContent" + i)

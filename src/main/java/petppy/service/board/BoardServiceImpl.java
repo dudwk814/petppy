@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.board.Board;
 import petppy.domain.board.QBoard;
-import petppy.domain.comment.Comment;
-import petppy.dto.board.BoardDto;
+import petppy.dto.board.BoardDTO;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
-import petppy.dto.comment.CommentDTO;
 import petppy.exception.BoardNotFoundException;
 import petppy.repository.board.BoardRepository;
 import petppy.repository.comment.CommentRepository;
@@ -33,13 +31,13 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void createBoard(BoardDto dto) {
+    public void createBoard(BoardDTO dto) {
         boardRepository.save(dtoToEntity(dto));
     }
 
     @Override
     @Transactional
-    public void modifyBoard(BoardDto dto) {
+    public void modifyBoard(BoardDTO dto) {
         Board board = boardRepository.findById(dto.getBoardId()).orElseThrow(BoardNotFoundException::new);
         board.changeBoard(dto.getTitle(), dto.getContent());
     }
@@ -62,7 +60,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public PageResultDTO<BoardDto, Board> searchBoardList(PageRequestDTO requestDTO) {
+    public PageResultDTO<BoardDTO, Board> searchBoardList(PageRequestDTO requestDTO) {
 
         Page<Board> result = boardRepository.searchBoardList(requestDTO);
 
@@ -74,14 +72,14 @@ public class BoardServiceImpl implements BoardService {
 
 
 
-        Function<Board, BoardDto> fn = (entity -> entityToDto(entity));
+        Function<Board, BoardDTO> fn = (entity -> entityToDto(entity));
 
         return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
     }
 
     @Override
     @Transactional
-    public BoardDto searchBoard(Long id) {
+    public BoardDTO searchBoard(Long id) {
 
         Optional<Board> result = boardRepository.findById(id);
 
@@ -101,7 +99,7 @@ public class BoardServiceImpl implements BoardService {
      * 최근 5개 게시글 조회
      */
     @Override
-    public List<BoardDto> findRecentBoardList(Pageable pageable) {
+    public List<BoardDTO> findRecentBoardList(Pageable pageable) {
         List<Board> result = boardRepository.findRecentBoardList(pageable);
 
         return result
@@ -114,7 +112,7 @@ public class BoardServiceImpl implements BoardService {
      * 유저 이메일로 게시글 조회
      */
     @Override
-    public PageResultDTO<BoardDto, Board> findByUserEmail(PageRequestDTO requestDTO, String email) {
+    public PageResultDTO<BoardDTO, Board> findByUserEmail(PageRequestDTO requestDTO, String email) {
 
         Page<Board> result = boardRepository.findUserEmail(requestDTO, email);
 
@@ -123,7 +121,7 @@ public class BoardServiceImpl implements BoardService {
         int totalPages = result.getTotalPages();
         long totalElements = result.getTotalElements();
 
-        Function<Board, BoardDto> fn = (entity -> entityToDto(entity));
+        Function<Board, BoardDTO> fn = (entity -> entityToDto(entity));
 
         return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
     }

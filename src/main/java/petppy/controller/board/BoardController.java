@@ -7,10 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import petppy.config.util.FormValidator;
 import petppy.domain.board.Board;
-import petppy.dto.board.BoardDto;
+import petppy.dto.board.BoardDTO;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.dto.user.UserDTO;
@@ -32,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.*;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -54,7 +50,7 @@ public class BoardController {
     @GetMapping("")
     public String boardList(Model model, @ModelAttribute("requestDTO") PageRequestDTO requestDTO) {
 
-        PageResultDTO<BoardDto, Board> result = boardService.searchBoardList(requestDTO);
+        PageResultDTO<BoardDTO, Board> result = boardService.searchBoardList(requestDTO);
 
         model.addAttribute("boardList", result);
 
@@ -64,7 +60,7 @@ public class BoardController {
     @GetMapping("/read")
     public String read(Model model, Long id, @ModelAttribute("requestDTO") PageRequestDTO requestDTO) {
 
-        BoardDto boardDto = boardService.searchBoard(id);
+        BoardDTO boardDto = boardService.searchBoard(id);
 
         model.addAttribute("board", boardDto);
 
@@ -79,7 +75,7 @@ public class BoardController {
      * 글 작성 폼으로 이동
      */
     @GetMapping("/edit")
-    public String editForm(BoardDto boardDto) {
+    public String editForm(BoardDTO boardDto) {
 
         return "/board/edit";
     }
@@ -88,7 +84,7 @@ public class BoardController {
      * 글 작성
      */
     @PostMapping("/edit")
-    public String edit(@Valid BoardDto boardDto, BindingResult result, Model model, HttpSession session) {
+    public String edit(@Valid BoardDTO boardDto, BindingResult result, Model model, HttpSession session) {
 
         if (result.hasErrors()) {
             Map<String, String> validatorResult = formValidator.validateHandling(result);
@@ -121,7 +117,7 @@ public class BoardController {
     public String modifyForm(Long id, HttpSession session, PageRequestDTO requestDTO, Model model) {
 
 
-        BoardDto boardDto = boardService.searchBoard(id);
+        BoardDTO boardDto = boardService.searchBoard(id);
 
         if (boardDto.getEmail() != session.getAttribute("userEmail")) {
             return "redirect:/board/read?id=" + boardDto.getBoardId();
@@ -138,7 +134,7 @@ public class BoardController {
      * 글 수정
      */
     @PostMapping("/modify")
-    public String modify(BoardDto boardDto, PageRequestDTO requestDTO, RedirectAttributes rttr) {
+    public String modify(BoardDTO boardDto, PageRequestDTO requestDTO, RedirectAttributes rttr) {
 
 
         boardDto.setContent(XssPreventer.unescape(boardDto.getContent()));
@@ -157,7 +153,7 @@ public class BoardController {
     @PostMapping("/delete")
     public String delete(Long id, HttpSession session, PageRequestDTO requestDTO, RedirectAttributes redirectAttributes) {
 
-        BoardDto boardDto = boardService.searchBoard(id);
+        BoardDTO boardDto = boardService.searchBoard(id);
 
         String email = (String) session.getAttribute("userEmail");
 
@@ -235,11 +231,11 @@ public class BoardController {
      */
     @ResponseBody
     @GetMapping(value = "/{email}/{page}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PageResultDTO<BoardDto, Board>> findUserEmail(@PathVariable("email") String email, @PathVariable("page") int page) {
+    public ResponseEntity<PageResultDTO<BoardDTO, Board>> findUserEmail(@PathVariable("email") String email, @PathVariable("page") int page) {
         PageRequestDTO requestDTO = new PageRequestDTO();
         requestDTO.setPage(page);
 
-        PageResultDTO<BoardDto, Board> result = boardService.findByUserEmail(requestDTO, email);
+        PageResultDTO<BoardDTO, Board> result = boardService.findByUserEmail(requestDTO, email);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
 
