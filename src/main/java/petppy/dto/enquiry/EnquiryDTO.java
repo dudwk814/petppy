@@ -1,19 +1,25 @@
 package petppy.dto.enquiry;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import petppy.domain.enquiry.EnquiryType;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnquiryDTO {
 
     private Long enquiryId;
 
     private EnquiryType enquiryType;
 
+    @NotBlank(message = "문의 내용을 입력해주세요!")
     private String content;
 
     private String userEmail;

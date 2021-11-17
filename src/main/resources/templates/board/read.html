@@ -235,7 +235,7 @@
                                 '                                        <p class="mr-auto">\n' +
                                 '                                            <a href="#" class="text-black-50 comment-input" aria-hidden="true"\n' +
                                 '                                               data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>\n';
-                            [# th:if = "${session.user != null}"]
+                            /*[# th:if = "${session.user != null}"]*/
                             var userEmail = [[${session.user.email}]];
                             if (userEmail == comment.email) {
                                 commentList +=  '                                                    /&nbsp;\n' +
@@ -248,7 +248,7 @@
                                     '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
                             }
 
-                            [/]
+                            /*[/]*/
                                 commentList += '                                        </p>\n' +
                                     '                                        <p class="d-flex">\n' +
                                     '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
@@ -367,7 +367,7 @@
                                 '                                                        <a href="#" class="text-black-50 comment-input"\n' +
                                 '                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"\n' +
                                 '                                                           title="답글 작성">답글</a>\n';
-                            [# th:if = "${session.user != null}"]
+                            /*[# th:if = "${session.user != null}"]*/
                                 var userEmail = [[${session.user.email}]];
                                 if (userEmail == children.email) {
                                     childrenList +='                                                                /&nbsp;\n' +
@@ -381,7 +381,7 @@
                                         '                                                                   title="댓글 삭제">삭제</a>\n';
                                 }
 
-                            [/]
+                            /*[/]*/
                             childrenList +=  '                                                    </p>\n' +
                                 '                                                </div>\n' +
                                 '                                            </li>\n';
@@ -426,8 +426,8 @@
 
         function comment_create_promise(commentContent, parentId){ // 댓글 작성 함수
 
-            [# th:if = "${session.user != null}"]
-            var commentDTO = {
+            /*[# th:if = "${session.user != null}"]*/
+            let commentDTO = {
                 boardId: boardId,
                 content: commentContent,
                 userId: [[${session.user.id}]],
@@ -435,7 +435,7 @@
                 parentId: parentId
             };
 
-            [/]
+            /*[/]*/
 
             return new Promise(function(resolve, reject){   // 댓글 작성 Promise
                 $.ajax({

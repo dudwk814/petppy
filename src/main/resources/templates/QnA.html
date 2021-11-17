@@ -233,20 +233,20 @@
                                 </div>
                                 <div class="collapse" id="collapseFour" role="tabpanel" aria-labelledby="headingTwo">
                                     <div class="card-body py-3 px-0 d-flex justify-content-center">
-                                        <form class="w-75">
+                                        <form class="w-75" id="enquiryForm">
                                             <div class="form-group">
-                                                <label for="exampleFormControlSelect1">문의 종류</label>
-                                                <select class="form-control" id="exampleFormControlSelect1">
-                                                    <option>멤버십</option>
-                                                    <option>예약</option>
-                                                    <option>기타</option>
+                                                <label for="enquiryType">문의 종류</label>
+                                                <select class="form-control" id="enquiryType">
+                                                    <option value="MEMBERSHIP">멤버십</option>
+                                                    <option value="RESERVE">예약</option>
+                                                    <option VALUE="ETC">기타</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="exampleFormControlTextarea1">문의 내용</label>
-                                                <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="문의하실 내용을 입력해주세요." rows="5"></textarea>
+                                                <label for="enquiryContent">문의 내용</label>
+                                                <textarea class="form-control" id="enquiryContent" placeholder="문의하실 내용을 입력해주세요." rows="5"></textarea>
                                             </div>
-                                            <button type="submit" class="btn btn-primary py-3 px-4 text-white">문의하기</button>
+                                            <button type="submit" class="btn btn-primary py-3 px-4 text-white enquiry-btn">문의하기</button>
                                         </form>
                                     </div>
                                 </div>
@@ -258,4 +258,56 @@
         </section>
     </th:block>
 </th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+
+        /* 문의하기 버튼 클릭시  */
+       $('.enquiry-btn').on('click', function (e) {
+            e.preventDefault();
+
+            if ([[${session.user == null}]]) {  // 로그인 전이라면 로그인 모달을 띄어주고 return false;
+                $("#loginModal").modal("show");
+
+                return false;
+            } else {    // 문의 생성
+                /*[# th:if = "${session.user != null}"]*/
+                    let enquiryType = $('#enquiryType option:selected').val();
+                    let content = $('#enquiryContent').val();
+                    let userId = [[${session.user.id}]];
+
+                    let enquiryDTO = {
+                        enquiryType : enquiryType,
+                        content : content,
+                        userId : userId
+                    }
+
+                    $.ajax({
+                        url: '/enquiry/create',
+                        type: 'post',
+                        data: JSON.stringify(enquiryDTO),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'text',
+                        success : function (result) {
+
+                            $('#enquiryForm')[0].reset();
+
+                            swal('문의', '문의 작성이 정상적으로 처리되었습니다.');
+                        },
+                        error : function(xhr, status, error) {
+                            let msg = '문의 작성에 실패하였습니다.\n' + xhr.responseText
+                            swal('문의', msg);
+                        }
+
+                    })
+                /*[/]*/
+            }
+
+
+
+
+
+        });
+    });
+</script>
 </html>

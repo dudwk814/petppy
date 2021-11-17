@@ -101,12 +101,6 @@ public class UserController {
         userDTO.setType(NORMAL);
 
 
-        /*if (userService.checkMemberIdExist(userDTO) == true) {
-
-            rttr.addFlashAttribute("checkEmail", true);
-
-            return "redirect:/user/signupForm";
-        }*/
 
         String name = userService.joinedMember(userDTO);
 
