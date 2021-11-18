@@ -22,6 +22,9 @@ public class EnquiryDTO {
     @NotBlank(message = "문의 내용을 입력해주세요!")
     private String content;
 
+    @NotBlank(message = "문의 제목을 입력해주세요!")
+    private String title;
+
     private String userEmail;
 
     private Long userId;

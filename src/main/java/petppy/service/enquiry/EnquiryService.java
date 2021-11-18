@@ -1,7 +1,10 @@
 package petppy.service.enquiry;
 
 import petppy.domain.enquiry.Enquiry;
+import petppy.domain.enquiry.EnquiryStatus;
 import petppy.domain.user.User;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 
 import java.util.List;
@@ -14,9 +17,13 @@ public interface EnquiryService {
 
     List<EnquiryDTO> findEnquiryListWithUserEmail(String email);
 
+    public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryList(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO);
+
     void changeEnquiry(EnquiryDTO enquiryDTO);
 
     void deleteEnquiry(Long id);
+
+    void changeEnquiryStatusToComplete(Long id);
 
     default Enquiry dtoToEntity(EnquiryDTO enquiryDTO) {
 
@@ -26,6 +33,8 @@ public interface EnquiryService {
                 .user(user)
                 .content(enquiryDTO.getContent())
                 .enquiryType(enquiryDTO.getEnquiryType())
+                .enquiryStatus(EnquiryStatus.BEFORE)
+                .title(enquiryDTO.getTitle())
                 .build();
     }
 
@@ -34,6 +43,7 @@ public interface EnquiryService {
                 .enquiryId(enquiry.getId())
                 .userId(enquiry.getUser().getId())
                 .userEmail(enquiry.getUser().getEmail())
+                .title(enquiry.getTitle())
                 .content(enquiry.getContent())
                 .enquiryType(enquiry.getEnquiryType())
                 .createdDate(enquiry.getCreatedDate())

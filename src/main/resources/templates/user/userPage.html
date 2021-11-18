@@ -33,10 +33,6 @@
                                     <span th:text="${#strings.equals(userDTO.membershipDTO.rating, 'NONE')}? 'NONE' : ${#temporals.format(userDTO.membershipDTO.modifiedDate, 'yyyy.MM.dd')} + '~' + ${#temporals.format(userDTO.membershipDTO.lastDate, 'yyyy.MM.dd')}"></span>
                                 </li>
                             </ul>
-                            <div class="card-body">
-                                <a href="#" class="card-link">Card link</a>
-                                <a href="#" class="card-link">Another link</a>
-                            </div>
                         </div>
                     </div>
                     <div class="col-md-7 pl-md-5 py-md-5">
@@ -52,10 +48,10 @@
                                 </div>
                             </div>
                             <div class="col-md-6 services-2 w-100 d-flex">
-                                <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-truck"></span></div>
+                                <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-question"></span></div>
                                 <div class="text pl-3">
-                                    <h4><a href="#">주문/배송 조회</a></h4>
-                                    <p>[[${userDTO.name}]]님께서 주문하신 상품의 주문 및 배송 정보 조회</p>
+                                    <h4><a th:href="@{/enquiry/enquiryList}">문의내역 확인</a></h4>
+                                    <p>[[${userDTO.name}]]님께서 문의하신 내역 확인</p>
                                 </div>
                             </div>
 

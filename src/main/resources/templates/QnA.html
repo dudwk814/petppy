@@ -243,6 +243,10 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
+                                                <label for="enquiryContent">문의 제목</label>
+                                                <input type="text" class="form-control" id="enquiryTitle" placeholder="문의하실 제목을 입력해주세요."></input>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="enquiryContent">문의 내용</label>
                                                 <textarea class="form-control" id="enquiryContent" placeholder="문의하실 내용을 입력해주세요." rows="5"></textarea>
                                             </div>
@@ -275,11 +279,13 @@
                     let enquiryType = $('#enquiryType option:selected').val();
                     let content = $('#enquiryContent').val();
                     let userId = [[${session.user.id}]];
+                    let title = $('#enquiryTitle').val();
 
                     let enquiryDTO = {
                         enquiryType : enquiryType,
                         content : content,
-                        userId : userId
+                        userId : userId,
+                        title : title
                     }
 
                     $.ajax({

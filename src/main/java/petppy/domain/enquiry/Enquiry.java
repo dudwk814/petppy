@@ -32,10 +32,21 @@ public class Enquiry extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EnquiryType enquiryType;
 
+    @Enumerated(EnumType.STRING)
+    private EnquiryStatus enquiryStatus;
+
+    @Column(name = "enquiry_title")
+    private String title;
+
     @Column(name = "enquiry_content")
     private String content;
 
     public void changeContent(String content) {
         this.content = content;
     }
+
+    public void changeEnquiryStatusToComplete() {
+        this.enquiryStatus = EnquiryStatus.COMPLETE;
+    }
+
 }
