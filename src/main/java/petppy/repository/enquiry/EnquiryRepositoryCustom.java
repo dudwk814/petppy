@@ -7,5 +7,5 @@ import petppy.dto.enquiry.EnquiryDTO;
 
 public interface EnquiryRepositoryCustom {
 
-    Page<Enquiry> findEnquiryList(EnquiryDTO enquiryDTO, PageRequestDTO pageRequestDTO);
+    Page<Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO pageRequestDTO);
 }

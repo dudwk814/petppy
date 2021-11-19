@@ -1,6 +1,7 @@
 package petppy.service.enquiry;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.enquiry.Enquiry;
@@ -11,6 +12,7 @@ import petppy.exception.EnquiryNotFoundException;
 import petppy.repository.enquiry.EnquiryRepository;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,8 +24,19 @@ public class EnquiryServiceImpl implements EnquiryService{
 
 
     @Override
-    public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryList(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO) {
-        return null;
+    public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO) {
+
+        Page<Enquiry> result = enquiryRepository.findEnquiryListWithPaging(enquiryDTO, requestDTO);
+
+        // 페이징 변수들
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+        Function<Enquiry, EnquiryDTO> fn = (enquiry -> entityToDTO(enquiry));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package petppy.repository.enquiry;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -8,7 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import petppy.domain.enquiry.Enquiry;
 import petppy.domain.enquiry.QEnquiry;
-import petppy.domain.notificaton.Notification;
+
+import static petppy.domain.user.QMembership.membership;
+import static petppy.domain.user.QUser.user;
+
+import petppy.domain.user.QMembership;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 
@@ -28,13 +33,14 @@ public class EnquiryRepositoryImpl implements EnquiryRepositoryCustom {
     }
 
     @Override
-    public Page<Enquiry> findEnquiryList(EnquiryDTO enquiryDTO, PageRequestDTO pageRequestDTO) {
+    public Page<Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO pageRequestDTO) {
 
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("id").descending());
 
         QueryResults<Enquiry> results = queryFactory
                 .selectFrom(enquiry)
-                .where(enquiry.user.email.eq(enquiryDTO.getUserEmail()))
+                .where(enquiry.user.email.eq(enquiryDTO.getUserEmail()), enquiryTypeEq(enquiryDTO), enquiryStatusEq(enquiryDTO))
+                .leftJoin(enquiry.user, user)
                 .fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -45,5 +51,23 @@ public class EnquiryRepositoryImpl implements EnquiryRepositoryCustom {
         long total = results.getTotal();
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+
+    private BooleanExpression enquiryTypeEq(EnquiryDTO enquiryDTO) {
+
+        if (enquiryDTO.getEnquiryType() == null) {
+            return null;
+        }
+
+        return enquiry.enquiryType.eq(enquiryDTO.getEnquiryType());
+    }
+
+    private BooleanExpression enquiryStatusEq(EnquiryDTO enquiryDTO) {
+        if (enquiryDTO.getEnquiryStatus() == null) {
+            return null;
+        }
+
+        return enquiry.enquiryStatus.eq(enquiryDTO.getEnquiryStatus());
     }
 }

@@ -17,7 +17,7 @@ public interface EnquiryService {
 
     List<EnquiryDTO> findEnquiryListWithUserEmail(String email);
 
-    public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryList(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO);
+    public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO);
 
     void changeEnquiry(EnquiryDTO enquiryDTO);
 
@@ -46,6 +46,7 @@ public interface EnquiryService {
                 .title(enquiry.getTitle())
                 .content(enquiry.getContent())
                 .enquiryType(enquiry.getEnquiryType())
+                .enquiryStatus(enquiry.getEnquiryStatus())
                 .createdDate(enquiry.getCreatedDate())
                 .updateDate(enquiry.getModifiedDate())
                 .build();

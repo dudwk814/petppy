@@ -5,10 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import petppy.domain.enquiry.Enquiry;
 import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 import petppy.service.enquiry.EnquiryService;
 
@@ -44,7 +47,12 @@ public class EnquiryController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/enquiryList")
-    public String enquiryList(HttpSession session, EnquiryDTO enquiryDTO, PageRequestDTO requestDTO) {
+    public String enquiryList(HttpSession session, Model model, EnquiryDTO enquiryDTO, PageRequestDTO requestDTO) {
+
+        String userEmail = (String) session.getAttribute("userEmail");
+        enquiryDTO.setUserEmail(userEmail);
+
+        model.addAttribute("enquiryList", enquiryService.findEnquiryListWithPaging(enquiryDTO, requestDTO));
 
         return "enquiry/enquiryList";
     }

@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+import petppy.domain.enquiry.Enquiry;
+import petppy.domain.enquiry.EnquiryStatus;
 import petppy.domain.enquiry.EnquiryType;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -45,6 +47,21 @@ class EnquiryServiceImplTest {
         List<EnquiryDTO> result = enquiryService.findEnquiryListWithUserEmail("kj99658103@gmail.com");
 
         result.stream().forEach(enquiryDTO -> System.out.println("enquiryDTO = " + enquiryDTO));
+    }
+
+    @Test
+    public void 이메일로_문의_리스트_조회_페이징() throws Exception {
+
+        EnquiryDTO enquiryDTO = EnquiryDTO.builder().userEmail("kj99658103@gmail.com").enquiryType(EnquiryType.MEMBERSHIP).enquiryStatus(EnquiryStatus.COMPLETE).build();
+        PageRequestDTO requestDTO = new PageRequestDTO();
+
+        PageResultDTO<EnquiryDTO, Enquiry> result = enquiryService.findEnquiryListWithPaging(enquiryDTO, requestDTO);
+
+        List<EnquiryDTO> content = result.getDtoList();
+
+        for (EnquiryDTO dto : content) {
+            System.out.println("dto = " + dto);
+        }
     }
 
     @Test

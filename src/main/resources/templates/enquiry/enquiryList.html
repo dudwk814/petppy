@@ -25,39 +25,55 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <a href="#" class="text-black-50"><b>Cras justo odio</b></a>
-                                <span class="badge badge-success badge-pill">답변 완료</span>
-                            </li>
-                            <li class="list-group-item">
-                                Dapibus ac facilisis in
-                                <span class="badge badge-danger badge-pill">처리중</span>
-                            </li>
-                        </ul>
+                        <table class="table">
+                            <thead>
+                            <tr class="table-active" th:align="center">
+                                <th scope="col">문의 번호</th>
+                                <th scope="col">문의 제목</th>
+                                <th scope="col">문의 종류</th>
+                                <th scope="col">문의 상태</th>
+                                <th scope="col">문의 삭제</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="enquiryList, i : ${enquiryList.dtoList}" th:align="center">
+
+                                <!-- 번호 -->
+                                <th th:text="${enquiryList.enquiryId}" scope="row"></th>
+
+                                <!-- 문의 제목-->
+                                <td><a href="#" class="enquiryList" th:data-id="${enquiryList.enquiryId}" th:text="${enquiryList.title}"></a></td>
+
+                                <!-- 문의 종류 -->
+                                <td class="enquiryType" th:if="${#strings.toString(enquiryList.enquiryType)} == 'MEMBERSHIP'">멤버십</td>
+                                <td class="enquiryType" th:if="${#strings.toString(enquiryList.enquiryType)} == 'RESERVE'">예약</td>
+                                <td class="enquiryType" th:if="${#strings.toString(enquiryList.enquiryType)} == 'ETC'">기타</td>
+
+                                <!-- 문의 상태 -->
+                                <td th:if="${#strings.toString(enquiryList.enquiryStatus)} == 'COMPLETE'" class="text-success">답변 완료</td>
+                                <td th:unless="${#strings.toString(enquiryList.enquiryStatus)} == 'COMPLETE'" class="text-danger">처리 중</td>
+
+                                <!-- 문의 삭제 -->
+                                <td th:if="${#strings.toString(enquiryList.enquiryStatus)} == 'BEFORE'"><button type="button" class="btn btn-outline-secondary reserve-cancel-btn">취소</button></td>
+                                <td th:unless="${#strings.toString(enquiryList.enquiryStatus)} == 'BEFORE'"><button type="button" class="btn btn-outline-secondary reserve-cancel-btn" disabled>취소</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <div class="col text-center">
-                        <div class="block-27">
-                            <ul>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
 
+                </div>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
+                        <li th:if="${enquiryList.prev}" class="page-item">
+                            <a class="page-link" th:href="@{/enquiry/enquiryList(page = ${enquiryList.start - 1})}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
+                        <li th:each="page : ${enquiryList.pageList}" th:class="${enquiryList.page == page ? 'active page-item':'page-item'}"><a th:href="@{/enquiry/enquiryList(page=${page}, size=${enquiryList.size})}" th:data-page="${page}" class="page-link">[[${page}]]</a></li>
+                        <li th:if="${enquiryList.next}" class="page-item">
+                            <a class="page-link" th:href="@{/enquiry/enquiryList(page = ${enquiryList.end + 1})}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -65,6 +81,57 @@
                 </nav>
             </div>
         </section>
+
+        <div class="modal fade" id="enquiryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">문의 및 답변</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="hr-sect">문의</div>
+                            <div class="form-group">
+                                <label for="enquiryTitle" class="col-form-label">문의 제목</label>
+                                <input type="text" class="form-control" id="enquiryTitle" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="enquiryType" class="col-form-label">문의 종류</label>
+                                <input type="text" class="form-control" id="enquiryType" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="enquiryContent" class="col-form-label">문의 내용</label>
+                                <textarea class="form-control" id="enquiryContent" rows="5" disabled></textarea>
+                            </div>
+
+                            <div class="hr-sect">답변</div>
+                            <div class="form-group">
+                                <label for="enquiryAnswer" class="col-form-label">문의 답변</label>
+                                <textarea class="form-control" id="enquiryAnswer" rows="5" disabled></textarea>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </th:block>
 </th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+
+        $('.enquiryList').on('click', function (e) {
+            e.preventDefault();
+
+            $('#enquiryModal').modal("show");
+        })
+    });
+</script>
 </html>
