@@ -13,6 +13,7 @@ import petppy.domain.enquiry.Enquiry;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.dto.enquiry.EnquiryDTO;
+import petppy.dto.reserve.ReserveDTO;
 import petppy.service.enquiry.EnquiryService;
 
 import javax.servlet.http.HttpSession;
@@ -55,5 +56,21 @@ public class EnquiryController {
         model.addAttribute("enquiryList", enquiryService.findEnquiryListWithPaging(enquiryDTO, requestDTO));
 
         return "enquiry/enquiryList";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @ResponseBody
+    @PostMapping("/delete")
+    public ResponseEntity<Boolean> delete(HttpSession session, EnquiryDTO enquiryDTO) {
+
+        String userEmail = (String) session.getAttribute("userEmail");
+
+        if (userEmail.equals(enquiryDTO.getUserEmail()) != true) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        enquiryService.deleteEnquiry(enquiryDTO.getEnquiryId());
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

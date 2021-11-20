@@ -102,12 +102,12 @@
         $('.reserve-cancel-btn').on('click', function (e) {
             e.preventDefault();
 
-            var id = $(this).closest('tr').data('id');
-            var userId = $(this).closest('tr').data('user');
-            var servicesId = $(this).closest('tr').data('service');
+            let id = $(this).closest('tr').data('id');
+            let userId = $(this).closest('tr').data('user');
+            let servicesId = $(this).closest('tr').data('service');
 
-            var reserveCancelBtn = $(this);
-            var reserveStatus = $(this).closest('tr').find('.reserveStatus');
+            let reserveCancelBtn = $(this);
+            let reserveStatus = $(this).closest('tr').find('.reserveStatus');
 
             swal("예약을 취소하시겠습니까?", {
                 buttons: {

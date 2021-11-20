@@ -54,8 +54,7 @@
                                 <td th:unless="${#strings.toString(enquiryList.enquiryStatus)} == 'COMPLETE'" class="text-danger">처리 중</td>
 
                                 <!-- 문의 삭제 -->
-                                <td th:if="${#strings.toString(enquiryList.enquiryStatus)} == 'BEFORE'"><button type="button" class="btn btn-outline-secondary reserve-cancel-btn">취소</button></td>
-                                <td th:unless="${#strings.toString(enquiryList.enquiryStatus)} == 'BEFORE'"><button type="button" class="btn btn-outline-secondary reserve-cancel-btn" disabled>취소</button></td>
+                                <td><button type="button" th:data-id="${enquiryList.enquiryId}" th:data-email="${enquiryList.userEmail}" class="btn btn-outline-secondary enquiryDeleteBtn">삭제</button></td>
                             </tr>
                             </tbody>
                         </table>
@@ -127,11 +126,65 @@
 <script th:inline="javascript">
     $(document).ready(function (e) {
 
+        /* 문의 내용 상세보기 및 답변보기 모달 생성 */
         $('.enquiryList').on('click', function (e) {
             e.preventDefault();
 
             $('#enquiryModal').modal("show");
+        });
+
+        /* 문의 삭제버튼 클릭시 문의 삭제 */
+        $('.enquiryDeleteBtn').on('click', function (e) {
+
+            let id = $(this).data('id');
+            let email = $(this).data('email');
+
+            swal("문의를 삭제하시겠습니까?", {
+                buttons: {
+                    cancel: "닫기",
+                    catch: {
+                        text: "삭제",
+                        value: "delete",
+                    }
+                },
+            }).then((value) => {
+                if (value) {
+
+
+                    $.ajax({
+                        url: '/enquiry/delete',
+                        type: 'post',
+                        data: {
+                            enquiryId: id,
+                            userEmail: email,
+                        },
+                        success: function (result) {
+                            if (result) {
+                                swal({
+                                    title: "문의 삭제",
+                                    text: "문의가 성공적으로 삭제되었습니다.",
+                                    icon: "success",
+                                    button: true,
+                                })
+                                    .then((willDelete) => {
+                                        if (willDelete) {
+                                            self.location.reload(); // 문의 삭제 성공시 페이지 리로드
+                                        }
+                                    });
+
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            swal('문의 삭제', '문의 삭제에 실패하였습니다.');
+                        }
+                    })
+
+                }
+            });
         })
+
+
     });
 </script>
 </html>

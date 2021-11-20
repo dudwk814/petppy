@@ -230,6 +230,7 @@
        let email = [[${session.user.email}]];
 
 
+       /* 결제 취소 버튼 클릭시 확인 후 결제 취소 */
        $(document).on('click', '.membership-cancel-btn',  function (e) {
            e.preventDefault();
 
@@ -237,7 +238,22 @@
 
            console.log(currentRating);
 
-           cancelMembershipRequest(email);
+           swal("예약을 취소하시겠습니까?", {
+               buttons: {
+                   cancel: "닫기",
+                   catch: {
+                       text: "멤버십 해지",
+                       value: "cancel",
+                   }
+               },
+           }).then((value) => {
+               if (value) {
+                   cancelMembershipRequest(email);
+               }
+
+       })
+
+
        });
 
 
