@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.enquiry.Enquiry;
+import petppy.domain.enquiry.EnquiryStatus;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.dto.enquiry.EnquiryCountDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 import petppy.exception.EnquiryNotFoundException;
 import petppy.repository.enquiry.EnquiryRepository;
@@ -56,6 +58,11 @@ public class EnquiryServiceImpl implements EnquiryService{
         List<Enquiry> result = enquiryRepository.findByUserEmail(email);
 
         return result.stream().map(enquiry -> entityToDTO(enquiry)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EnquiryCountDTO> countByEnquiryWithEnquiryType(EnquiryStatus enquiryStatus) {
+        return enquiryRepository.countByEnquiryWithEnquiryType(enquiryStatus);
     }
 
     @Transactional

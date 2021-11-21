@@ -5,6 +5,7 @@ import petppy.domain.enquiry.EnquiryStatus;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.dto.enquiry.EnquiryCountDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface EnquiryService {
     EnquiryDTO findEnquiry(Long id);
 
     List<EnquiryDTO> findEnquiryListWithUserEmail(String email);
+
+    List<EnquiryCountDTO> countByEnquiryWithEnquiryType(EnquiryStatus enquiryStatus);
 
     public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO);
 

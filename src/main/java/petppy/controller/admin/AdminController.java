@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import petppy.domain.enquiry.EnquiryStatus;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.ServicesType;
@@ -14,12 +15,14 @@ import petppy.domain.user.Rating;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.dto.enquiry.EnquiryCountDTO;
 import petppy.dto.reserve.ReserveCountDTO;
 import petppy.dto.reserve.ReserveDTO;
 import petppy.dto.user.MembershipCountDTO;
 import petppy.dto.user.UserDTO;
 import petppy.repository.reserve.ReserveRepository;
 import petppy.repository.user.MembershipRepository;
+import petppy.service.enquiry.EnquiryService;
 import petppy.service.reserve.ReserveService;
 import petppy.service.user.UserService;
 
@@ -34,14 +37,17 @@ public class AdminController {
     private final UserService userService;
     private final ReserveRepository reserveRepository;
     private final ReserveService reserveService;
+    private final EnquiryService enquiryService;
 
     @GetMapping("")
     @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
     public String adminPage(Model model) {
 
-        List<MembershipCountDTO> membershipCountDTOS = membershipRepository.countByMembershipWithRating();
         int userCount = 0;
         int reserveCount = 0;
+        int enquiryCount = 0;
+
+        List<MembershipCountDTO> membershipCountDTOS = membershipRepository.countByMembershipWithRating();
 
         for (MembershipCountDTO membershipCountDTO : membershipCountDTOS) {
             userCount += membershipCountDTO.getCount();
@@ -55,9 +61,17 @@ public class AdminController {
             model.addAttribute(reserveCountDTO.getServicesType().toString(), reserveCountDTO);  // key: DOG_WALK, PET_GROOMING, VET_VISIT
         }
 
+        List<EnquiryCountDTO> enquiryCountDTOS = enquiryService.countByEnquiryWithEnquiryType(EnquiryStatus.BEFORE);
+        for (EnquiryCountDTO enquiryCountDTO : enquiryCountDTOS) {
+            enquiryCount += enquiryCountDTO.getCount();
+            model.addAttribute(enquiryCountDTO.getEnquiryType().toString(), enquiryCountDTO);
+        }
+
+
 
         model.addAttribute("userCount", userCount);
         model.addAttribute("reserveCount", reserveCount);
+        model.addAttribute("enquiryCount", enquiryCount);
 
         return "admin/adminPage";
     }

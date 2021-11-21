@@ -42,7 +42,7 @@
                     <div class="card text-center border-primary rounded">
                         <div class="card-body">
                             <p class="card-title text-primary">문의</p>
-                            <h5>55</h5>
+                            <h5>[[${enquiryCount}]]</h5>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                            aria-controls="profile" aria-selected="false">예약</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                        <a class="nav-link" id="enquiry-tab" data-toggle="tab" href="#enquiry" role="tab"
                            aria-controls="contact" aria-selected="false">문의</a>
                     </li>
                 </ul>
@@ -298,7 +298,107 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                    <div class="tab-pane fade" id="enquiry" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row mt-5">
+                        </div>
+                        <div class="card-deck">
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">총 문의 수</p>
+                                    <h5>[[${enquiryCount}]]</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">멤버십</p>
+                                    <h5 class="membershipEnquiryCount" th:if="${MEMBERSHIP} != null">[[${MEMBERSHIP.count}]]</h5>
+                                    <h5 class="membershipEnquiryCount" th:unless="${MEMBERSHIP} != null">0</h5>
+                                </div>
+                            </div>
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">예약</p>
+                                    <h5 class="reserveEnquiryCount" th:if="${RESERVE} != null">[[${RESERVE.count}]]</h5>
+                                    <h5 class="reserveEnquiryCount" th:unless="${RESERVE} != null">0</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">기타</p>
+                                    <h5 class="etcEnquiryCount" th:if="${ETC} != null">[[${ETC.count}]]</h5>
+                                    <h5 class="etcEnquiryCount" th:unless="${ETC} != null">0</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-header text-center">
+                                    문의 테이블
+                                </div>
+                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 500px !important;">
+                                    <select class="custom-select" name="enquiryStatus" id="enquiryStatus" style="height: 52px !important;">
+                                        <option value="" selected>문의 타입</option>
+                                        <option value="BEFORE">처리 중</option>
+                                        <option value="COMPLETE">답변 완료</option>
+                                    </select>
+                                    <select class="custom-select" name="enquiryType" id="enquiryType" style="height: 52px !important;">
+                                        <option value="" selected>문의 종류</option>
+                                        <option value="MEMBERSHIP">멤버십</option>
+                                        <option value="RESERVE">예약</option>
+                                        <option value="ETC">기타</option>
+                                    </select>
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control enquiry-keyword" placeholder="이름 OR 이메일 OR 제목" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary enquiry-search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2">
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">문의 번호</th>
+                                                <th scope="col" class="text-center">이름</th>
+                                                <th scope="col" class="text-center">제목</th>
+                                                <th scope="col" class="text-center">문의 종류</th>
+                                                <th scope="col" class="text-center">답변 상태</th>
+                                                <th scope="col" class="text-center"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="enquiry-tbody">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer enquirye-table-pagination">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
@@ -888,6 +988,16 @@
                 }
             });
         })
+
+        /* 문의 탭 클릭 시 문의 테이블 정보 조회 */
+        $('#enquiry-tab').on('click', function (e) {
+
+        });
+
+        /* 문의 테이블 조회 */
+        function enquiryList(page) {
+            var page = page || 1;
+        }
 
 
         /* 페이지 버튼 클릭 시 페이지 변경 */

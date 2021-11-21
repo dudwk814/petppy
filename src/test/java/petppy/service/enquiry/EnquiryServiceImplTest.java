@@ -10,6 +10,7 @@ import petppy.domain.enquiry.EnquiryStatus;
 import petppy.domain.enquiry.EnquiryType;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.dto.enquiry.EnquiryCountDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 
 import java.util.List;
@@ -68,6 +69,16 @@ class EnquiryServiceImplTest {
     @Commit
     public void 문의_삭제() throws Exception {
         enquiryService.deleteEnquiry(2L);
+    }
+
+    @Test
+    public void 문의_종류_별_카운트() throws Exception {
+
+        List<EnquiryCountDTO> result = enquiryService.countByEnquiryWithEnquiryType(EnquiryStatus.BEFORE);
+
+        for (EnquiryCountDTO enquiryCountDTO : result) {
+            System.out.println("enquiryCountDTO = " + enquiryCountDTO);
+        }
     }
 
 }
