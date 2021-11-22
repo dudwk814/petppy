@@ -29,6 +29,8 @@ public class EnquiryDTO {
 
     private String userEmail;
 
+    private String userName;
+
     private Long userId;
 
     private LocalDateTime createdDate;

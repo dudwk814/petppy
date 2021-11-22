@@ -366,6 +366,7 @@
                                                 <th scope="col" class="text-center">이름</th>
                                                 <th scope="col" class="text-center">제목</th>
                                                 <th scope="col" class="text-center">문의 종류</th>
+                                                <th scope="col" class="text-center">문의 날짜</th>
                                                 <th scope="col" class="text-center">답변 상태</th>
                                                 <th scope="col" class="text-center"></th>
                                             </tr>
@@ -375,7 +376,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="card-footer enquirye-table-pagination">
+                                    <div class="card-footer enquiry-table-pagination">
                                         <nav aria-label="Page navigation">
                                             <ul class="pagination justify-content-center">
                                                 <li class="page-item">
@@ -486,11 +487,12 @@
                 </div>
             </div>
         </div>
+        <!-- 예약 모달 -->
         <div class="modal fade" tabindex="-1" id="reserveModal" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">예약 정보 정보</h5>
+                        <h5 class="modal-title">예약 정보</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -565,6 +567,67 @@
             </div>
         </div>
 
+
+    <!-- 문의 모달 -->
+        <div class="modal fade" tabindex="-1" id="enquiryModal" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">문의 정보</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="enquiry-modal-form">
+                            <div class="enquiry-div">
+                                <div class="form-group">
+                                    <label for="enquiryType">문의 종류</label>
+                                    <input type="text" class="form-control" name="enquiryType" placeholder="문의하실 제목을 입력해주세요." disabled></input>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enquiryTitle">문의 제목</label>
+                                    <input type="text" class="form-control" name="enquiryTitle" placeholder="문의하실 제목을 입력해주세요." disabled></input>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="userName">문의자 이름</label>
+                                            <input type="text" class="form-control" name="userName" placeholder="문의작성자 이름" disabled></input>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="userEmail">문의자 이메일</label>
+                                            <input type="text" class="form-control" name="userEmail" placeholder="문의작성자 이메일" disabled></input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enquiryContent">문의 내용</label>
+                                    <textarea class="form-control" name="enquiryContent" placeholder="문의하실 내용을 입력해주세요." disabled rows="5"></textarea>
+                                </div>
+
+                                <div class="row mt-5">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="answerContent">답변 내용</label>
+                                    <textarea class="form-control" name="answerContent" id="answerContent" placeholder="문의하실 내용을 입력해주세요." rows="5"></textarea>
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger enquiry-answer-btn">답변작성</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </th:block>
 </th:block>
 <script th:inline="javascript">
@@ -989,15 +1052,119 @@
             });
         })
 
+        /* 문의 검색 버튼 클릭시 문의 조회 */
+        $('.enquiry-search-btn').on('click', function (e) {
+            e.preventDefault();
+
+            enquiryList(1);
+
+        });
+
         /* 문의 탭 클릭 시 문의 테이블 정보 조회 */
         $('#enquiry-tab').on('click', function (e) {
-
+            enquiryList(1)
         });
 
         /* 문의 테이블 조회 */
         function enquiryList(page) {
             var page = page || 1;
+
+            let enquiryListTable = "";
+            let pagination = "";
+            let enquiryType = $('select[name="enquiryType"] option:selected').val().trim() === "" ? "" : $('select[name="enquiryType"] option:selected').val().trim();
+            let enquiryStatus = $('select[name="enquiryStatus"] option:selected').val().trim() === "" ? "" : $('select[name="enquiryStatus"] option:selected').val().trim();
+            let keyword = $('.enquiry-keyword').val().trim() === "" ? "" : $('.enquiry-keyword').val().trim();
+
+            $.ajax({
+                url: '/admin/enquiry/' + page,
+                type: 'get',
+                contentType:'application/json; charset=utf-8',
+                data: {
+                    'page' : page,
+                    'keyword' : keyword,
+                    'enquiryType' : enquiryType,
+                    'enquiryStatus' : enquiryStatus
+                },
+                success: function (result) {
+                    if (result.totalElements == 0){
+                        swal('문의 검색', '조건에 맞는 문의가 없습니다.');
+                        return false;
+                    }
+                    // 문의 테이블
+                    console.log(result.totalElements);
+                    $.each(result.dtoList, function (index, enquiryList) {
+                        let enquiryType = "";
+                        let enquiryStatus = "";
+
+                        // 문의 타입에 따른 서비스 한글화
+                        if (enquiryList.enquiryType == "MEMBERSHIP") {
+                            enquiryType = "멤버십";
+                        } else if(enquiryList.enquiryType == "RESERVE") {
+                            enquiryType = "예약";
+                        } else if(enquiryList.enquiryType == "ETC") {
+                            enquiryType = "기타";
+                        }
+
+                        // 문의 상태 한글화
+                        if (enquiryList.enquiryStatus == "BEFORE"){
+                            enquiryStatus = "답변 전";
+                        } else if (enquiryList.enquiryStatus == "COMPLETE"){
+                            enquiryStatus = "답변 완료";
+                        }
+
+                        enquiryListTable += '<tr aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">' +
+                            '<th scope="row" class="text-center">' + enquiryList.enquiryId + '</th>' +
+                            '<td class="text-center">' + enquiryList.userName + '</td>' +
+                            '<td class="text-center">' + enquiryList.title + '</td>' +
+                            '<td class="text-center">' + enquiryType + '</td>' +
+                            '<td class="text-center">' + enquiryList.createdDate + '</td>' +
+                            '<td class="text-center">' + enquiryStatus + '</td>' +
+                            '<td class="text-center"><a href="#" class="enquiry-modal-btn" data-id="' + enquiryList.enquiryId +'">자세히 보기</a></td>' +
+                            '</tr> ';
+                    });
+
+                    $('.enquiry-tbody').html(enquiryListTable);
+
+                    // 예약 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="enquiry" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" data-type="enquiry" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="enquiry" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.enquiry-table-pagination').html(pagination);
+
+                    console.log(result);
+                }
+            })
         }
+
+        /* 문의 자세히보기 및 답변 모달 */
+        $(document).on('click', '.enquiry-modal-btn', function (e) {
+            e.preventDefault();
+
+            $('#enquiryModal').modal("show");
+        })
 
 
         /* 페이지 버튼 클릭 시 페이지 변경 */
@@ -1013,6 +1180,8 @@
                 userList(page);
             } else if (type == "reserve") {
                 reserveList(page)
+            } else if(type == "enquiry") {
+                enquiryList(page)
             }
 
 
@@ -1031,6 +1200,8 @@
                 userList(page);
             } else if (type == "reserve") {
                 reserveList(page)
+            } else if(type == "enquiry") {
+                enquiryList(page)
             }
         });
 
@@ -1047,6 +1218,8 @@
                 userList(page);
             } else if (type == "reserve") {
                 reserveList(page)
+            } else if(type == "enquiry") {
+                enquiryList(page)
             }
         });
     });

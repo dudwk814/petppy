@@ -25,10 +25,27 @@ public class EnquiryServiceImpl implements EnquiryService{
     private final EnquiryRepository enquiryRepository;
 
 
+
     @Override
     public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO) {
 
         Page<Enquiry> result = enquiryRepository.findEnquiryListWithPaging(enquiryDTO, requestDTO);
+
+        // 페이징 변수들
+        int page = result.getNumber() + 1;
+        int size = result.getSize();
+        int totalPages = result.getTotalPages();
+        long totalElements = result.getTotalElements();
+
+        Function<Enquiry, EnquiryDTO> fn = (enquiry -> entityToDTO(enquiry));
+
+        return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
+    }
+
+    @Override
+    public PageResultDTO<EnquiryDTO, Enquiry> searchEnquiryList(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO) {
+
+        Page<Enquiry> result = enquiryRepository.searchEnquiryList(enquiryDTO, requestDTO);
 
         // 페이징 변수들
         int page = result.getNumber() + 1;

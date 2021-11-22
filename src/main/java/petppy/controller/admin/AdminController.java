@@ -7,7 +7,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import petppy.domain.enquiry.Enquiry;
 import petppy.domain.enquiry.EnquiryStatus;
+import petppy.domain.enquiry.EnquiryType;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.ServicesType;
@@ -16,6 +18,7 @@ import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.dto.enquiry.EnquiryCountDTO;
+import petppy.dto.enquiry.EnquiryDTO;
 import petppy.dto.reserve.ReserveCountDTO;
 import petppy.dto.reserve.ReserveDTO;
 import petppy.dto.user.MembershipCountDTO;
@@ -39,6 +42,11 @@ public class AdminController {
     private final ReserveService reserveService;
     private final EnquiryService enquiryService;
 
+    /**
+     * 관리자 페이지
+     * @param model
+     * @return
+     */
     @GetMapping("")
     @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
     public String adminPage(Model model) {
@@ -76,6 +84,13 @@ public class AdminController {
         return "admin/adminPage";
     }
 
+    /**
+     * 회원 검색
+     * @param page
+     * @param keyword
+     * @param rating
+     * @return
+     */
     @GetMapping("/user/{page}")
     @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
     @ResponseBody
@@ -89,6 +104,14 @@ public class AdminController {
         return new ResponseEntity<>(userService.searchUser(requestDTO), HttpStatus.OK);
     }
 
+    /**
+     * 예약 검색
+     * @param page
+     * @param keyword
+     * @param reserveType
+     * @param servicesType
+     * @return
+     */
     @GetMapping("/reserve/{page}")
     @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
     @ResponseBody
@@ -102,5 +125,19 @@ public class AdminController {
 
 
         return new ResponseEntity<>(reserveService.searchReserve(reserveDTO, pageRequestDTO), HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated() and hasRole('ADMIN')")
+    @ResponseBody
+    @GetMapping("/enquiry/{page}")
+    public ResponseEntity<PageResultDTO<EnquiryDTO, Enquiry>> enquiryList(@PathVariable("page") int page, String keyword, EnquiryType enquiryType, EnquiryStatus enquiryStatus) {
+
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setPage(page);
+        pageRequestDTO.setKeyword(keyword);
+
+        EnquiryDTO enquiryDTO = EnquiryDTO.builder().enquiryStatus(enquiryStatus).enquiryType(enquiryType).build();
+
+        return new ResponseEntity<>(enquiryService.searchEnquiryList(enquiryDTO, pageRequestDTO), HttpStatus.OK);
     }
 }

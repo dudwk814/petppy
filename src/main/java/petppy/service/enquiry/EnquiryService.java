@@ -20,7 +20,9 @@ public interface EnquiryService {
 
     List<EnquiryCountDTO> countByEnquiryWithEnquiryType(EnquiryStatus enquiryStatus);
 
-    public PageResultDTO<EnquiryDTO, Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO);
+    PageResultDTO<EnquiryDTO, Enquiry> findEnquiryListWithPaging(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO);
+
+    PageResultDTO<EnquiryDTO, Enquiry> searchEnquiryList(EnquiryDTO enquiryDTO, PageRequestDTO requestDTO);
 
     void changeEnquiry(EnquiryDTO enquiryDTO);
 
@@ -46,6 +48,7 @@ public interface EnquiryService {
                 .enquiryId(enquiry.getId())
                 .userId(enquiry.getUser().getId())
                 .userEmail(enquiry.getUser().getEmail())
+                .userName(enquiry.getUser().getName())
                 .title(enquiry.getTitle())
                 .content(enquiry.getContent())
                 .enquiryType(enquiry.getEnquiryType())

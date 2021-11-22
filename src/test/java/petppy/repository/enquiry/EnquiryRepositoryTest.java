@@ -32,11 +32,14 @@ class EnquiryRepositoryTest {
     @Commit
     public void 문의_생성() throws Exception {
 
-        User user = userRepository.findById(1L).orElseThrow(UserNotFoundException::new);
+        for (int i = 0; i < 435; i++) {
+            User user = userRepository.findById(1L).orElseThrow(UserNotFoundException::new);
 
-        Enquiry enquiry = Enquiry.builder().user(user).enquiryType(EnquiryType.MEMBERSHIP).content("TEST Enquiry").build();
+            Enquiry enquiry = Enquiry.builder().user(user).enquiryType(EnquiryType.MEMBERSHIP).content("TEST Enquiry" + i).title("TEST Enquiry" + i).build();
 
-        enquiryRepository.save(enquiry);
+            enquiryRepository.save(enquiry);
+        }
+
     }
 
     @Test

@@ -53,10 +53,24 @@ class EnquiryServiceImplTest {
     @Test
     public void 이메일로_문의_리스트_조회_페이징() throws Exception {
 
-        EnquiryDTO enquiryDTO = EnquiryDTO.builder().userEmail("kj99658103@gmail.com").enquiryType(EnquiryType.MEMBERSHIP).enquiryStatus(EnquiryStatus.COMPLETE).build();
+        EnquiryDTO enquiryDTO = EnquiryDTO.builder().enquiryType(EnquiryType.MEMBERSHIP).enquiryStatus(EnquiryStatus.COMPLETE).build();
         PageRequestDTO requestDTO = new PageRequestDTO();
 
         PageResultDTO<EnquiryDTO, Enquiry> result = enquiryService.findEnquiryListWithPaging(enquiryDTO, requestDTO);
+
+        List<EnquiryDTO> content = result.getDtoList();
+
+        for (EnquiryDTO dto : content) {
+            System.out.println("dto = " + dto);
+        }
+    }
+
+    @Test
+    public void 관리자용_문의_조회() throws Exception {
+        EnquiryDTO enquiryDTO = EnquiryDTO.builder().enquiryType(EnquiryType.MEMBERSHIP).build();
+        PageRequestDTO requestDTO = new PageRequestDTO();
+
+        PageResultDTO<EnquiryDTO, Enquiry> result = enquiryService.searchEnquiryList(enquiryDTO, requestDTO);
 
         List<EnquiryDTO> content = result.getDtoList();
 
