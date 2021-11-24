@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import petppy.domain.BaseTimeEntity;
+import petppy.domain.answer.Answer;
 import petppy.domain.user.User;
 
 import javax.persistence.*;
@@ -40,6 +41,9 @@ public class Enquiry extends BaseTimeEntity {
 
     @Column(name = "enquiry_content")
     private String content;
+
+    @OneToOne(mappedBy = "enquiry", cascade = CascadeType.ALL)
+    private Answer answer;
 
     public void changeContent(String content) {
         this.content = content;

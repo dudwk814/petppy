@@ -10,10 +10,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import petppy.domain.enquiry.Enquiry;
+import petppy.domain.user.Role;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 import petppy.dto.reserve.ReserveDTO;
+import petppy.dto.user.UserDTO;
 import petppy.service.enquiry.EnquiryService;
 
 import javax.servlet.http.HttpSession;
@@ -44,6 +46,22 @@ public class EnquiryController {
         enquiryService.createEnquiry(enquiryDTO);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{enquiryId}")
+    public ResponseEntity<EnquiryDTO> findEnquiry(@PathVariable("enquiryId") Long enquiryId, String email, HttpSession session) {
+
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+
+        String userEmail = userDTO.getEmail();
+        Role userRole = userDTO.getRole();
+
+        if (email.equals(userEmail) || userRole == Role.ADMIN) {
+            return new ResponseEntity<>(enquiryService.findEnquiry(enquiryId), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PreAuthorize("isAuthenticated()")

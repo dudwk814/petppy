@@ -583,11 +583,15 @@
                             <div class="enquiry-div">
                                 <div class="form-group">
                                     <label for="enquiryType">문의 종류</label>
-                                    <input type="text" class="form-control" name="enquiryType" placeholder="문의하실 제목을 입력해주세요." disabled></input>
+                                    <input type="text" class="form-control" name="enquiryType" placeholder="문의 종류를 선택해주세요." disabled></input>
                                 </div>
                                 <div class="form-group">
                                     <label for="enquiryTitle">문의 제목</label>
                                     <input type="text" class="form-control" name="enquiryTitle" placeholder="문의하실 제목을 입력해주세요." disabled></input>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enquiryDate">문의 날짜</label>
+                                    <input type="text" class="form-control" name="enquiryDate" placeholder="문의하실 제목을 입력해주세요." disabled></input>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -623,7 +627,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger enquiry-answer-btn">답변작성</button>
+                        <button type="button" class="btn btn-success enquiry-answer-btn">답변작성</button>
                     </div>
                 </div>
             </div>
@@ -1117,9 +1121,9 @@
                             '<td class="text-center">' + enquiryList.userName + '</td>' +
                             '<td class="text-center">' + enquiryList.title + '</td>' +
                             '<td class="text-center">' + enquiryType + '</td>' +
-                            '<td class="text-center">' + enquiryList.createdDate + '</td>' +
+                            '<td class="text-center">' + get_date_str(enquiryList.createdDate) + '</td>' +
                             '<td class="text-center">' + enquiryStatus + '</td>' +
-                            '<td class="text-center"><a href="#" class="enquiry-modal-btn" data-id="' + enquiryList.enquiryId +'">자세히 보기</a></td>' +
+                            '<td class="text-center"><a href="#" class="enquiry-modal-btn" data-email="' + enquiryList.userEmail +'" data-id="' + enquiryList.enquiryId +'">자세히 보기</a></td>' +
                             '</tr> ';
                     });
 
@@ -1140,7 +1144,7 @@
 
                         let active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
-                        pagination += '<a class="page-link page-num" data-type="enquiry" data-page="' + page +'" href="#">' + page + '</a></li>'
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="enquiry" data-page="' + page +'" href="#">' + page + '</a></li>'
                     })
 
                     if (result.next) {
@@ -1163,12 +1167,53 @@
         $(document).on('click', '.enquiry-modal-btn', function (e) {
             e.preventDefault();
 
+            let form = $('.enquiry-modal-form');
+            let enquiryId = $(this).data('id');
+            let email = $(this).data('email');
+            let enquiryType = $("input[name='enquiryType']");
+            let enquiryDate = $("input[name='enquiryDate']");
+            let enquiryTitle = $('input[name="enquiryTitle"]');
+            let userName = $('input[name="userName"]');
+            let userEmailInput = $('input[name="userEmail"]');
+            let enquiryContent = $('textarea[name="enquiryContent"]');
+
+            // 모달 input 초기화
+            form[0].reset();
+
+
+            $.ajax({
+                url: '/enquiry/' + enquiryId,
+                type: 'get',
+                data: {
+                    'enquiryId' : enquiryId,
+                    'email' : email
+                },
+                dataType: 'json',
+                success: function (result) {
+
+                    enquiryTitle.val(result.title);
+                    userName.val(result.userName);
+                    userEmailInput.val(result.userEmail);
+                    enquiryContent.val(result.content);
+                    enquiryDate.val(get_date_str(result.createdDate));
+
+                    // 문의 타입에 따른 서비스 한글화
+                    if (result.enquiryType == "MEMBERSHIP") {
+                        enquiryType.val("멤버십");
+                    } else if(result.enquiryType == "RESERVE") {
+                        enquiryType.val("예약");
+                    } else if(result.enquiryType == "ETC") {
+                        enquiryType.val("기타");
+                    }
+                }
+            })
+
             $('#enquiryModal').modal("show");
         })
 
 
         /* 페이지 버튼 클릭 시 페이지 변경 */
-        $(document).on('click', '.page-link', function (e) {
+        $(document).on('click', '#page-link', function (e) {
             e.preventDefault();
 
             let page = $(this).data('page');
