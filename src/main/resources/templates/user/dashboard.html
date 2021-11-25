@@ -31,7 +31,6 @@
                             <a class="list-group-item list-group-item-action" id="list-notify-list" data-toggle="list" href="#list-notify" role="tab" aria-controls="notify">내 알림</a>
                             <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-board" role="tab" aria-controls="messages">작성글 관리</a>
                             <a class="list-group-item list-group-item-action" id="list-comment-list" data-toggle="list" href="#list-comment" role="tab" aria-controls="settings">댓글 관리</a>
-                            <a class="list-group-item list-group-item-action" id="list-review-list" data-toggle="list" href="#list-review" role="tab" aria-controls="settings">리뷰 관리</a>
                         </div>
                     </div>
                     <div class="col-md-10">
@@ -199,23 +198,6 @@
 
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="list-review" role="tabpanel" aria-labelledby="list-settings-list">
-                                <ul class="review-list pt-5">
-
-                                </ul>
-
-                                <div class="row mt-5">
-                                    <div class="col text-center">
-                                        <div class="block-27">
-                                            <ul>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="review-pagination-div">
-
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -335,7 +317,7 @@
 
                         let active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
-                        pagination += '<a class="page-link page-num" data-page="' + page + '" href="#">' + page + '</a></li>'
+                        pagination += '<a class="page-link page-num" id="page-link" data-page="' + page + '" href="#">' + page + '</a></li>'
                     })
 
                     if (result.next) {
@@ -410,7 +392,7 @@
 
                            let active = result.page == page ? 'active' : '';
                            pagination += '<li class="page-item ' + active + '">';
-                           pagination += '<a class="page-link page-num" data-page="' + page + '" href="#">' + page + '</a></li>'
+                           pagination += '<a class="page-link page-num" id="page-link" data-page="' + page + '" href="#">' + page + '</a></li>'
                        })
 
                        if (result.next) {
@@ -429,7 +411,7 @@
            });
 
            /* 게시글 & 댓글 페이지 버튼 클릭 시 페이지 변경 */
-           $(document).on('click', '.page-link', function (e) {
+           $(document).on('click', '#page-link', function (e) {
                e.preventDefault();
 
                var page = $(this).data('page');
@@ -574,7 +556,7 @@
 
                        let active = result.page == page ? 'active' : '';
                        pagination += '<li class="page-item ' + active + '">';
-                       pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
+                       pagination += '<a class="page-link page-num" id="page-link" data-page="' + page +'" href="#">' + page + '</a></li>'
                    })
 
                    if (result.next) {

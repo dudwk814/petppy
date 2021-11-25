@@ -1209,10 +1209,15 @@
             })
 
             $('#enquiryModal').modal("show");
-        })
+        });
+
+        /* 문의 답변작성 버튼 클릭시 답변 저장 */
+        $(document).on('click', '.enquiry-answer-btn', function (e) {
+
+        });
 
 
-        /* 페이지 버튼 클릭 시 페이지 변경 */
+       /* 페이지 버튼 클릭 시 페이지 변경 */
         $(document).on('click', '#page-link', function (e) {
             e.preventDefault();
 

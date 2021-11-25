@@ -280,7 +280,7 @@
 
                         var active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
-                        pagination += '<a class="page-link page-num" data-page="' + page +'" href="#">' + page + '</a></li>'
+                        pagination += '<a class="page-link page-num" id="page-link" data-page="' + page +'" href="#">' + page + '</a></li>'
                     })
 
                     if (result.next) {
@@ -298,7 +298,7 @@
         }
 
         /* 댓글 페이지 버튼 클릭 시 페이지 변경 */
-        $(document).on('click', '.page-link', function (e) {
+        $(document).on('click', '#page-link', function (e) {
             e.preventDefault();
 
             var page = $(this).data('page');
