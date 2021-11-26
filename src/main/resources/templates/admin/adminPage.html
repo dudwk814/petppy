@@ -1234,6 +1234,11 @@
                 content : content
             }
 
+            if (content.trim() == "") {
+                swal('답변', '답변 내용을 입력해주세요.');
+                return false;
+            }
+
             $.ajax({
                 url: '/answer/create',
                 type: 'post',
@@ -1254,9 +1259,13 @@
                                 }
                             });
                     }
+                },
+                error : function(xhr, status, error) {
+                    let msg = '답변 작성에 실패하였습니다.\n' + xhr.responseText
+                    swal('답변', msg);
                 }
 
-            })
+            });
         });
 
 
