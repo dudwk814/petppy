@@ -42,7 +42,7 @@
                                 <th th:text="${enquiryList.enquiryId}" scope="row"></th>
 
                                 <!-- 문의 제목-->
-                                <td><a href="#" class="enquiryList" th:data-id="${enquiryList.enquiryId}" th:text="${enquiryList.title}"></a></td>
+                                <td><a href="#" class="enquiryList" th:data-email="${enquiryList.userEmail}" th:data-id="${enquiryList.enquiryId}" th:text="${enquiryList.title}"></a></td>
 
                                 <!-- 문의 종류 -->
                                 <td class="enquiryType" th:if="${#strings.toString(enquiryList.enquiryType)} == 'MEMBERSHIP'">멤버십</td>
@@ -91,7 +91,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form class="enquiry-modal-form">
                             <div class="hr-sect">문의</div>
                             <div class="form-group">
                                 <label for="enquiryTitle" class="col-form-label">문의 제목</label>
@@ -100,6 +100,10 @@
                             <div class="form-group">
                                 <label for="enquiryType" class="col-form-label">문의 종류</label>
                                 <input type="text" class="form-control" id="enquiryType" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="enquiryDate" class="col-form-label">문의 날짜</label>
+                                <input type="text" class="form-control" id="enquiryDate" disabled>
                             </div>
                             <div class="form-group">
                                 <label for="enquiryContent" class="col-form-label">문의 내용</label>
@@ -129,6 +133,53 @@
         /* 문의 내용 상세보기 및 답변보기 모달 생성 */
         $('.enquiryList').on('click', function (e) {
             e.preventDefault();
+
+            let enquiryId = $(this).data('id');
+            let userEmail = $(this).data('email');
+            let form = $('.enquiry-modal-form');
+
+            let enquiryTitle = $('#enquiryTitle');
+            let enquiryType = $('#enquiryType');
+            let enquiryDate = $('#enquiryDate');
+            let enquiryContent = $('#enquiryContent');
+            let enquiryAnswer = $('#enquiryAnswer');
+
+            // 모달 input 초기화
+            form[0].reset();
+
+            console.log(enquiryId);
+            console.log(userEmail);
+
+            $.ajax({
+                url: '/enquiry/' + enquiryId,
+                type: 'get',
+                data: {
+                    'enquiryId' : enquiryId,
+                    'email' : userEmail
+                },
+                dataType: 'json',
+                success: function (result) {
+                    enquiryTitle.val(result.title);
+                    enquiryDate.val(get_date_str(result.createdDate));
+                    enquiryContent.val(result.content);
+
+                    // 문의 타입에 따른 서비스 한글화
+                    if (result.enquiryType == "MEMBERSHIP") {
+                        enquiryType.val("멤버십");
+                    } else if(result.enquiryType == "RESERVE") {
+                        enquiryType.val("예약");
+                    } else if(result.enquiryType == "ETC") {
+                        enquiryType.val("기타");
+                    }
+
+                    if (result.answerDTO == null) {
+                        enquiryAnswer.val("");
+                    } else{
+                        enquiryAnswer.val(result.answerDTO.content);
+                    }
+
+                }
+            })
 
             $('#enquiryModal').modal("show");
         });

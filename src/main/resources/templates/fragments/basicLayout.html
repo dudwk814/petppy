@@ -614,6 +614,12 @@
             return `${Math.floor(betweenTimeDay / 365)}년전`;
         }
 
+        /* date형을 string형 yyyy-mm-dd로 변환 */
+        function get_date_str(date) {
+
+            return date.substring(0,10);
+        }
+
         $(document).ready(function (e) {
 
             // 웹 소켓 연결

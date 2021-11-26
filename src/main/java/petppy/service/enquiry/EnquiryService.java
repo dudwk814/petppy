@@ -5,6 +5,7 @@ import petppy.domain.enquiry.EnquiryStatus;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
+import petppy.dto.answer.AnswerDTO;
 import petppy.dto.enquiry.EnquiryCountDTO;
 import petppy.dto.enquiry.EnquiryDTO;
 
@@ -44,17 +45,37 @@ public interface EnquiryService {
     }
 
     default EnquiryDTO entityToDTO(Enquiry enquiry) {
-        return EnquiryDTO.builder()
-                .enquiryId(enquiry.getId())
-                .userId(enquiry.getUser().getId())
-                .userEmail(enquiry.getUser().getEmail())
-                .userName(enquiry.getUser().getName())
-                .title(enquiry.getTitle())
-                .content(enquiry.getContent())
-                .enquiryType(enquiry.getEnquiryType())
-                .enquiryStatus(enquiry.getEnquiryStatus())
-                .createdDate(enquiry.getCreatedDate())
-                .updateDate(enquiry.getModifiedDate())
-                .build();
+
+        if (enquiry.getAnswer() == null) {
+            return EnquiryDTO.builder()
+                    .enquiryId(enquiry.getId())
+                    .userId(enquiry.getUser().getId())
+                    .userEmail(enquiry.getUser().getEmail())
+                    .userName(enquiry.getUser().getName())
+                    .title(enquiry.getTitle())
+                    .content(enquiry.getContent())
+                    .enquiryType(enquiry.getEnquiryType())
+                    .enquiryStatus(enquiry.getEnquiryStatus())
+                    .createdDate(enquiry.getCreatedDate())
+                    .updateDate(enquiry.getModifiedDate())
+                    .build();
+        } else {
+            AnswerDTO answerDTO = AnswerDTO.builder().content(enquiry.getAnswer().getContent()).id(enquiry.getAnswer().getId()).build();
+
+            return EnquiryDTO.builder()
+                    .enquiryId(enquiry.getId())
+                    .userId(enquiry.getUser().getId())
+                    .userEmail(enquiry.getUser().getEmail())
+                    .userName(enquiry.getUser().getName())
+                    .title(enquiry.getTitle())
+                    .content(enquiry.getContent())
+                    .enquiryType(enquiry.getEnquiryType())
+                    .enquiryStatus(enquiry.getEnquiryStatus())
+                    .createdDate(enquiry.getCreatedDate())
+                    .updateDate(enquiry.getModifiedDate())
+                    .answerDTO(answerDTO)
+                    .build();
+        }
+
     }
 }

@@ -580,6 +580,7 @@
                     </div>
                     <div class="modal-body">
                         <form class="enquiry-modal-form">
+                            <input type="hidden" name="enquiryId" disabled>
                             <div class="enquiry-div">
                                 <div class="form-group">
                                     <label for="enquiryType">문의 종류</label>
@@ -627,7 +628,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success enquiry-answer-btn">답변작성</button>
+                        <button type="button" data-id="" data-page="" class="btn btn-success enquiry-answer-btn">답변작성</button>
                     </div>
                 </div>
             </div>
@@ -794,11 +795,7 @@
 
         }
 
-        /* date형을 string형 yyyy-mm-dd로 변환 */
-        function get_date_str(date) {
 
-            return date.substring(0,10);
-        }
 
 
         /* 회원 자세히 보기 버튼 클릭시 회원 조회 후 모달 생성성 */
@@ -1123,7 +1120,7 @@
                             '<td class="text-center">' + enquiryType + '</td>' +
                             '<td class="text-center">' + get_date_str(enquiryList.createdDate) + '</td>' +
                             '<td class="text-center">' + enquiryStatus + '</td>' +
-                            '<td class="text-center"><a href="#" class="enquiry-modal-btn" data-email="' + enquiryList.userEmail +'" data-id="' + enquiryList.enquiryId +'">자세히 보기</a></td>' +
+                            '<td class="text-center"><a href="#" class="enquiry-modal-btn" data-page="' + result.page + '" data-email="' + enquiryList.userEmail +'" data-id="' + enquiryList.enquiryId +'">자세히 보기</a></td>' +
                             '</tr> ';
                     });
 
@@ -1176,7 +1173,9 @@
             let userName = $('input[name="userName"]');
             let userEmailInput = $('input[name="userEmail"]');
             let enquiryContent = $('textarea[name="enquiryContent"]');
-
+            let answerContent = $('textarea[name="answerContent"]');
+            let enquiryAnswerBtn = $('.enquiry-answer-btn');
+            let page = $(this).data('page');
             // 모달 input 초기화
             form[0].reset();
 
@@ -1205,6 +1204,20 @@
                     } else if(result.enquiryType == "ETC") {
                         enquiryType.val("기타");
                     }
+
+                    // 답변 유무에 따른 답변 input disable과 답변 내용
+                    if (result.answerDTO != null) {
+                        answerContent.attr("readonly", true);
+                        enquiryAnswerBtn.attr("disabled", true);
+                        enquiryAnswerBtn.attr('data-id', result.enquiryId);
+                        enquiryAnswerBtn.attr('data-page', page);
+                        answerContent.val(result.answerDTO.content);
+                    } else {
+                        answerContent.attr("readonly", false);
+                        enquiryAnswerBtn.attr("disabled", false);
+                        enquiryAnswerBtn.attr('data-id', result.enquiryId);
+                        enquiryAnswerBtn.attr('data-page', page);
+                    }
                 }
             })
 
@@ -1213,7 +1226,37 @@
 
         /* 문의 답변작성 버튼 클릭시 답변 저장 */
         $(document).on('click', '.enquiry-answer-btn', function (e) {
+            let enquiryId = $(this).data('id');
+            let page = $(this).data('page');
+            let content = $('textarea[name="answerContent"]').val();
+            let answerDTO = {
+                enquiryId : enquiryId,
+                content : content
+            }
 
+            $.ajax({
+                url: '/answer/create',
+                type: 'post',
+                data: JSON.stringify(answerDTO),
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    if (result === "success") {
+                        swal({
+                            title: "답변 작성",
+                            text: "답변이 작성되었습니다.",
+                            icon: "success",
+                            button: true,
+                        })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    enquiryList(page);
+                                    $('#enquiryModal').modal("hide");
+                                }
+                            });
+                    }
+                }
+
+            })
         });
 
 

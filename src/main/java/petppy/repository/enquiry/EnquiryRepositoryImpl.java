@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import petppy.domain.answer.QAnswer;
 import petppy.domain.enquiry.Enquiry;
 import petppy.domain.enquiry.QEnquiry;
 
+import static petppy.domain.answer.QAnswer.answer;
 import static petppy.domain.user.QMembership.membership;
 import static petppy.domain.user.QUser.user;
 
@@ -47,6 +49,7 @@ public class EnquiryRepositoryImpl implements EnquiryRepositoryCustom {
                 .selectFrom(enquiry)
                 .where(enquiry.user.email.eq(enquiryDTO.getUserEmail()), enquiryTypeEq(enquiryDTO), enquiryStatusEq(enquiryDTO))
                 .leftJoin(enquiry.user, user)
+                .leftJoin(enquiry.answer, answer)
                 .fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -78,6 +81,7 @@ public class EnquiryRepositoryImpl implements EnquiryRepositoryCustom {
                         keywordContains(pageRequestDTO)
                         )
                 .leftJoin(enquiry.user, user)
+                .leftJoin(enquiry.answer, answer)
                 .fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

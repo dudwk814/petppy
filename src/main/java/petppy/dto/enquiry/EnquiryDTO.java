@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import petppy.domain.enquiry.EnquiryStatus;
 import petppy.domain.enquiry.EnquiryType;
+import petppy.dto.answer.AnswerDTO;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -35,6 +36,8 @@ public class EnquiryDTO {
 
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
+
+    private AnswerDTO answerDTO;
 
 
 }
