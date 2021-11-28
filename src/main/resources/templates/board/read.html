@@ -59,12 +59,7 @@
                         <div th:utext="${board.content}">Content</div>
 
                         <div class="tag-widget post-tag-container mb-5 mt-5">
-                            <div class="tagcloud">
-                                <a href="#" class="tag-cloud-link">Life</a>
-                                <a href="#" class="tag-cloud-link">Sport</a>
-                                <a href="#" class="tag-cloud-link">Tech</a>
-                                <a href="#" class="tag-cloud-link">Travel</a>
-                            </div>
+
                         </div>
 
                         <div class="pt-5 mt-5 comment-div">
@@ -106,17 +101,10 @@
                     </div> <!-- .col-md-8 -->
                     <div class="col-lg-4 sidebar pl-lg-5 ftco-animate">
                         <div class="sidebar-box">
-                            <!--<form action="#" class="search-form">
-                                <div class="form-group">
-                                    <span class="fa fa-search"></span>
-                                    <input type="text" class="form-control" placeholder="제목 OR 내용 OR 작성자">
-                                </div>
-                            </form>-->
                             <form action="/board" class="search-form">
                                 <input type="hidden" name="page" value="1">
                                 <input type="hidden" name="size" value="10">
                                 <div class="input-group mb-3" style="width: 400px !important;">
-                                    <!--<div class="input-group-prepend">-->
                                     <select class="custom-select" name="type" id="inputGroupSelect02" style="height: 52px !important;">
                                         <option th:selected="${requestDTO.type == null}">Choose...</option>
                                         <option value="t" th:selected="${requestDTO.type == 't'}">제목</option>
@@ -153,19 +141,6 @@
                                                 title="조회수"><span class="icon-chat"></span> [[${board.hit}]]</a></div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="sidebar-box ftco-animate">
-                            <h3>Tag Cloud</h3>
-                            <div class="tagcloud">
-                                <a href="#" class="tag-cloud-link">cat</a>
-                                <a href="#" class="tag-cloud-link">dog</a>
-                                <a href="#" class="tag-cloud-link">pet</a>
-                                <a href="#" class="tag-cloud-link">bird</a>
-                                <a href="#" class="tag-cloud-link">husky</a>
-                                <a href="#" class="tag-cloud-link">bulldog</a>
-                                <a href="#" class="tag-cloud-link">food</a>
                             </div>
                         </div>
 
