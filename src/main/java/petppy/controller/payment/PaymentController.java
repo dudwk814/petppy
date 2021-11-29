@@ -1,4 +1,4 @@
-package petppy.controller;
+package petppy.controller.payment;
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.dto.payment.PaymentDTO;
 import petppy.service.payment.PaymentService;
 
@@ -74,13 +76,28 @@ public class PaymentController {
         return client.getAuth();
     }
 
-    // 이메일로 결제 정보 조회
+    /**
+     * 이메일로 결제정보 조히
+     * @param email
+     * @return
+     */
     @RequestMapping("/{email}")
     public ResponseEntity<PaymentDTO> findPaymentByEmail(@PathVariable("email") String email) {
 
         PaymentDTO result = paymentService.findPaymentByEmail(email);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/list/{email}")
+    public ResponseEntity<PageResultDTO<PaymentDTO, petppy.domain.payment.Payment>> findPaymentListByEmail(@PathVariable("email") String email, int page) {
+
+        PageRequestDTO requestDTO = new PageRequestDTO();
+        requestDTO.setPage(page);
+
+        PaymentDTO paymentDTO = PaymentDTO.builder().email(email).build();
+
+        return new ResponseEntity<>(paymentService.findPaymentListByEmail(paymentDTO, requestDTO), HttpStatus.OK);
     }
 
     /**

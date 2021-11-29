@@ -31,6 +31,7 @@
                             <a class="list-group-item list-group-item-action" id="list-notify-list" data-toggle="list" href="#list-notify" role="tab" aria-controls="notify">내 알림</a>
                             <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-board" role="tab" aria-controls="messages">작성글 관리</a>
                             <a class="list-group-item list-group-item-action" id="list-comment-list" data-toggle="list" href="#list-comment" role="tab" aria-controls="settings">댓글 관리</a>
+                            <a class="list-group-item list-group-item-action" id="list-payment-list" data-toggle="list" href="#list-payment" role="tab" aria-controls="settings">결제 내역</a>
                         </div>
                     </div>
                     <div class="col-md-10">
@@ -198,6 +199,25 @@
 
                                 </div>
                             </div>
+                            <div class="tab-pane fade" id="list-payment" role="tabpanel" aria-labelledby="list-membership-list">
+                                <div class="jumbotron bg-transparent">
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">결제번호</th>
+                                                <th scope="col" class="text-center">상품명</th>
+                                                <th scope="col" class="text-center">결제가격</th>
+                                                <th scope="col" class="text-center">결제일</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="payment-tbody">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -263,9 +283,18 @@
 
        });
 
+
+       /* 내 알림 탭 클릭시 notifyList() 실행 */
+       $('#list-notify-list').on('click', function (e) {
+           e.preventDefault();
+
            notifyList(1);
 
-       function notifyList(page) {  // 이메일로 알림 조회
+       });
+
+
+
+       function notifyList(page) {  // 이메일로 알림 리스트 조회
 
            var page = page || 1;
 
@@ -334,8 +363,13 @@
            });
        }
 
+        /* 작성글 관리 탭 클릭시 boardList() 실행 */
+        $('#list-board-list').on('click', function (e) {
+            e.preventDefault();
+
             boardList(1);
 
+        });
 
        /* 유저 이메일로 게시글 조회 */
        function boardList(page) {
@@ -459,9 +493,14 @@
            });
        }
 
+
+        /* 댓글 관리 탭 클릭시 commentList() 실행 */
+        $('#list-comment-list').on('click', function (e) {
+            e.preventDefault();
+
             commentList(1);
 
-
+        });
 
        /* 유저 이메일로 댓글 목록 조회 */
        function commentList(page) {
@@ -665,6 +704,30 @@
            });
 
        }
+
+        /* 결제 내역 탭 클릭시 paymentList()실행 */
+        $('#list-payment-list').on('click', function (e) {
+            e.preventDefault();
+
+            paymentList(1);
+
+        });
+
+        function paymentList(page) {
+            var page = page || 1;
+
+            $.ajax({
+                url: '/payment/list/' + email,
+                type: 'get',
+                data: {
+                    'email': email,
+                    'page' : page
+                },
+                success: function (result) {
+                    console.log("paymentList");
+                }
+            })
+        }
     });
 </script>
 </html>

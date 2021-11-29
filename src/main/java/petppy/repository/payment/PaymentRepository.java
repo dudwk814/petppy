@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
 
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface PaymentRepository extends JpaRepository<Payment, Long>, PaymentRepositoryCustom {
 
     @EntityGraph(attributePaths = {"user"}, type = FETCH)
     public Optional<Payment> findFirstByUserEmailAndPaymentStatusOrderByIdDesc(String email,PaymentStatus paymentStatus);

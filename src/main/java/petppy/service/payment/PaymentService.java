@@ -3,6 +3,8 @@ package petppy.service.payment;
 import petppy.domain.payment.Payment;
 import petppy.domain.payment.PaymentStatus;
 import petppy.domain.user.User;
+import petppy.dto.PageRequestDTO;
+import petppy.dto.PageResultDTO;
 import petppy.dto.payment.PaymentDTO;
 
 public interface PaymentService {
@@ -10,6 +12,8 @@ public interface PaymentService {
     public void createPaymentInfo(PaymentDTO paymentDTO);
 
     public PaymentDTO findPaymentByEmail(String email);
+
+    public PageResultDTO<PaymentDTO, Payment> findPaymentListByEmail(PaymentDTO paymentDTO, PageRequestDTO requestDTO);
 
     public void cancel(String imp_uid);
 
