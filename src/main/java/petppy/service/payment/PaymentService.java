@@ -28,6 +28,7 @@ public interface PaymentService {
                 .transactionNumber(payment.getTransactionNumber())
                 .userId(payment.getUser().getId())
                 .price(payment.getPrice())
+                .createdDate(payment.getCreatedDate())
                 .build();
     }
 

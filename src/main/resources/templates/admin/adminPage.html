@@ -775,7 +775,7 @@
 
                         let active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
-                        pagination += '<a class="page-link page-num" data-type="user" data-page="' + page +'" href="#">' + page + '</a></li>'
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="user" data-page="' + page +'" href="#">' + page + '</a></li>'
                     })
 
                     if (result.next) {
@@ -941,7 +941,7 @@
 
                         let active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
-                        pagination += '<a class="page-link page-num" data-type="reserve" data-page="' + page +'" href="#">' + page + '</a></li>'
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="reserve" data-page="' + page +'" href="#">' + page + '</a></li>'
                     })
 
                     if (result.next) {
@@ -955,7 +955,6 @@
 
                     $('.reserve-table-pagination').html(pagination);
 
-                    console.log(result);
                 }
             })
         }
@@ -1091,7 +1090,6 @@
                         return false;
                     }
                     // 문의 테이블
-                    console.log(result.totalElements);
                     $.each(result.dtoList, function (index, enquiryList) {
                         let enquiryType = "";
                         let enquiryStatus = "";
@@ -1154,7 +1152,6 @@
 
                     $('.enquiry-table-pagination').html(pagination);
 
-                    console.log(result);
                 }
             })
         }

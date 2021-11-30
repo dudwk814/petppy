@@ -207,6 +207,7 @@
                                             <tr>
                                                 <th scope="col" class="text-center">결제번호</th>
                                                 <th scope="col" class="text-center">상품명</th>
+                                                <th scope="col" class="text-center">승인번호</th>
                                                 <th scope="col" class="text-center">결제가격</th>
                                                 <th scope="col" class="text-center">결제일</th>
                                             </tr>
@@ -214,7 +215,15 @@
                                             <tbody class="payment-tbody">
 
                                             </tbody>
+
                                         </table>
+
+                                        <div class="row mt-5">
+
+                                        </div>
+                                        <div class="payment-pagination-div">
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -306,6 +315,8 @@
                 type : 'get',
                 success : function (result) {
 
+                    console.log('notifyList');
+
                    $.each(result.dtoList, function (index, notify) {
 
                        let notificationType = notify.notificationType;
@@ -337,7 +348,7 @@
 
                     if (result.prev) {
                         pagination += '                            <li className="page-item disabled">\n' +
-                            '                                <a class="page-link page-prev" data-preve="' + (result.start - 1) + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                                <a class="page-link page-prev" data-type="notify" data-preve="' + (result.start - 1) + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
                             '                            </li>\n';
                     }
 
@@ -346,12 +357,12 @@
 
                         let active = result.page == page ? 'active' : '';
                         pagination += '<li class="page-item ' + active + '">';
-                        pagination += '<a class="page-link page-num" id="page-link" data-page="' + page + '" href="#">' + page + '</a></li>'
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="notify" data-page="' + page + '" href="#">' + page + '</a></li>'
                     })
 
                     if (result.next) {
                         pagination += '                            <li class="page-item">\n' +
-                            '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) + '"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                                <a class="page-link page-next" data-type="notify" href="#" data-end="' + (result.end + 1) + '"><span aria-hidden="true">&raquo;</span> </a>\n' +
                             '                            </li>\n';
                     }
 
@@ -381,6 +392,9 @@
                data : {'email':email, 'page':page},
                dataType: 'json',
                success : function (result) {
+
+                   console.log('boardList');
+
                    let boardList = "";
                    let pagination = "";
 
@@ -417,7 +431,7 @@
 
                        if (result.prev) {
                            pagination += '                            <li className="page-item disabled">\n' +
-                               '                                <a class="page-link page-prev" data-preve="' + (result.start - 1) + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                               '                                <a class="page-link page-prev" data-type="board" data-preve="' + (result.start - 1) + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
                                '                            </li>\n';
                        }
 
@@ -426,12 +440,12 @@
 
                            let active = result.page == page ? 'active' : '';
                            pagination += '<li class="page-item ' + active + '">';
-                           pagination += '<a class="page-link page-num" id="page-link" data-page="' + page + '" href="#">' + page + '</a></li>'
+                           pagination += '<a class="page-link page-num" id="page-link" data-type="board" data-page="' + page + '" href="#">' + page + '</a></li>'
                        })
 
                        if (result.next) {
                            pagination += '                            <li class="page-item">\n' +
-                               '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) + '"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                               '                                <a class="page-link page-next" data-type="board" href="#" data-end="' + (result.end + 1) + '"><span aria-hidden="true">&raquo;</span> </a>\n' +
                                '                            </li>\n';
                        }
 
@@ -445,19 +459,24 @@
            });
 
            /* 게시글 & 댓글 페이지 버튼 클릭 시 페이지 변경 */
-           $(document).on('click', '#page-link', function (e) {
+           $(document).off('click').on('click', '#page-link', function (e) {
                e.preventDefault();
 
                var page = $(this).data('page');
 
-               if ($(this).closest('div').hasClass('board-pagination-div')) {
-                   boardList(page);
-               } else if ($(this).closest('div').hasClass('comment-pagination-div')) {
-                   commentList(page);
-               } else if ($(this).closest('div').hasClass('notify-pagination-div')) {
-                   notifyList(page);
-               }
+               let type = $(this).data("type");
 
+               console.log(page);
+
+               if (type == "board") {
+                   boardList(page);
+               } else if (type == "notify") {
+                   notifyList(page)
+               } else if(type == "comment") {
+                   commentList(page)
+               } else if (type == "payment") {
+                   paymentList(page)
+               }
 
            });
 
@@ -467,12 +486,17 @@
 
                var page = $(this).data('preve');
 
-               if ($(this).closest('div').hasClass('board-pagination-div')) {
+               let type = $(this).data("type");
+
+
+               if (type == "board") {
                    boardList(page);
-               } else if ($(this).closest('div').hasClass('comment-pagination-div')) {
-                   commentList(page);
-               } else if ($(this).closest('div').hasClass('notify-pagination-div')) {
-                   notifyList(page);
+               } else if (type == "notify") {
+                   notifyList(page)
+               } else if(type == "comment") {
+                   commentList(page)
+               } else if (type == "payment") {
+                   paymentList(page)
                }
            });
 
@@ -483,12 +507,16 @@
 
                var page = $(this).data('end');
 
-               if ($(this).closest('div').hasClass('board-pagination-div')) {
+               let type = $(this).data("type");
+
+               if (type == "board") {
                    boardList(page);
-               } else if ($(this).closest('div').hasClass('comment-pagination-div')) {
-                   commentList(page);
-               } else if ($(this).closest('div').hasClass('notify-pagination-div')) {
-                   notifyList(page);
+               } else if (type == "notify") {
+                   notifyList(page)
+               } else if(type == "comment") {
+                   commentList(page)
+               } else if (type == "payment") {
+                   paymentList(page)
                }
            });
        }
@@ -512,6 +540,9 @@
                data : {'email':email, 'page':page},
                dataType: 'json',
                success : function (result) {
+
+                   console.log('commentList');
+
                    let commentList = "";
 
                    let pagination = "";
@@ -586,7 +617,7 @@
 
                    if (result.prev) {
                        pagination +='                            <li className="page-item disabled">\n' +
-                           '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                           '                                <a class="page-link page-prev" data-type="comment" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
                            '                            </li>\n';
                    }
 
@@ -595,12 +626,12 @@
 
                        let active = result.page == page ? 'active' : '';
                        pagination += '<li class="page-item ' + active + '">';
-                       pagination += '<a class="page-link page-num" id="page-link" data-page="' + page +'" href="#">' + page + '</a></li>'
+                       pagination += '<a class="page-link page-num" id="page-link" data-type="comment" data-page="' + page +'" href="#">' + page + '</a></li>'
                    })
 
                    if (result.next) {
                        pagination += '                            <li class="page-item">\n' +
-                           '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                           '                                <a class="page-link page-next" data-type="comment" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
                            '                            </li>\n';
                    }
 
@@ -715,6 +746,8 @@
 
         function paymentList(page) {
             var page = page || 1;
+            let paymentListTable = "";
+            let pagination = "";
 
             $.ajax({
                 url: '/payment/list/' + email,
@@ -724,7 +757,60 @@
                     'page' : page
                 },
                 success: function (result) {
-                    console.log("paymentList");
+
+                    console.log('paymentList');
+
+                    // 결제 내역 테이블
+                    $.each(result.dtoList, function (index, paymentList) {
+
+                        let service = "";
+
+                        if (paymentList.price == 27000) {
+                            service = "PERSONAL";
+                        } else if (paymentList.price == 43000) {
+                            service = "BUSINESS";
+                        } else if (paymentList.price == 78000) {
+                            service = "ULTIMATE";
+                        }
+
+                        paymentListTable += '<tr aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">' +
+                            '<th scope="row" class="text-center">' + paymentList.id + '</th>' +
+                            '<td class="text-center">' + service + '</td>' +
+                            '<td class="text-center">' + paymentList.approvalNumber + '</td>' +
+                            '<td class="text-center">' + paymentList.price + '</td>' +
+                            '<td class="text-center">' + get_date_str(paymentList.createdDate) + '</td>';
+                    });
+
+                    $('.payment-tbody').html(paymentListTable);
+
+                    // 결제 내역 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="payment" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="payment" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="payment" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.payment-pagination-div').html(pagination);
+
                 }
             })
         }

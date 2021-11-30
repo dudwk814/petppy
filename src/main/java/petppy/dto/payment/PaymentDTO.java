@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import petppy.domain.payment.PaymentStatus;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,5 +31,7 @@ public class PaymentDTO {
     private String email;
 
     private Long userId;
+
+    private LocalDateTime createdDate;
 
 }
