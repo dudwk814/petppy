@@ -267,6 +267,30 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="popupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">PETPPY 공지</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>'PETPPY'는 포트폴리오 프로젝트이며, 실제 서비스는 제공하지 않습니다.</p>
+                    <p>'PETPPY'의 이용방법을 확인하시려면 <a th:href="@{/QnA}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="홈페이지 이용방법 확인하기">QnA</a>를 클릭하여 이용방법을 확인해주세요.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <input type="checkbox" class="popupModalSetCookie"> 하루동안 팝업 열지않기
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script th:src="@{/petppy/js/jquery.min.js}"></script>
     <script th:src="@{/petppy/js/jquery-migrate-3.0.1.min.js}"></script>
     <script th:src="@{/petppy/js/popper.min.js}"></script>
@@ -292,6 +316,31 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script th:inline="javascript">
+
+        // 팝업용 쿠키 생성 함수
+        function setCookie(cookie_name, value, days) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + days);
+            // 설정 일수만큼 현재시간에 만료값으로 지정
+
+            var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+            document.cookie = cookie_name + '=' + cookie_value;
+        }
+
+        // 쿠키 조회 함수
+        function getCookie(cookie_name) {
+            var x, y;
+            var val = document.cookie.split(';');
+
+            for (var i = 0; i < val.length; i++) {
+                x = val[i].substr(0, val[i].indexOf('='));
+                y = val[i].substr(val[i].indexOf('=') + 1);
+                x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+                if (x == cookie_name) {
+                    return unescape(y); // unescape로 디코딩 후 값 리턴
+                }
+            }
+        }
 
         function execDaumPostcode() {
             new daum.Postcode({
@@ -621,6 +670,23 @@
         }
 
         $(document).ready(function (e) {
+
+            // 홈 화면 팝업 모달
+            $(".popupModalSetCookie").change(function () {
+                if ($(".popupModalSetCookie").is(":checked") == true) {
+                    setCookie('popupModalCookie', 'Y', '1') // 하루동안 쿠키 유지
+                    console.log("Y");
+                    $("#popupModal").modal("hide");
+                }
+            });
+
+            // 레이어 팝업 show
+            console.log(getCookie('popupModalCookie'));
+            if (getCookie('popupModalCookie') == "Y") {
+                $("#popupModal").modal("hide");
+            } else {
+                $("#popupModal").modal("show");
+            }
 
             // 웹 소켓 연결
             connectWs();

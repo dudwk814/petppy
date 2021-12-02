@@ -457,69 +457,71 @@
 
                }
            });
-
-           /* 게시글 & 댓글 페이지 버튼 클릭 시 페이지 변경 */
-           $(document).off('click').on('click', '#page-link', function (e) {
-               e.preventDefault();
-
-               var page = $(this).data('page');
-
-               let type = $(this).data("type");
-
-               console.log(page);
-
-               if (type == "board") {
-                   boardList(page);
-               } else if (type == "notify") {
-                   notifyList(page)
-               } else if(type == "comment") {
-                   commentList(page)
-               } else if (type == "payment") {
-                   paymentList(page)
-               }
-
-           });
-
-           /* 게시글 & 댓글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
-           $(document).on('click', '.page-prev', function (e) {
-               e.preventDefault();
-
-               var page = $(this).data('preve');
-
-               let type = $(this).data("type");
-
-
-               if (type == "board") {
-                   boardList(page);
-               } else if (type == "notify") {
-                   notifyList(page)
-               } else if(type == "comment") {
-                   commentList(page)
-               } else if (type == "payment") {
-                   paymentList(page)
-               }
-           });
-
-
-           /* 게시글 & 댓글 다음 페이지 클릭 시 end + 1 페이지로 변경 */
-           $(document).on('click', '.page-next', function (e) {
-               e.preventDefault();
-
-               var page = $(this).data('end');
-
-               let type = $(this).data("type");
-
-               if (type == "board") {
-                   boardList(page);
-               } else if (type == "notify") {
-                   notifyList(page)
-               } else if(type == "comment") {
-                   commentList(page)
-               } else if (type == "payment") {
-                   paymentList(page)
-               }
-           });
        }
+
+        /* 게시글 & 댓글 페이지 버튼 클릭 시 페이지 변경 */
+        $(document).on('click', '#page-link', function (e) {
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            var page = $(this).data('page');
+
+            let type = $(this).data("type");
+
+            console.log(page);
+
+            if (type == "board") {
+                boardList(page);
+            } else if (type == "notify") {
+                notifyList(page)
+            } else if(type == "comment") {
+                commentList(page)
+            } else if (type == "payment") {
+                paymentList(page)
+            }
+
+        });
+
+        /* 게시글 & 댓글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-prev', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('preve');
+
+            let type = $(this).data("type");
+
+
+            if (type == "board") {
+                boardList(page);
+            } else if (type == "notify") {
+                notifyList(page)
+            } else if(type == "comment") {
+                commentList(page)
+            } else if (type == "payment") {
+                paymentList(page)
+            }
+        });
+
+
+        /* 게시글 & 댓글 다음 페이지 클릭 시 end + 1 페이지로 변경 */
+        $(document).on('click', '.page-next', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('end');
+
+            let type = $(this).data("type");
+
+            if (type == "board") {
+                boardList(page);
+            } else if (type == "notify") {
+                notifyList(page)
+            } else if(type == "comment") {
+                commentList(page)
+            } else if (type == "payment") {
+                paymentList(page)
+            }
+        });
 
 
         /* 댓글 관리 탭 클릭시 commentList() 실행 */
