@@ -185,7 +185,6 @@ public class UserController {
     }
 
 
-    @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @PatchMapping(value = "/{email}")
     public ResponseEntity<Boolean> changePassword(@PathVariable("email") String email, @RequestBody UserDTO userDTO) {
@@ -195,6 +194,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/findPassword")
+    public String findPasswordForm() {
+        return "user/findPassword";
     }
 
 

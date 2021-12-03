@@ -237,44 +237,6 @@
             })
         });
 
-        // 비밀번호 유효성 검증
-        function passwordCheck(password1, password2) {
-
-            if ($(".password").hasClass("is-invalid") === true) {
-                $(".password").removeClass("is-invalid");
-                $(".password1-invalid-div").remove();
-            }
-
-            if ($(".password2").hasClass("is-invalid") === true) {
-                $(".password2").removeClass("is-invalid");
-                $(".password2-invalid-div").remove();
-            }
-
-            if (password1 == "" || password1.length < 4 || password2 == "" || password2.length < 4 || password1 !== password2) {
-                if (password1 == "" || password1.length < 4) {
-                    $(".password").addClass("is-invalid");
-                    $("#password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
-                }
-
-                if (password2 == "" || password2.length < 4) {
-                    $(".password2").addClass("is-invalid");
-                    $("#password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
-                }
-
-                if (password1 !== password2) {
-
-                    $("#password").addClass("is-invalid");
-                    $("#password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
-
-                    $("#password2").addClass("is-invalid");
-                    $("#password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
-                }
-                return false;
-            } else {
-                return true;
-            }
-        }
-
     });
 </script>
 </script>
