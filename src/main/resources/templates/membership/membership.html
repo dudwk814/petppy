@@ -91,48 +91,6 @@
 <script th:inline="javascript">
   $(document).ready(function (e) {
 
-    $(".kakaoPay").on("click", function (e) {
-      e.preventDefault();
-
-
-
-      if ([[${session.user}]] == null) {
-        $("#loginModal").modal("show");
-      } else {
-        /*[# th:if = "${session.user != null}"]*/
-        if ([[${session.user.membershipDTO.rating}]] === $(this).data('membership').toUpperCase()) {
-          swal("결제실패", '이미 이용중인 멤버십 등급입니다.');
-          return false;
-        }
-        /*[/]*/
-      }
-
-
-
-
-
-      /*[# th:if = "${session.user != null}"]*/
-        var rating = $(this).data('membership');
-        var price = $(this).data('price');
-        var userId = [[${session.user.id}]];
-        var email = [[${session.user.email}]];
-        var name = [[${session.user.name}]];
-        var request = {
-          rating : rating,
-          userId : userId,
-          email : email,
-          name : name,
-          price : price
-        }
-
-
-
-
-        changeMembershipRequestKakaoPay(request);
-      /*[/]*/
-
-
-    });
   });
 </script>
 </html>

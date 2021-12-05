@@ -713,6 +713,8 @@
 
         $(document).ready(function (e) {
 
+
+
             // 홈 화면 팝업 모달
             $(".popupModalSetCookie").change(function () {
                 if ($(".popupModalSetCookie").is(":checked") == true) {
@@ -733,7 +735,48 @@
             // 웹 소켓 연결
             connectWs();
 
+            // 툴팁 활성화
             $('[data-toggle="tooltip"]').tooltip();
+
+            // 카카오페이 간편 결제 버튼 클릭 시 카카오페이 결제창 생성
+            $(".kakaoPay").on("click", function (e) {
+                e.preventDefault();
+
+
+
+                if ([[${session.user}]] == null) {
+                    $("#loginModal").modal("show");
+                } else {
+                    /*[# th:if = "${session.user != null}"]*/
+                    if ([[${session.user.membershipDTO.rating}]] === $(this).data('membership').toUpperCase()) {
+                        swal("결제실패", '이미 이용중인 멤버십 등급입니다.');
+                        return false;
+                    }
+                    /*[/]*/
+                }
+
+                /*[# th:if = "${session.user != null}"]*/
+                var rating = $(this).data('membership');
+                var price = $(this).data('price');
+                var userId = [[${session.user.id}]];
+                var email = [[${session.user.email}]];
+                var name = [[${session.user.name}]];
+                var request = {
+                    rating : rating,
+                    userId : userId,
+                    email : email,
+                    name : name,
+                    price : price
+                }
+
+
+
+
+                changeMembershipRequestKakaoPay(request);
+                /*[/]*/
+
+
+            });
 
             // 알림 벨 버튼 클릭시 알람 dropdown show
             $('#notifyBtn').on('click', function (e) {
