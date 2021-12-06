@@ -185,12 +185,12 @@
                                             <div class="icon"><span class="fa fa-clock-o"></span></div>
                                             <select type="text"  class="form-control reserveStartTime" placeholder="Time">
                                                 <option value="" selected>시간</option>
-                                                <option value="09:00" disabled style="color: red">09:00 AM - 예약 불가</option>
-                                                <option value="11:00">11:00 AM</option>
-                                                <option value="13:00">01:00 PM</option>
-                                                <option value="15:00">03:00 PM</option>
-                                                <option value="17:00">05:00 PM</option>
-                                                <option value="19:00">07:00 PM</option>
+                                                <option value="09:00" data-time="1">09:00 AM</option>
+                                                <option value="11:00" data-time="2">11:00 AM</option>
+                                                <option value="13:00" data-time="3">01:00 PM</option>
+                                                <option value="15:00" data-time="4">03:00 PM</option>
+                                                <option value="17:00" data-time="5">05:00 PM</option>
+                                                <option value="19:00" data-time="6">07:00 PM</option>
                                             </select>
                                         </div>
                                     </div>
@@ -363,6 +363,7 @@
             let serviceName = $("#services-type").val();
             let reserveStartDate = $('.reserveStartDate').val();    // 예약일 (시작)
             let reserveStartTime = $('.reserveStartTime').val();    // 예약일 (종료)
+            let timeNumber = $('.reserveStartTime option:selected').data('time');
             let reserveStartDateTime = (reserveStartDate + "-" + reserveStartTime).replace(':', '-');   // 예약일 + 예약시간
             let reserveRequest = $('#reserveRequest').val();    // 요청사항
 
@@ -372,6 +373,8 @@
             let jibunAddress =  $('input[name="jibunAddress"]').val();
             let detailAddress =  $('input[name="detailAddress"]').val();
             let extraAddress =  $('input[name="extraAddress"]').val();
+
+            console.log(timeNumber);
 
             // 주소 객체
             let address = {
@@ -390,7 +393,8 @@
                 servicesType: servicesType,
                 reserveStartDate: reserveStartDateTime,
                 request: reserveRequest,
-                address: address
+                address: address,
+                timeNumber : timeNumber
             });
 
             if (reserveStartDate === "") { // 예약일 선택안할 시 alert후 리턴

@@ -34,8 +34,14 @@ public class ReserveDTO {
 
     private String reserveEndDate;
 
+    private int timeNumber;
+
+    private boolean enableState;
+
     private ReserveType reserveType;
 
     private Address address;
+
+
 
 }

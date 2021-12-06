@@ -52,6 +52,8 @@ public class Reserve extends BaseTimeEntity {
     @Column(name = "reserve_end_date")
     private LocalDateTime reserveEndDate;
 
+    private int timeNumber; // 예약 시간을 번호로 구분 ex -> 09 ~ 11 = 1,  11 ~ 13 = 2
+
     @Enumerated(STRING)
     private ReserveType reserveType;
 
