@@ -18,6 +18,7 @@ import petppy.repository.user.MembershipRepository;
 import petppy.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.Function;
 
 @Service
@@ -112,6 +113,11 @@ public class ReserveServiceImpl implements ReserveService {
         Function<Reserve, ReserveDTO> fn = (entity -> entityToDTO(entity));
 
         return new PageResultDTO<>(result, fn, totalPages, page, size, totalElements);
+    }
+
+    @Override
+    public List<ReserveDTO> findReserveByDate(LocalDateTime dateTime) {
+        return null;
     }
 
     /**

@@ -62,4 +62,13 @@ public class ReserveController {
 
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
+
+    @ResponseBody
+    @GetMapping("/{date}")
+    public ResponseEntity<List<ReserveDTO>> findReserveByDate(@PathVariable("date") String date) {
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

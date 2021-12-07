@@ -22,6 +22,8 @@ public interface ReserveService {
 
     public PageResultDTO<ReserveDTO, Reserve> searchReserve(ReserveDTO reserveDTO, PageRequestDTO requestDTO);
 
+    public List<ReserveDTO> findReserveByDate(LocalDateTime dateTime);
+
     public void cancelReserve(ReserveDTO reserveDTO);
 
     public void modifyReserveTime(Long id, LocalDateTime reserveStartDate);

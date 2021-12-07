@@ -169,6 +169,17 @@ class ReserveRepositoryTest {
 
     }
 
+    @Test
+    public void 특정_날짜_예약_조회() throws Exception {
+        LocalDateTime reserveStartDate = LocalDateTime.of(2021, 12, 07, 0, 0);
+
+        List<Reserve> result = reserveRepository.findByReserveStartDateContains(reserveStartDate);
+
+        for (Reserve reserve : result) {
+            System.out.println("reserve = " + reserve);
+        }
+    }
+
     private User addUser() {
 
         return userRepository.save(User

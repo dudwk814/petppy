@@ -182,7 +182,17 @@
 		'autoclose': true,
 		'startDate' : '0d',
 		'title' : '예약일'
-	});
+	}).on("changeDate", function(e) {
+		let email = $('#notifyBtn').data('email');
+
+		$.ajax({
+			url: '/user/' + email,
+			type: 'get',
+			success: function (result) {
+				console.log('zzz');
+			}
+		})
+	})
 
 	/*$('.appointment_time').timepicker({
 		'minTime': '09:00am', // 조회하고자 할 시작 시간 ( 09시 부터 선택 가능하다. )

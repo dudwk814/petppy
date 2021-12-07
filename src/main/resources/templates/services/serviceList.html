@@ -270,83 +270,88 @@
                 $.ajax({
                     url: '/user/' + email,
                     type: 'get',
-                    success: function (result) {
-                        if (result.membershipDTO.rating === 'NONE') { // 현재 멤버십등급이 NONE인 경우 alert 후 리턴
+                }).done(function (result) {
+                    if (result.membershipDTO.rating === 'NONE') { // 현재 멤버십등급이 NONE인 경우 alert 후 리턴
 
-                            // 멤버십 가입 유도 a태그 생성
-                            let createA = document.createElement('a');
-                            createA.setAttribute('href', "/membership");
-                            createA.innerHTML="<span>멤버십 가입하기</span>";
+                        // 멤버십 가입 유도 a태그 생성
+                        let createA = document.createElement('a');
+                        createA.setAttribute('href', "/membership");
+                        createA.innerHTML="<span>멤버십 가입하기</span>";
 
-                            swal({
-                                title: '멤버십 가입 필요',
-                                text: '멤버십에 가입후 이용가능합니다.',
-                                icon: 'error',
-                                content: createA
-                            });
-                            return;
-                        } else { // 현재 멤버십등급이 NONE이 아닌경우 예약 모달 생성
-
-                            $('#reserve-form')[0].reset();
-                            // 회원 주소로 주소 input 추가
-                            $('input[name="roadAddress"]').val(result.roadAddress);
-                            $('input[name="postcode"]').val(result.postcode);
-                            $('input[name="jibunAddress"]').val(result.jibunAddress);
-                            $('input[name="detailAddress"]').val(result.detailAddress);
-                            $('input[name="extraAddress"]').val(result.extraAddress);
-
-                            let dogWalkCount;
-                            let petGroomingCount;
-                            let vetVisitCount;
-
-                            if (result.membershipDTO.rating === 'PERSONAL') {
-                                dogWalkCount = 3
-                                petGroomingCount = 1
-                                vetVisitCount = 1
-                            } else if (result.membershipDTO.rating === 'BUSINESS') {
-                                dogWalkCount = 5
-                                petGroomingCount = 3
-                                vetVisitCount = 3
-                            } else if(result.membershipDTO.rating === 'ULTIMATE'){
-                                dogWalkCount = 15
-                                petGroomingCount = 5
-                                vetVisitCount = 5
-                            }
-
-                            // 각 서비스에 맞는 input value로 변경
-                            if (reservationBtn.hasClass('dog-walking')) {
-
-                                $("#reservationModal").find('#services-type').val('강아지 산책      ---      ' + result.membershipDTO.dogWalkCount + ' / ' + dogWalkCount);
-                                $("#reservationModal").find('#services-type').attr('data-id', '1');
-                                $("#reservationModal").find('#services-type').attr('data-type', 'DOG_WALK');
-
-                                $('.address-div').show();
-                            } else if (reservationBtn.hasClass('pet-grooming')) {
-                                $("#reservationModal").find('#services-type').val('애완동물 미용      ---      ' + result.membershipDTO.petGroomingCount + ' / ' + petGroomingCount);
-                                $("#reservationModal").find('#services-type').attr('data-id', '2');
-                                $("#reservationModal").find('#services-type').attr('data-type', 'PET_GROOMING');
-
-                                $('.address-div').hide();
-
-                            } else if (reservationBtn.hasClass('vet-visit')) {
-                                $("#reservationModal").find('#services-type').val('수의사 방문      ---      ' + result.membershipDTO.vetVisitCount + ' / ' + vetVisitCount);
-                                $("#reservationModal").find('#services-type').attr('data-id', '3');
-                                $("#reservationModal").find('#services-type').attr('data-type', 'VET_VISIT');
-                                $('.address-div').show();
-                            }
+                        swal({
+                            title: '멤버십 가입 필요',
+                            text: '멤버십에 가입후 이용가능합니다.',
+                            icon: 'error',
+                            content: createA
+                        });
+                        return;
+                    } else { // 현재 멤버십등급이 NONE이 아닌경우 예약 모달 생성
 
 
+                        $('#reserve-form')[0].reset();
+                        // 회원 주소로 주소 input 추가
+                        $('input[name="roadAddress"]').val(result.roadAddress);
+                        $('input[name="postcode"]').val(result.postcode);
+                        $('input[name="jibunAddress"]').val(result.jibunAddress);
+                        $('input[name="detailAddress"]').val(result.detailAddress);
+                        $('input[name="extraAddress"]').val(result.extraAddress);
 
-                            $("#reservationModal").modal("show");
+                        let dogWalkCount;
+                        let petGroomingCount;
+                        let vetVisitCount;
+
+                        if (result.membershipDTO.rating === 'PERSONAL') {
+                            dogWalkCount = 3
+                            petGroomingCount = 1
+                            vetVisitCount = 1
+                        } else if (result.membershipDTO.rating === 'BUSINESS') {
+                            dogWalkCount = 5
+                            petGroomingCount = 3
+                            vetVisitCount = 3
+                        } else if(result.membershipDTO.rating === 'ULTIMATE'){
+                            dogWalkCount = 15
+                            petGroomingCount = 5
+                            vetVisitCount = 5
                         }
+
+                        // 각 서비스에 맞는 input value로 변경
+                        if (reservationBtn.hasClass('dog-walking')) {
+
+                            $("#reservationModal").find('#services-type').val('강아지 산책      ---      ' + result.membershipDTO.dogWalkCount + ' / ' + dogWalkCount);
+                            $("#reservationModal").find('#services-type').attr('data-id', '1');
+                            $("#reservationModal").find('#services-type').attr('data-type', 'DOG_WALK');
+
+                            $('.address-div').show();
+                        } else if (reservationBtn.hasClass('pet-grooming')) {
+                            $("#reservationModal").find('#services-type').val('애완동물 미용      ---      ' + result.membershipDTO.petGroomingCount + ' / ' + petGroomingCount);
+                            $("#reservationModal").find('#services-type').attr('data-id', '2');
+                            $("#reservationModal").find('#services-type').attr('data-type', 'PET_GROOMING');
+
+                            $('.address-div').hide();
+
+                        } else if (reservationBtn.hasClass('vet-visit')) {
+                            $("#reservationModal").find('#services-type').val('수의사 방문      ---      ' + result.membershipDTO.vetVisitCount + ' / ' + vetVisitCount);
+                            $("#reservationModal").find('#services-type').attr('data-id', '3');
+                            $("#reservationModal").find('#services-type').attr('data-type', 'VET_VISIT');
+                            $('.address-div').show();
+                        }
+
+
+
+                        $("#reservationModal").modal("show");
                     }
-                });
+                })
 
 
             }
 
 
         });
+
+        /*$('.reserveStartDate').on('change', function (e) {
+
+
+        });*/
 
 
 
