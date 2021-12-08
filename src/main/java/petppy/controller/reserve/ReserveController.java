@@ -9,12 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import petppy.domain.reserve.ReserveType;
+import petppy.domain.services.ServicesType;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.reserve.ReserveDTO;
 import petppy.dto.user.UserDTO;
 import petppy.service.reserve.ReserveService;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -64,11 +67,14 @@ public class ReserveController {
     }
 
     @ResponseBody
-    @GetMapping("/{date}")
-    public ResponseEntity<List<ReserveDTO>> findReserveByDate(@PathVariable("date") String date) {
+    @GetMapping("/find/{date}")
+    public ResponseEntity<List<Integer>> findReserveByDate(@PathVariable("date") String date, ServicesType servicesType) {
 
+        LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(date.substring(0, 4)), Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)), 0, 0);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        System.out.println("dateTime = " + dateTime);
+
+        return new ResponseEntity<>(reserveService.findTimeNumberByDate(dateTime, servicesType), HttpStatus.OK);
     }
 
 }

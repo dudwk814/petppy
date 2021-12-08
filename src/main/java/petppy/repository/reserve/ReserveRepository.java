@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
+import petppy.domain.services.ServicesType;
 import petppy.dto.reserve.ReserveCountDTO;
 import petppy.dto.reserve.ReserveDTO;
 import petppy.dto.user.MembershipCountDTO;
@@ -36,8 +37,7 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long>, Reserve
     @Query("select new petppy.dto.reserve.ReserveCountDTO(count(r), r.services.servicesType) from Reserve r where r.reserveType = :reserveType group by r.services.servicesType")
     List<ReserveCountDTO> countByServicesType(@Param("reserveType") ReserveType reserveType);
 
-    @Query("select r from Reserve r where ")
-    List<Reserve> findReserveByDate()
+    List<Reserve> findReserveByReserveStartDateBetweenAndServicesServicesType(LocalDateTime start, LocalDateTime end, ServicesType servicesType);
 
 
 }

@@ -183,16 +183,78 @@
 		'startDate' : '0d',
 		'title' : '예약일'
 	}).on("changeDate", function(e) {
-		let email = $('#notifyBtn').data('email');
+		let date = $(this).val();
+
+		let servicesType = $('#services-type').attr('data-type');
+
+		let toDay = new Date();
+
 
 		$.ajax({
-			url: '/user/' + email,
+			url: '/reserve/find/' + date,
 			type: 'get',
+			data: {
+				"servicesType" : servicesType
+			},
 			success: function (result) {
-				console.log('zzz');
+
+				if (result.length > 0) {	// 선택한 날짜의 예약이 있다면 예약된 시간 .reserveStartTime option disabled
+					$.each(result, function (index, timeNumber) {
+
+
+						$('.reserveStartTime option').each(function(){
+
+							$(this).removeAttr("disabled");
+							$(this).css('color', '');
+
+							if ($(this).data('time') == timeNumber) {
+								$(this).attr("disabled","disabled");
+								$(this).css('color', 'red');
+							}
+
+						});
+
+					});
+				} else {
+					$('.reserveStartTime option').each(function() {		// 예약된 시간이 없다면 .reserveStartTime option disabled 해제
+						$(this).removeAttr("disabled");
+						$(this).css('color', '');
+					});
+				}
+
+				$('.reserveStartTime option').each(function() {	// 선택한 날짜가 오늘이고 현재 시간이 option의 시간 값보다 크다면 .reserveStartTime option disabled
+
+
+					let dateToHour = $(this).val().substring(0, 2);
+
+					if (date === dateFormat(toDay)) {
+
+						if (toDay.getHours() >= dateToHour) {
+
+							$(this).attr("disabled","disabled");
+							$(this).css('color', 'red');
+						}
+					}
+
+				});
+
+
+
 			}
 		})
-	})
+	});
+
+	function dateFormat(date) {
+		let month = date.getMonth() + 1;
+		let day = date.getDate();
+
+
+		month = month >= 10 ? month : '0' + month;
+		day = day >= 10 ? day : '0' + day;
+
+		return date.getFullYear() + '-' + month + '-' + day;
+	}
+
 
 	/*$('.appointment_time').timepicker({
 		'minTime': '09:00am', // 조회하고자 할 시작 시간 ( 09시 부터 선택 가능하다. )

@@ -3,6 +3,7 @@ package petppy.service.reserve;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
 import petppy.domain.services.Services;
+import petppy.domain.services.ServicesType;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
@@ -22,7 +23,7 @@ public interface ReserveService {
 
     public PageResultDTO<ReserveDTO, Reserve> searchReserve(ReserveDTO reserveDTO, PageRequestDTO requestDTO);
 
-    public List<ReserveDTO> findReserveByDate(LocalDateTime dateTime);
+    public List<Integer> findTimeNumberByDate(LocalDateTime start, ServicesType servicesType);
 
     public void cancelReserve(ReserveDTO reserveDTO);
 

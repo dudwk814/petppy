@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.reserve.Reserve;
 import petppy.domain.reserve.ReserveType;
+import petppy.domain.services.ServicesType;
 import petppy.domain.user.Membership;
 import petppy.domain.user.User;
 import petppy.dto.PageRequestDTO;
@@ -18,8 +19,10 @@ import petppy.repository.user.MembershipRepository;
 import petppy.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -116,8 +119,22 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public List<ReserveDTO> findReserveByDate(LocalDateTime dateTime) {
-        return null;
+    public List<Integer> findTimeNumberByDate(LocalDateTime start, ServicesType servicesType) {
+
+        LocalDateTime end = LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(), 23, 59);// end = start 날짜의 23시 59분
+
+        List<Reserve> result = reserveRepository.findReserveByReserveStartDateBetweenAndServicesServicesType(start, end, servicesType);
+        List<ReserveDTO> reserveDTOList = result.stream().map(reserve -> entityToDTO(reserve)).collect(Collectors.toList());
+
+        List timeNumberList = new ArrayList();
+
+        for (ReserveDTO reserveDTO : reserveDTOList) {
+            if (Integer.valueOf(reserveDTO.getTimeNumber()) != null) {
+                timeNumberList.add(Integer.valueOf(reserveDTO.getTimeNumber()));
+            }
+        }
+
+        return timeNumberList;
     }
 
     /**

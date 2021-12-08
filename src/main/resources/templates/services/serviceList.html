@@ -289,6 +289,15 @@
 
 
                         $('#reserve-form')[0].reset();
+
+                        $('.appointment_date').val('').datepicker('update');
+
+                        $('.reserveStartTime option').each(function(){
+                            $(this).removeAttr("disabled");
+                            $(this).css('color', '');
+
+
+                        });
                         // 회원 주소로 주소 input 추가
                         $('input[name="roadAddress"]').val(result.roadAddress);
                         $('input[name="postcode"]').val(result.postcode);
