@@ -103,8 +103,6 @@ public class BoardController {
 
         boardDto.setContent(XssPreventer.unescape(boardDto.getContent()));
 
-        System.out.println("boardDto = " + boardDto);
-
         boardService.createBoard(boardDto);
 
         return "redirect:/board";
