@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
+                 data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+                    </div>
+                </div>
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i
+                                class="ion-ios-arrow-forward"></i></a></span> <span>Admin<i
+                                class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">Admin</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ftco-section bg-light">
+            <div class="container">
+                <div class="card-deck">
+                    <div class="card text-center border-primary rounded">
+                        <div class="card-body">
+                            <p class="card-title text-primary">회원</p>
+                            <h5>[[${userCount}]]</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center border-primary rounded">
+                        <div class="card-body">
+                            <p class="card-title text-primary">예약</p>
+                            <h5>[[${reserveCount}]]</h5>
+                        </div>
+                    </div>
+                    <div class="card text-center border-primary rounded">
+                        <div class="card-body">
+                            <p class="card-title text-primary">문의</p>
+                            <h5>[[${enquiryCount}]]</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <!--<div class="col text-center">
+                        <div class="block-27">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>-->
+                </div>
+
+                <ul class="nav nav-pills nav-fill justify-content-center nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                           aria-controls="home" aria-selected="true">회원</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="reserve-tab" data-toggle="tab" href="#reserve" role="tab"
+                           aria-controls="profile" aria-selected="false">예약</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="enquiry-tab" data-toggle="tab" href="#enquiry" role="tab"
+                           aria-controls="contact" aria-selected="false">문의</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row mt-5">
+                        </div>
+                        <div class="card-deck">
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">총 회원 수</p>
+                                    <h5>[[${userCount}]]</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">NONE</p>
+                                    <h5 class="noneCount" th:if="${NONE} != null">[[${NONE.count}]]</h5>
+                                    <h5 class="noneCount" th:unless="${NONE} != null">0</h5>
+                                </div>
+                            </div>
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">PERSONAL</p>
+                                    <h5 class="personalCount" th:if="${PERSONAL} != null">[[${PERSONAL.count}]]</h5>
+                                    <h5 class="personalCount" th:unless="${PERSONAL} != null">0</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">BUSINESS</p>
+                                    <h5 class="businessCount" th:if="${BUSINESS} != null">[[${BUSINESS.count}]]</h5>
+                                    <h5 class="businessCount" th:unless="${BUSINESS} != null">0</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">ULTIMATE</p>
+                                    <h5 class="ultimateCount" th:if="${ULTIMATE} != null">[[${ULTIMATE.count}]]</h5>
+                                    <h5 class="ultimateCount" th:unless="${ULTIMATE} != null">0</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        회원 차트
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="membershipChart1" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        회원 차트
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="membershipChart2" width="400" height="300"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5 mb-5">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-header text-center">
+                                    회원 테이블
+                                </div>
+                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 400px !important;">
+                                    <select class="custom-select" name="rating" id="inputGroupSelect02" style="height: 52px !important;">
+                                        <option value="" selected>멤버십</option>
+                                        <option value="NONE">NONE</option>
+                                        <option value="PERSONAL">PERSONAL</option>
+                                        <option value="BUSINESS">BUSINESS</option>
+                                        <option value="ULTIMATE">ULTIMATE</option>
+                                    </select>
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control user-keyword" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary user-search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2">
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">회원번호</th>
+                                                <th scope="col" class="text-center">이름</th>
+                                                <th scope="col" class="text-center">이메일</th>
+                                                <th scope="col" class="text-center">멤버십</th>
+                                                <th scope="col" class="text-center"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer user-table-pagination">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="reserve" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row mt-5">
+                        </div>
+                        <div class="card-deck">
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">총 예약 수</p>
+                                    <h5>[[${reserveCount}]]</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">강아지 산책</p>
+                                    <h5 class="dogWalkCount" th:if="${DOG_WALK} != null">[[${DOG_WALK.count}]]</h5>
+                                    <h5 class="dogWalkCount" th:unless="${DOG_WALK} != null">0</h5>
+                                </div>
+                            </div>
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">반려동물 미용</p>
+                                    <h5 class="petGroomingCount" th:if="${PET_GROOMING} != null">[[${PET_GROOMING.count}]]</h5>
+                                    <h5 class="personalCount" th:unless="${PET_GROOMING} != null">0</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">수의사 방문</p>
+                                    <h5 class="vetVisitCount" th:if="${VET_VISIT} != null">[[${VET_VISIT.count}]]</h5>
+                                    <h5 class="vetVisitCount" th:unless="${VET_VISIT} != null">0</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-header text-center">
+                                    예약 테이블
+                                </div>
+                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 500px !important;">
+                                    <select class="custom-select" name="reserveType" id="inputGroupSelect03" style="height: 52px !important;">
+                                        <option value="" selected>예약 타입</option>
+                                        <option value="RESERVE">예약</option>
+                                        <option value="COMPLETE">완료</option>
+                                        <option value="CANCEL">취소</option>
+                                    </select>
+                                    <select class="custom-select" name="servicesType" id="inputGroupSelect04" style="height: 52px !important;">
+                                        <option value="" selected>서비스</option>
+                                        <option value="DOG_WALK">강아지 산책</option>
+                                        <option value="PET_GROOMING">반려동물 미용</option>
+                                        <option value="VET_VISIT">수의사 방문</option>
+                                    </select>
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control reserve-keyword" placeholder="이름 OR 이메일" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary reserve-search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2">
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">예약 번호</th>
+                                                <th scope="col" class="text-center">이름</th>
+                                                <th scope="col" class="text-center">예약 서비스</th>
+                                                <th scope="col" class="text-center">예약 일</th>
+                                                <th scope="col" class="text-center">예약 상태</th>
+                                                <th scope="col" class="text-center"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="reserve-tbody">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer reserve-table-pagination">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="enquiry" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row mt-5">
+                        </div>
+                        <div class="card-deck">
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">총 문의 수</p>
+                                    <h5>[[${enquiryCount}]]</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">멤버십</p>
+                                    <h5 class="membershipEnquiryCount" th:if="${MEMBERSHIP} != null">[[${MEMBERSHIP.count}]]</h5>
+                                    <h5 class="membershipEnquiryCount" th:unless="${MEMBERSHIP} != null">0</h5>
+                                </div>
+                            </div>
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">예약</p>
+                                    <h5 class="reserveEnquiryCount" th:if="${RESERVE} != null">[[${RESERVE.count}]]</h5>
+                                    <h5 class="reserveEnquiryCount" th:unless="${RESERVE} != null">0</h5>
+                                </div>
+                            </div>
+
+                            <div class="card text-center border-primary rounded">
+                                <div class="card-body">
+                                    <p class="card-title text-primary">기타</p>
+                                    <h5 class="etcEnquiryCount" th:if="${ETC} != null">[[${ETC.count}]]</h5>
+                                    <h5 class="etcEnquiryCount" th:unless="${ETC} != null">0</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-header text-center">
+                                    문의 테이블
+                                </div>
+                                <div class="input-group mb-0 mt-2 d-flex justify-content-end" style="width: 500px !important;">
+                                    <select class="custom-select" name="enquiryStatus" id="enquiryStatus" style="height: 52px !important;">
+                                        <option value="" selected>문의 타입</option>
+                                        <option value="BEFORE">처리 중</option>
+                                        <option value="COMPLETE">답변 완료</option>
+                                    </select>
+                                    <select class="custom-select" name="enquiryType" id="enquiryType" style="height: 52px !important;">
+                                        <option value="" selected>문의 종류</option>
+                                        <option value="MEMBERSHIP">멤버십</option>
+                                        <option value="RESERVE">예약</option>
+                                        <option value="ETC">기타</option>
+                                    </select>
+                                    <input style="width: 150px !important;"  name="keyword" type="text" class="form-control enquiry-keyword" placeholder="이름 OR 이메일 OR 제목" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary enquiry-search-btn" type="button" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2">
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">문의 번호</th>
+                                                <th scope="col" class="text-center">이름</th>
+                                                <th scope="col" class="text-center">제목</th>
+                                                <th scope="col" class="text-center">문의 종류</th>
+                                                <th scope="col" class="text-center">문의 날짜</th>
+                                                <th scope="col" class="text-center">답변 상태</th>
+                                                <th scope="col" class="text-center"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="enquiry-tbody">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="card-footer enquiry-table-pagination">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="modal fade" tabindex="-1" id="userModal" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">회원 정보</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="user-modal-form">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="userEmail">이메일</label>
+                                    <input type="email" class="form-control" id="userEmail" placeholder="이메일" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="userName">이름</label>
+                                    <input type="text" class="form-control" id="userName" placeholder="이름" disabled>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label for="postcode">우편번호</label>
+                                    <input type="text" class="form-control" id="postcode" placeholder="우편번호" disabled>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label for="roadAddress">도로명 주소</label>
+                                    <input type="text" class="form-control" id="roadAddress" placeholder="도로명 주소" disabled>
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label for="jibunAddress">지번 주소</label>
+                                    <input type="text" class="form-control" id="jibunAddress" placeholder="지번 주소" disabled>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="detailAddress">상세 주소</label>
+                                    <input type="text" class="form-control" id="detailAddress" placeholder="상세 주소" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="extraAddress">참고 사항</label>
+                                    <input type="text" class="form-control" id="extraAddress" placeholder="참고 사항" disabled>
+                                </div>
+                            </div>
+
+                            <div class="hr-sect">멤버십</div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="userEmail">멤버십 등급</label>
+                                    <input type="text" class="form-control" id="membershipRating" placeholder="멤버십 등급" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="userName">멤버십 기간</label>
+                                    <input type="text" class="form-control" id="membershipDate" placeholder="멤버십 기간" disabled>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="postcode">이용가능 강아지 산책 횟수</label>
+                                    <input type="text" class="form-control" id="dogWalk" placeholder="강아지 산책" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="roadAddress">이용가능 반려동물 미용 횟수</label>
+                                    <input type="text" class="form-control" id="petGrooming" placeholder="반려동물 미용" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="jibunAddress">이용가능 수의사 방문 횟수</label>
+                                    <input type="text" class="form-control" id="vetVisit" placeholder="수의사 방문" disabled>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 예약 모달 -->
+        <div class="modal fade" tabindex="-1" id="reserveModal" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">예약 정보</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="reserve-modal-form">
+                            <div class="reserve-div">
+                                <div class="hr-sect">예약</div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="reserveId">예약번호</label>
+                                        <input type="text" class="form-control" id="reserveId" placeholder="예약번호" disabled>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="reserveId">회원번호</label>
+                                        <input type="text" class="form-control" id="userId" placeholder="회원번호" disabled>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="reserveName">이름</label>
+                                        <input type="text" class="form-control" id="reserveName" placeholder="이름" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        <label for="servicesType">예약 서비스</label>
+                                        <input type="text" class="form-control" id="servicesType" placeholder="예약 서비스" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="reserveDate">예약 날짜</label>
+                                        <input type="text" class="form-control" id="reserveDate" placeholder="예약 날짜" disabled>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="reserveType">예약 상태</label>
+                                        <input type="text" class="form-control" id="reserveType" placeholder="예약상태" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="address-div">
+                                <div class="hr-sect">주소 정보</div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="reservePostcode">우편번호</label>
+                                        <input type="text" class="form-control" id="reservePostcode" placeholder="우편번호" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="reserveRoadAddress">도로명 주소</label>
+                                        <input type="text" class="form-control" id="reserveRoadAddress" placeholder="도로명 주소" disabled>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="reserveJibunAddress">지번 주소</label>
+                                        <input type="text" class="form-control" id="reserveJibunAddress" placeholder="지번 주소" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="reserveDetailAddress">상세 주소</label>
+                                        <input type="text" class="form-control" id="reserveDetailAddress" placeholder="상세 주소" disabled>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="reserveExtraAddress">참고 사항</label>
+                                        <input type="text" class="form-control" id="reserveExtraAddress" placeholder="참고 사항" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger reserve-cancel-btn" data-services="">예약 취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- 문의 모달 -->
+        <div class="modal fade" tabindex="-1" id="enquiryModal" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">문의 정보</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="enquiry-modal-form">
+                            <input type="hidden" name="enquiryId" disabled>
+                            <div class="enquiry-div">
+                                <div class="form-group">
+                                    <label for="enquiryType">문의 종류</label>
+                                    <input type="text" class="form-control" name="enquiryType" placeholder="문의 종류를 선택해주세요." disabled></input>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enquiryTitle">문의 제목</label>
+                                    <input type="text" class="form-control" name="enquiryTitle" placeholder="문의하실 제목을 입력해주세요." disabled></input>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enquiryDate">문의 날짜</label>
+                                    <input type="text" class="form-control" name="enquiryDate" placeholder="문의하실 제목을 입력해주세요." disabled></input>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="userName">문의자 이름</label>
+                                            <input type="text" class="form-control" name="userName" placeholder="문의작성자 이름" disabled></input>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="userEmail">문의자 이메일</label>
+                                            <input type="text" class="form-control" name="userEmail" placeholder="문의작성자 이메일" disabled></input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enquiryContent">문의 내용</label>
+                                    <textarea class="form-control" name="enquiryContent" placeholder="문의하실 내용을 입력해주세요." disabled rows="5"></textarea>
+                                </div>
+
+                                <div class="row mt-5">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="answerContent">답변 내용</label>
+                                    <textarea class="form-control" name="answerContent" id="answerContent" placeholder="문의하실 내용을 입력해주세요." rows="5"></textarea>
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" data-id="" data-page="" class="btn btn-success enquiry-answer-btn">답변작성</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</th:block>
+<script th:inline="javascript">
+
+    <!-- 각 멤버십 등급 별 회원수 카운트 -->
+    const userCount = [[${userCount}]];
+    const noneCount = $('.noneCount').text();
+    const personalCount = $('.personalCount').text();
+    const businessCount = $('.businessCount').text();
+    const ultimateCount = $('.ultimateCount').text();
+
+    <!-- 멤버십 차트 1 -->
+    const membershipChart1 = new Chart($('#membershipChart1'), {
+        type: 'bar',
+        data: {
+            labels: ['NONE', 'PERSONAL', 'BUSINESS', 'ULTIMATE'],
+            datasets: [{
+                label: '회원 수',
+                data: [noneCount, personalCount, businessCount, ultimateCount],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    <!-- 멤버십 차트 2 -->
+    const membershipChart2 = new Chart($('#membershipChart2'), {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'NONE',
+                'PERSONAL',
+                'BUSINESS',
+                'ULTIMATE'
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [noneCount, personalCount, businessCount, ultimateCount],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    $(document).ready(function (e) {
+
+        userList(1);    // 페이지 로딩시 유저 리스트 조회
+
+        $('.user-search-btn').on('click', function (e) {    // 회원 검색 버튼 클릭시 회원 조회
+            e.preventDefault();
+
+            userList(1);
+        });
+
+        
+        /* 회원 검색 */
+        function userList(page) {
+            var page = page || 1;
+
+            let userListTable = "";
+            let pagination = "";
+            let rating = $('select[name="rating"] option:selected').val().trim() === "" ? "" : $('select[name="rating"] option:selected').val().trim();
+            let keyword = $('.user-keyword').val().trim() === "" ? "" : $('user-keyword').val().trim();
+
+            let pageRequestDto = {
+                page: page,
+                rating: rating,
+                keyword: keyword
+            }
+
+            $.ajax({
+                url: '/admin/user/' + page,
+                type: 'get',
+                data: {
+                    'keyword': keyword,
+                    'rating': rating,
+                    'page': page
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+
+                    if (result.totalElements == 0){
+                        swal('회원 검색', '조건에 맞는 회원이 없습니다.');
+                        return false;
+                    }
+                    // 회원 테이블
+                    $.each(result.dtoList, function (index, userList) {
+                        userListTable += '<tr>' +
+                            '<th scope="row" class="text-center">' + userList.id + '</th>' +
+                            '<td class="text-center">' + userList.name + '</td>' +
+                            '<td class="text-center">' + userList.email + '</td>' +
+                            '<td class="text-center">' + userList.membershipDTO.rating + '</td>' +
+                            '<td class="text-center"><a href="#" class="user-modal-btn" data-email="' + userList.email +'">자세히 보기</a></td>' +
+                            '</tr>';
+                    });
+
+                    $('tbody').html(userListTable);
+
+                    // 회원 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="user" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="user" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="user" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.user-table-pagination').html(pagination);
+
+                }
+            });
+
+        }
+
+
+
+
+        /* 회원 자세히 보기 버튼 클릭시 회원 조회 후 모달 생성성 */
+        $(document).on('click', '.user-modal-btn', function (e) {
+            e.preventDefault();
+
+            let email = $(this).data('email');
+            let form = $('.user-modal-form');
+
+            // 모달 input 초기화
+            form[0].reset();
+            
+            let modal = $('#userModal');
+
+            // 모달 input 변수
+            let emailInput = $('#userEmail');
+            let nameInput = $('#userName');
+            let postcodeInput = $('#postcode');
+            let roadAddressInput = $('#roadAddress');
+            let jibunAddressInput = $('#jibunAddress');
+            let detailAddressInput = $('#detailAddress');
+            let extraAddressInput = $('#extraAddress');
+            let membershipRatingInput = $('#membershipRating');
+            let membershipDateInput = $('#membershipDate');
+            let dogWalkInput = $('#dogWalk');
+            let petGroomingInput = $('#petGrooming');
+            let vetVisitInput = $('#vetVisit');
+
+            $.ajax({
+                url: '/user/' + email,
+                type: 'get',
+                success: function (result) {
+                    emailInput.val(result.email);
+                    nameInput.val(result.name);
+                    postcodeInput.val(result.postcode);
+                    roadAddressInput.val(result.roadAddress);
+                    jibunAddressInput.val(result.jibunAddress);
+                    detailAddressInput.val(result.detailAddress);
+                    extraAddressInput.val(result.extraAddress);
+                    membershipRatingInput.val(result.membershipDTO.rating);
+                    if (result.membershipDTO.rating !== 'NONE') {
+                        membershipDateInput.val(get_date_str(result.membershipDTO.modifiedDate) + ' ~ ' + get_date_str(result.membershipDTO.lastDate));
+                    }
+
+                    dogWalkInput.val(result.membershipDTO.dogWalkCount);
+                    petGroomingInput.val(result.membershipDTO.petGroomingCount);
+                    vetVisitInput.val(result.membershipDTO.vetVisitCount);
+                }
+            })
+
+
+
+
+            $('#userModal').modal('show');
+        })
+
+       /* 예약 검색 버튼 클릭시 예약 조회 */
+        $('.reserve-search-btn').on('click', function (e) {
+            e.preventDefault();
+
+            reserveList(1);
+
+        })
+
+        /* 예약 탭 클릭 시 예약 테이블 정보 조회 */
+        $('#reserve-tab').on('click', function () {
+
+            reserveList(1);
+
+        })
+
+        /* 예약 리스트 조회 */
+        function reserveList(page) {
+            var page = page || 1;
+
+            let reserveListTable = "";
+            let pagination = "";
+            let reserveType = $('select[name="reserveType"] option:selected').val().trim() === "" ? "" : $('select[name="reserveType"] option:selected').val().trim();
+            let servicesType = $('select[name="servicesType"] option:selected').val().trim() === "" ? "" : $('select[name="servicesType"] option:selected').val().trim();
+            let keyword = $('.reserve-keyword').val().trim() === "" ? "" : $('.reserve-keyword').val().trim();
+
+            $.ajax({
+                url: '/admin/reserve/' + page,
+                type: 'get',
+                contentType:'application/json; charset=utf-8',
+                data: {
+                    'page' : page,
+                    'keyword' : keyword,
+                    'servicesType' : servicesType,
+                    'reserveType' : reserveType
+                },
+                success: function (result) {
+                    console.log("reserveList")
+                    if (result.totalElements == 0){
+                        swal('예약 검색', '조건에 맞는 예약이 없습니다.');
+                        return false;
+                    }
+                    // 회원 테이블
+                    $.each(result.dtoList, function (index, reserveList) {
+                        let serviceType = "";
+                        let reserveType = "";
+
+                        // 서비스에 타입에 따른 서비스 한글화
+                        if (reserveList.servicesType == "DOG_WALK") {
+                            serviceType = "강아지 산책";
+                        } else if(reserveList.servicesType == "PET_GROOMING") {
+                            serviceType = "반려동물 미용";
+                        } else if(reserveList.servicesType == "VET_VISIT") {
+                            serviceType = "수의사 방문";
+                        }
+
+                        // 예약 상태 한글화
+                        if (reserveList.reserveType == "RESERVE"){
+                            reserveType = "예약";
+                        } else if(reserveList.reserveType == "CANCEL"){
+                            reserveType = "취소";
+                        } else if (reserveList.reserveType == "COMPLETE"){
+                            reserveType = "완료";
+                        }
+
+                        reserveListTable += '<tr aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">' +
+                            '<th scope="row" class="text-center">' + reserveList.id + '</th>' +
+                            '<td class="text-center">' + reserveList.name + '</td>' +
+                            '<td class="text-center">' + serviceType + '</td>' +
+                            '<td class="text-center">' + reserveList.reserveStartDate + '</td>' +
+                            '<td class="text-center">' + reserveType + '</td>' +
+                            '<td class="text-center"><a href="#" class="reserve-modal-btn" data-id="' + reserveList.id +'">자세히 보기</a></td>' +
+                            '</tr> ';
+                    });
+
+                    $('.reserve-tbody').html(reserveListTable);
+
+                    // 예약 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="reserve" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="reserve" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="reserve" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.reserve-table-pagination').html(pagination);
+
+                }
+            })
+        }
+
+        /* 예약 자세히 보기 버튼 클릭시 예약 조회 후 모달 생성성 */
+        $(document).on('click', '.reserve-modal-btn', function (e) {
+            e.preventDefault();
+
+            let id = $(this).data('id');
+            let form = $('.reserve-modal-form');
+
+            // 모달 input 초기화
+            form[0].reset();
+
+            let modal = $('#reserveModal');
+
+            // 모달 input 변수
+            let idInput = $("#reserveId");
+            let userIdInput = $("#userId");
+            let nameInput = $('#reserveName');
+            let servicesTypeInput = $("#servicesType")
+            let reserveDateInput = $("#reserveDate");
+            let reserveTypeInput = $("#reserveType");
+            let postcodeInput = $('#reservePostcode');
+            let roadAddressInput = $('#reserveRoadAddress');
+            let jibunAddressInput = $('#reserveJibunAddress');
+            let detailAddressInput = $('#reserveDetailAddress');
+            let extraAddressInput = $('#reserveExtraAddress');
+            let cancelBtn = $('.reserve-cancel-btn');
+
+            $.ajax({
+                url: '/reserve/' + id,
+                type: 'get',
+                success: function (result) {
+                    idInput.val(result.id);
+                    userIdInput.val(result.userId);
+                    nameInput.val(result.name);
+                    servicesTypeInput.val(result.servicesType);
+                    reserveDateInput.val(result.reserveStartDate);
+                    reserveTypeInput.val(result.reserveType);
+                    postcodeInput.val(result.address.postcode);
+                    roadAddressInput.val(result.address.roadAddress);
+                    jibunAddressInput.val(result.address.jibunAddress);
+                    detailAddressInput.val(result.address.detailAddress);
+                    extraAddressInput.val(result.address.extraAddress);
+                    cancelBtn.attr('data-services', result.servicesId);
+
+                    if (result.reserveType != 'RESERVE') {
+                        cancelBtn.attr('disabled', true);
+                    }
+                }
+
+            })
+
+
+            $(modal).modal('show');
+        });
+        
+        /* 예약 모달에서 예약 취소 버튼 클릭시 예약 취소 */
+        $(document).on('click', '.reserve-cancel-btn', function () {
+
+            let id = $("#reserveId").val();
+            let userId = $("#userId").val();
+            let servicesId = $('.reserve-cancel-btn').data('services');
+
+            swal("예약을 취소하시겠습니까?", {
+                buttons: {
+                    cancel: "닫기",
+                    catch: {
+                        text: "예약 취소",
+                        value: "cancel",
+                    }
+                },
+            }).then((value) => {
+                if (value) {
+
+
+                    $.ajax({
+                        url: '/reserve/cancel',
+                        type: 'post',
+                        data: {
+                            id: id,
+                            userId: userId,
+                            servicesId: servicesId
+                        }
+                    }).done(function (result) {
+                        if (result) {
+                            swal('예약 취소', '예약을 취소했습니다.');
+
+                        }
+                    })
+
+                }
+            });
+        })
+
+        /* 문의 검색 버튼 클릭시 문의 조회 */
+        $('.enquiry-search-btn').on('click', function (e) {
+            e.preventDefault();
+
+            enquiryList(1);
+
+        });
+
+        /* 문의 탭 클릭 시 문의 테이블 정보 조회 */
+        $('#enquiry-tab').on('click', function (e) {
+            enquiryList(1)
+        });
+
+        /* 문의 테이블 조회 */
+        function enquiryList(page) {
+            var page = page || 1;
+
+            let enquiryListTable = "";
+            let pagination = "";
+            let enquiryType = $('select[name="enquiryType"] option:selected').val().trim() === "" ? "" : $('select[name="enquiryType"] option:selected').val().trim();
+            let enquiryStatus = $('select[name="enquiryStatus"] option:selected').val().trim() === "" ? "" : $('select[name="enquiryStatus"] option:selected').val().trim();
+            let keyword = $('.enquiry-keyword').val().trim() === "" ? "" : $('.enquiry-keyword').val().trim();
+
+            $.ajax({
+                url: '/admin/enquiry/' + page,
+                type: 'get',
+                contentType:'application/json; charset=utf-8',
+                data: {
+                    'page' : page,
+                    'keyword' : keyword,
+                    'enquiryType' : enquiryType,
+                    'enquiryStatus' : enquiryStatus
+                },
+                success: function (result) {
+                    if (result.totalElements == 0){
+                        swal('문의 검색', '조건에 맞는 문의가 없습니다.');
+                        return false;
+                    }
+                    // 문의 테이블
+                    $.each(result.dtoList, function (index, enquiryList) {
+                        let enquiryType = "";
+                        let enquiryStatus = "";
+
+                        // 문의 타입에 따른 서비스 한글화
+                        if (enquiryList.enquiryType == "MEMBERSHIP") {
+                            enquiryType = "멤버십";
+                        } else if(enquiryList.enquiryType == "RESERVE") {
+                            enquiryType = "예약";
+                        } else if(enquiryList.enquiryType == "ETC") {
+                            enquiryType = "기타";
+                        }
+
+                        // 문의 상태 한글화
+                        if (enquiryList.enquiryStatus == "BEFORE"){
+                            enquiryStatus = "답변 전";
+                        } else if (enquiryList.enquiryStatus == "COMPLETE"){
+                            enquiryStatus = "답변 완료";
+                        }
+
+                        enquiryListTable += '<tr aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">' +
+                            '<th scope="row" class="text-center">' + enquiryList.enquiryId + '</th>' +
+                            '<td class="text-center">' + enquiryList.userName + '</td>' +
+                            '<td class="text-center">' + enquiryList.title + '</td>' +
+                            '<td class="text-center">' + enquiryType + '</td>' +
+                            '<td class="text-center">' + get_date_str(enquiryList.createdDate) + '</td>' +
+                            '<td class="text-center">' + enquiryStatus + '</td>' +
+                            '<td class="text-center"><a href="#" class="enquiry-modal-btn" data-page="' + result.page + '" data-email="' + enquiryList.userEmail +'" data-id="' + enquiryList.enquiryId +'">자세히 보기</a></td>' +
+                            '</tr> ';
+                    });
+
+                    $('.enquiry-tbody').html(enquiryListTable);
+
+                    // 예약 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="enquiry" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="enquiry" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="enquiry" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.enquiry-table-pagination').html(pagination);
+
+                }
+            })
+        }
+
+        /* 문의 자세히보기 및 답변 모달 */
+        $(document).on('click', '.enquiry-modal-btn', function (e) {
+            e.preventDefault();
+
+            let form = $('.enquiry-modal-form');
+            let enquiryId = $(this).data('id');
+            let email = $(this).data('email');
+            let enquiryType = $("input[name='enquiryType']");
+            let enquiryDate = $("input[name='enquiryDate']");
+            let enquiryTitle = $('input[name="enquiryTitle"]');
+            let userName = $('input[name="userName"]');
+            let userEmailInput = $('input[name="userEmail"]');
+            let enquiryContent = $('textarea[name="enquiryContent"]');
+            let answerContent = $('textarea[name="answerContent"]');
+            let enquiryAnswerBtn = $('.enquiry-answer-btn');
+            let page = $(this).data('page');
+            // 모달 input 초기화
+            form[0].reset();
+
+
+            $.ajax({
+                url: '/enquiry/' + enquiryId,
+                type: 'get',
+                data: {
+                    'enquiryId' : enquiryId,
+                    'email' : email
+                },
+                dataType: 'json',
+                success: function (result) {
+
+                    enquiryTitle.val(result.title);
+                    userName.val(result.userName);
+                    userEmailInput.val(result.userEmail);
+                    enquiryContent.val(result.content);
+                    enquiryDate.val(get_date_str(result.createdDate));
+
+                    // 문의 타입에 따른 서비스 한글화
+                    if (result.enquiryType == "MEMBERSHIP") {
+                        enquiryType.val("멤버십");
+                    } else if(result.enquiryType == "RESERVE") {
+                        enquiryType.val("예약");
+                    } else if(result.enquiryType == "ETC") {
+                        enquiryType.val("기타");
+                    }
+
+                    // 답변 유무에 따른 답변 input disable과 답변 내용
+                    if (result.answerDTO != null) {
+                        answerContent.attr("readonly", true);
+                        enquiryAnswerBtn.attr("disabled", true);
+                        enquiryAnswerBtn.attr('data-id', result.enquiryId);
+                        enquiryAnswerBtn.attr('data-page', page);
+                        answerContent.val(result.answerDTO.content);
+                    } else {
+                        answerContent.attr("readonly", false);
+                        enquiryAnswerBtn.attr("disabled", false);
+                        enquiryAnswerBtn.attr('data-id', result.enquiryId);
+                        enquiryAnswerBtn.attr('data-page', page);
+                    }
+                }
+            })
+
+            $('#enquiryModal').modal("show");
+        });
+
+        /* 문의 답변작성 버튼 클릭시 답변 저장 */
+        $(document).on('click', '.enquiry-answer-btn', function (e) {
+            let enquiryId = $(this).data('id');
+            let page = $(this).data('page');
+            let content = $('textarea[name="answerContent"]').val();
+            let answerDTO = {
+                enquiryId : enquiryId,
+                content : content
+            }
+
+            if (content.trim() == "") {
+                swal('답변', '답변 내용을 입력해주세요.');
+                return false;
+            }
+
+            $.ajax({
+                url: '/answer/create',
+                type: 'post',
+                data: JSON.stringify(answerDTO),
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    if (result === "success") {
+                        swal({
+                            title: "답변 작성",
+                            text: "답변이 작성되었습니다.",
+                            icon: "success",
+                            button: true,
+                        })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    enquiryList(page);
+                                    $('#enquiryModal').modal("hide");
+                                }
+                            });
+                    }
+                },
+                error : function(xhr, status, error) {
+                    let msg = '답변 작성에 실패하였습니다.\n' + xhr.responseText
+                    swal('답변', msg);
+                }
+
+            });
+        });
+
+
+       /* 페이지 버튼 클릭 시 페이지 변경 */
+        $(document).on('click', '#page-link', function (e) {
+            e.preventDefault();
+
+
+
+
+            let page = $(this).data('page');
+
+            let type = $(this).data("type");
+
+            console.log(page);
+
+
+            if (type == "user") {
+                userList(page);
+            } else if (type == "reserve") {
+                reserveList(page)
+            } else if(type == "enquiry") {
+                enquiryList(page)
+            }
+
+
+        });
+
+        /* 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-prev', function (e) {
+            e.preventDefault();
+
+            let page = $(this).data('preve');
+
+            let type = $(this).data("type");
+
+
+            if (type == "user") {
+                userList(page);
+            } else if (type == "reserve") {
+                reserveList(page)
+            } else if(type == "enquiry") {
+                enquiryList(page)
+            }
+        });
+
+        /* 다음 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-next', function (e) {
+            e.preventDefault();
+
+            let page = $(this).data('end');
+
+            let type = $(this).data("type");
+
+
+            if (type == "user") {
+                userList(page);
+            } else if (type == "reserve") {
+                reserveList(page)
+            } else if(type == "enquiry") {
+                enquiryList(page)
+            }
+        });
+    });
+</script>
+</html>

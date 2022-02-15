@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
+                 data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+                    </div>
+                </div>
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true"
+                                                                          data-toggle="tooltip" data-placement="top"
+                                                                          title="메인 페이지로 이동">Home <i
+                                class="ion-ios-arrow-forward"></i></a></span>
+                            <span class="mr-2"><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                  title="게시판 목록으로 이동"
+                                                  th:href="@{/board(page=${requestDTO.page},size=${requestDTO.size})}">Board <i
+                                    class="ion-ios-arrow-forward"></i></a></span> <span>Board Read<i
+                                    class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">Board</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ftco-section ftco-degree-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 ftco-animate">
+                        <p class="meta d-flex">
+                            <span aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성자">[[${#strings.substringBefore(board.email,'@')}]]</span>
+                            &nbsp;/&nbsp;
+                            <span aria-hidden="true" data-toggle="tooltip" data-placement="top" title="작성일">[[${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}]]</span>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span>
+                                <a data-toggle="tooltip" data-placement="top" title="목록으로 돌아가기" class="text-black-50" th:href="@{/board(page=${requestDTO.page},size=${requestDTO.size}, type=${requestDTO.type}, keyword=${requestDTO.keyword})}">목록</a>
+                            </span>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <th:block th:if="${board.email == session.user.email}">
+                                    &nbsp; / &nbsp;
+                                    <span>
+                                        <a data-toggle="tooltip" data-placement="top" title="게시글 수정" class="text-black-50" th:href="@{/board/modify(id=${board.boardId})}">수정</a>
+                                    </span> &nbsp; / &nbsp;
+                                    <span>
+                                        <a data-toggle="tooltip" data-placement="top" title="게시글 삭제" class="text-black-50 board-remove-btn" th:href="@{/#}">삭제</a>
+                                    </span>
+                                </th:block>
+                            </th:block>
+                        </p>
+                        <h2 class="mb-3" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목"
+                            th:utext="${board.title}"></h2>
+                        <hr>
+                        <div th:utext="${board.content}">Content</div>
+
+                        <div class="tag-widget post-tag-container mb-5 mt-5">
+
+                        </div>
+
+                        <div class="pt-5 mt-5 comment-div">
+                            <h5 class="comment-count">댓글 [[${#numbers.formatInteger(board.commentCount, 0, 'COMMA')}]]개</h5>
+                            <div class="comment-form-wrap">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="vcard bio" style="margin-top: 10px;">
+                                            <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">
+                                        </div>
+                                    </div>
+                                    <input type="text" id="reply-content" class="form-control main-input" placeholder="댓글을 입력하세요."
+                                           aria-label="Recipient's username" aria-describedby="replyAddBtn">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary replyAddBtn" type="button"
+                                                id="replyAddBtn">등록
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="comment-list pt-5">
+
+                            </ul>
+
+                            <div class="row mt-5">
+                                <div class="col text-center">
+                                    <div class="block-27">
+                                        <ul>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pagination-div">
+
+                            </div>
+                            <!-- END comment-list -->
+                        </div>
+
+                    </div> <!-- .col-md-8 -->
+                    <div class="col-lg-4 sidebar pl-lg-5 ftco-animate">
+                        <div class="sidebar-box">
+                            <form action="/board" class="search-form">
+                                <input type="hidden" name="page" value="1">
+                                <input type="hidden" name="size" value="10">
+                                <div class="input-group mb-3" style="width: 400px !important;">
+                                    <select class="custom-select" name="type" id="inputGroupSelect02" style="height: 52px !important;">
+                                        <option th:selected="${requestDTO.type == null}">Choose...</option>
+                                        <option value="t" th:selected="${requestDTO.type == 't'}">제목</option>
+                                        <option value="c" th:selected="${requestDTO.type == 'c'}">내용</option>
+                                        <option value="w" th:selected="${requestDTO.type == 'w'}">작성자</option>
+                                        <option value="tw" th:selected="${requestDTO.type == 'tw'}">제목 or 작성자</option>
+                                        <option value="tc" th:selected="${requestDTO.type == 'tc'}">제목 or 내용</option>
+                                        <option value="ct" th:selected="${requestDTO.type == 'ct'}">내용 or 작성자</option>
+                                        <option value="tcw" th:selected="${requestDTO.type == 'tcw'}">제목 or 내용 or 작성자</option>
+                                    </select>
+                                    <!--</div>-->
+                                    <input style="width: 150px !important;" th:value="${requestDTO.keyword}" name="keyword" type="text" class="form-control" placeholder="제목 OR 내용 OR 작성자" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit" style="width: 55px;"><span class="fa fa-search"></span></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="sidebar-box ftco-animate">
+                            <h3>최근 게시글</h3>
+                            <div class="block-21 mb-4 d-flex" th:each="board : ${recentBoardList}">
+                                <div class="text">
+                                    <h3 class="heading"><a th:href="@{/board/read(id=${board.boardId})}" th:utext="${board.title}"></a>
+                                    </h3>
+                                    <div class="meta">
+                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                title="작성자"><span class="icon-person"></span>
+                                            [[${#strings.substringBefore(board.email,'@')}]]</a></div>
+                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                title="작성일"><span class="icon-calendar"></span>
+                                            [[${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}]]</a></div>
+                                        <div><a aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                                                title="조회수"><span class="icon-chat"></span> [[${board.hit}]]</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section> <!-- .section -->
+    </th:block>
+</th:block>
+<script th:inline="javascript">
+
+    $(document).ready(function (e) {
+
+        var boardId = [[${board.boardId}]];
+
+        commentList(1);
+
+        /* 댓글 목록 조회 */
+        function commentList(page) {
+
+            var page = page || 1;
+
+            $.ajax({
+                url : '/comment/' + boardId + '/' + page,
+                data : {'boardId':boardId, 'page':page},
+                dataType: 'json',
+                success : function (result) {
+                    var commentList = "";
+
+                    var pagination = "";
+
+                    $.each(result.dtoList, function (index, comment) {
+
+                        var date = timeForToday(comment.createdDate);
+
+
+                        console.log(comment.deleteStatus);
+
+                        if (comment.deleteStatus === 'Y') {
+                            commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                                '                                    <div class="vcard bio">\n' +
+                                '                                        <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                                '                                    </div>\n' +
+                                '                                    <div class="comment-body" id="comment-body' + comment.id + '"\n' +
+                                '                                         data-comment="' + comment.id + '">\n' +
+                                maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                                '                                        <span class="meta">' +  date  + '</span>\n' +
+                                '                                        <p class="comment-content"> 삭제된 댓글입니다.</p>\n' +
+                                '                                        <p class="d-flex">\n' +
+                                '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                                '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' +
+                                comment.childrenCount + '개 보기\n' +
+                                '                                            </a>\n' +
+                                '                                        </p>\n' +
+                                '                                    </div>';
+                        } else {
+                            commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                                '                                    <div class="vcard bio">\n' +
+                                '                                        <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                                '                                    </div>\n' +
+                                '                                    <div class="comment-body" id="comment-body' + comment.id + '"\n' +
+                                '                                         data-comment="' + comment.id + '">\n' +
+                                maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                                '                                        <span class="meta">' +  date  + '</span>\n' +
+                                '                                        <p class="comment-content">' + comment.content + '</p>\n' +
+                                '                                        <p class="mr-auto">\n' +
+                                '                                            <a href="#" class="text-black-50 comment-input" aria-hidden="true"\n' +
+                                '                                               data-toggle="tooltip" data-placement="top" title="답글 작성">답글</a>\n';
+                            /*[# th:if = "${session.user != null}"]*/
+                            var userEmail = [[${session.user.email}]];
+                            if (userEmail == comment.email) {
+                                commentList +=  '                                                    /&nbsp;\n' +
+                                    '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                                    '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                    '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
+                                    '                                                    &nbsp;/&nbsp;\n' +
+                                    '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                                    '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                    '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
+                            }
+
+                            /*[/]*/
+                                commentList += '                                        </p>\n' +
+                                    '                                        <p class="d-flex">\n' +
+                                    '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                                    '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' +
+                                    comment.childrenCount + '개 보기\n' +
+                                    '                                            </a>\n' +
+                                    '                                        </p>\n' +
+                                    '                                    </div>';
+                        }
+
+
+                    });
+
+
+                    $('.comment-list').html(commentList);
+
+                    /* 페이징 */
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                        '                                <a class="page-link page-prev" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                        '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        var active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" id="page-link" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.pagination-div').html(pagination);
+                }
+            });
+        }
+
+        /* 댓글 페이지 버튼 클릭 시 페이지 변경 */
+        $(document).on('click', '#page-link', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('page');
+
+            commentList(page);
+        });
+
+        /* 댓글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-prev', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('preve');
+
+            commentList(page);
+        });
+
+
+        /* 댓글 다음 페이지 클릭 시 end + 1 페이지로 변경 */
+        $(document).on('click', '.page-next', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('end');
+
+            commentList(page);
+        });
+
+
+
+
+        /* 답글 조회  */
+        $(document).on('click', '.reply', function (e) {
+            e.preventDefault();
+
+            var parentId = $(this).data('comment');
+
+            console.log(parentId);
+
+            $.ajax({
+                url : '/comment/' + parentId,
+                type : 'get',
+                data: parentId,
+                dataType : 'json',
+                success : function (result) {
+
+                    if ($('#comment' + parentId).find('.children').length) {
+                        $('#comment' + parentId).find('.children').remove();
+                    } else {
+                        var childrenList = '<ul class="children">';
+
+                        console.log(result);
+
+                        $.each(result, function (index, children) {
+
+                            var date = timeForToday(children.createdDate);
+
+
+                            childrenList += '                                            <li class="comment">\n' +
+                                '                                                <div class="vcard bio">\n' +
+                                '                                                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                                '                                                </div>\n' +
+                                '                                                <div class="comment-body" id="comment-body">\n' +
+                                maskingFunc.email(children.email) + '&nbsp;/&nbsp;\n' +
+                                '                                                    <span class="meta">' + date + '</span>\n' +
+                                '                                                    <p class="comment-content">' + children.content + '</p>\n' +
+                                '                                                    <p class="mr-auto">\n' +
+                                '                                                        <a href="#" class="text-black-50 comment-input"\n' +
+                                '                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"\n' +
+                                '                                                           title="답글 작성">답글</a>\n';
+                            /*[# th:if = "${session.user != null}"]*/
+                                var userEmail = [[${session.user.email}]];
+                                if (userEmail == children.email) {
+                                    childrenList +='                                                                /&nbsp;\n' +
+                                        '                                                                <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                                        '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                                        '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                                        '                                                                   title="댓글 수정">수정</a> &nbsp;/&nbsp;\n' +
+                                        '                                                                <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                                        '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                                        '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                                        '                                                                   title="댓글 삭제">삭제</a>\n';
+                                }
+
+                            /*[/]*/
+                            childrenList +=  '                                                    </p>\n' +
+                                '                                                </div>\n' +
+                                '                                            </li>\n';
+
+                        });
+
+                        childrenList += '</ul>';
+
+                        $('#comment' + parentId).append(childrenList);
+                    }
+
+                }
+            })
+        });
+
+        /* 게시글 삭제 */
+        $(document).on('click', '.board-remove-btn', function (e) {
+            e.preventDefault();
+
+            if (confirm("게시글을 삭제하시겠습니까?") === true) {
+
+                var commentCount = [[${board.commentCount}]]
+                // create element (form)
+                var boardRemoveForm = $('<form></form>');
+
+                // set attribute(form)
+                boardRemoveForm.attr('method', 'post');
+                boardRemoveForm.attr('action', '/board/delete');
+
+                // set attribute(input)
+                boardRemoveForm.append($('<input/>', {type: 'hidden', name: 'id', value:boardId }));
+                // append form (to body)
+                boardRemoveForm.appendTo('body');
+
+                // submit form
+                boardRemoveForm.submit();
+            }
+        });
+
+
+        $('.children').attr('style', 'display:none');
+
+        function comment_create_promise(commentContent, parentId){ // 댓글 작성 함수
+
+            /*[# th:if = "${session.user != null}"]*/
+            let commentDTO = {
+                boardId: boardId,
+                content: commentContent,
+                userId: [[${session.user.id}]],
+                email: [[${session.user.email}]],
+                parentId: parentId
+            };
+
+            /*[/]*/
+
+            return new Promise(function(resolve, reject){   // 댓글 작성 Promise
+                $.ajax({
+                    url: '/comment/' + boardId,
+                    type: 'post',
+                    data: JSON.stringify(commentDTO),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'text',
+                    success : function(result){
+                        console.log(result + "번 댓글이 등록되었습니다.");
+
+                        $('.main-input').val("");
+
+                        swal("댓글 등록", result + '번 댓글이 등록되었습니다.');
+
+                        commentList(1);
+
+                        resolve();
+
+                    }
+                });
+
+            });
+        }
+
+        function notify_ajax(result) { // 댓글 알림 DB저장
+            return new Promise(function(resolve, reject){
+
+                var targetEmail = [[${board.email}]];
+                var message = boardId + "번 글에 댓글이 작성되었습니다.";
+                var url = "/board/read?id=" + [[${board.boardId}]];
+
+                var notificationData = {
+                    targetEmail : targetEmail,
+                    message : message,
+                    notificationType : "comment",
+                    url : url
+                };
+
+                $.ajax({
+                    type : 'post',
+                    url : '/notify/save',
+                    data : JSON.stringify(notificationData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType : 'text',
+                    success : function(data){
+                        if(socket){
+                            let socketMsg = "댓글," + targetEmail +","+ message +","+ url;
+                            /*console.log("msgmsg : " + socketMsg);*/
+                            socket.send(socketMsg);
+                        }
+
+                        resolve();
+
+                    },
+                    error : function(err){
+                        console.log(err);
+                    }
+                });
+            });
+        }
+
+        function comment_count_promise() {  // 댓글 갯수 변경 함수
+            return new Promise(function(resolve, reject){
+                $.ajax({
+                    type : 'get',
+                    url : '/board/commentCount/' + boardId,
+                    success : function (result) {
+                        console.log(result);
+                        $('.comment-count').text('댓글 ' + result + '개');
+                    }
+                })
+            });
+        }
+
+
+
+        /* 댓글 & 답글 등록 버튼 클릭 시 댓글 & 답글 등록 */
+        $(document).on('click', '.replyAddBtn', function (e) {
+
+            if ([[${session.user == null}]]) {
+                $("#loginModal").modal("show");
+
+                return;
+            }
+
+            var commentContent = $(this).closest('.input-group').find('#reply-content').val();
+            var parentId = $(this).data("parent");
+
+
+            if (commentContent.trim() === "") {
+                if ($(this).closest('.input-group').find('#reply-content').hasClass('is-invalid') === true) {
+                    $('#reply-content').removeClass("is-invalid");
+                }
+                $(this).closest(".input-group").find('input').addClass('is-invalid');
+                /*$(this).closest(".input-group").append("<div class='invalid-feedback' id='comment-content-invalid-div'>" + "내용을 입력하세요 </div>");*/
+                $(this).closest(".input-group").find('input').attr('placeholder', '올바른 내용을 입력해주세요.');
+                return;
+            }
+
+
+            comment_create_promise(commentContent, parentId)
+            .then(notify_ajax)
+            .then(comment_count_promise);
+
+
+
+            /*self.location.reload();*/
+
+
+        });
+
+        /* 답글 클릭 시 답글 작성 input창 생성 */
+        $(document).on('click', '.comment-input', function (e) {
+            e.preventDefault();
+
+            var commentBody = $(this.closest(".comment-body"));
+            var parentId = commentBody.data("comment");
+
+
+            if (commentBody.children('.input-group').length < 1) {
+                $(commentBody).append('<div class="input-group mb-3" th:data-comment-input-group="' + parentId + '">\n' +
+                    '                  <div class="input-group-prepend">\n' +
+                    '                    <div class="vcard bio" style="margin-top: 10px;">\n' +
+                    '                      <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                    '                    </div>\n' +
+                    '                  </div>\n' +
+                    '                  <input type="text" id="reply-content" class="form-control" placeholder="답글을 입력하세요." aria-label="Recipient\'s username" aria-describedby="replyAddBtn">\n' +
+                    '                  <div class="input-group-append">\n' +
+                    '                    <button class="btn btn-outline-secondary replyAddBtn" type="button" id="replyAddBtn" data-parent="' + parentId + '">답글 등록</button>\n' +
+                    '                  </div>\n' +
+                    '                </div>');
+            } else {
+                commentBody.children('.input-group').remove();
+                return;
+            }
+        })
+
+
+
+        /* 답글 삭제 클릭 시 확인 후 댓글 삭제 */
+        $(document).on('click', '.comment-remove-btn', function (e) {
+            e.preventDefault();
+
+            var commentId = $(this).data("comment");
+
+            var commentDTO = {
+                boardId: boardId,
+                id: commentId
+            }
+
+            if (confirm("댓글을 삭제하시겠습니까?") === true) {
+                $.ajax({
+                    url: '/comment/' + commentId,
+                    type: 'delete',
+                    data: JSON.stringify(commentDTO),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'text',
+                    success: function (result) {
+                        console.log(result);
+
+                        self.location.reload();
+                    }
+                });
+            }
+        });
+
+        /* 댓글 리스트에서 수정 버튼 클릭 시 comment input창 생성 */
+        $(document).on('click', '.comment-modify-btn', function (e) {
+            e.preventDefault();
+
+            var commentId = $(this).data("comment");
+
+            if ($(this).closest('.comment-body').find('.input-group').length < 1) {
+                $(this).closest('.comment-body').find('.comment-content').before('<div class="input-group mb-3">\n' +
+                    '                                    <input type="text" id="modify-content" class="form-control" placeholder="수정할 댓글의 내용을 입력하세요."\n' +
+                    '                                           aria-label="Recipient\'s username" aria-describedby="replyAddBtn">\n' +
+                    '                                    <div class="input-group-append">\n' +
+                    '                                        <button class="btn btn-outline-secondary comment-modify" data-comment="' + commentId + '" type="button"\n' +
+                    '                                                id="replyAddBtn">수정\n' +
+                    '                                        </button>\n' +
+                    '                                    </div>\n' +
+                    '                                </div>');
+                $(this).closest('.comment-body').find('.comment-content').css('visibility', 'hidden');
+                $(this).text('수정 취소');
+            } else {
+                $(this).closest('.comment-body').find('.input-group').remove();
+                $(this).closest('.comment-body').find('.comment-content').css('visibility', 'visible');
+                $(this).text('수정');
+            }
+
+
+        });
+
+        /* 댓글 수정창에서 수정 버튼 클릭시 comment 수정 */
+        $(document).on('click', '.comment-modify', function () {
+
+            var commentId = $(this).data("comment");
+            var commentContent = $(this).closest('.input-group').find('#modify-content').val();
+
+            var commentDTO = {
+                id: commentId,
+                content: commentContent
+            }
+
+            if (confirm("댓들을 수정하시겠습니까?") === true) {
+                $.ajax({
+                    url: '/comment/' + commentId,
+                    type: 'patch',
+                    data: JSON.stringify(commentDTO),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'text',
+                    success: function (result) {
+                        console.log(result + "번 댓글이 수정되었습니다.");
+
+                        self.location.reload();
+                    }
+                });
+            }
+        })
+
+    });
+</script>
+</html>

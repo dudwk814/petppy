@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+                    </div>
+                </div>
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">Home <i class="ion-ios-arrow-forward"></i></a></span>
+                            <span>EnquiryList <i class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">문의내역</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                            <tr class="table-active" th:align="center">
+                                <th scope="col">문의 번호</th>
+                                <th scope="col">문의 제목</th>
+                                <th scope="col">문의 종류</th>
+                                <th scope="col">문의 상태</th>
+                                <th scope="col">문의 삭제</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="enquiryList, i : ${enquiryList.dtoList}" th:align="center">
+
+                                <!-- 번호 -->
+                                <th th:text="${enquiryList.enquiryId}" scope="row"></th>
+
+                                <!-- 문의 제목-->
+                                <td><a href="#" class="enquiryList" th:data-email="${enquiryList.userEmail}" th:data-id="${enquiryList.enquiryId}" th:text="${enquiryList.title}"></a></td>
+
+                                <!-- 문의 종류 -->
+                                <td class="enquiryType" th:if="${#strings.toString(enquiryList.enquiryType)} == 'MEMBERSHIP'">멤버십</td>
+                                <td class="enquiryType" th:if="${#strings.toString(enquiryList.enquiryType)} == 'RESERVE'">예약</td>
+                                <td class="enquiryType" th:if="${#strings.toString(enquiryList.enquiryType)} == 'ETC'">기타</td>
+
+                                <!-- 문의 상태 -->
+                                <td th:if="${#strings.toString(enquiryList.enquiryStatus)} == 'COMPLETE'" class="text-success">답변 완료</td>
+                                <td th:unless="${#strings.toString(enquiryList.enquiryStatus)} == 'COMPLETE'" class="text-danger">처리 중</td>
+
+                                <!-- 문의 삭제 -->
+                                <td><button type="button" th:data-id="${enquiryList.enquiryId}" th:data-email="${enquiryList.userEmail}" class="btn btn-outline-secondary enquiryDeleteBtn">삭제</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-5">
+
+                </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li th:if="${enquiryList.prev}" class="page-item">
+                            <a class="page-link" th:href="@{/enquiry/enquiryList(page = ${enquiryList.start - 1})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:each="page : ${enquiryList.pageList}" th:class="${enquiryList.page == page ? 'active page-item':'page-item'}"><a th:href="@{/enquiry/enquiryList(page=${page}, size=${enquiryList.size})}" th:data-page="${page}" class="page-link">[[${page}]]</a></li>
+                        <li th:if="${enquiryList.next}" class="page-item">
+                            <a class="page-link" th:href="@{/enquiry/enquiryList(page = ${enquiryList.end + 1})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
+
+        <div class="modal fade" id="enquiryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">문의 및 답변</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="enquiry-modal-form">
+                            <div class="hr-sect">문의</div>
+                            <div class="form-group">
+                                <label for="enquiryTitle" class="col-form-label">문의 제목</label>
+                                <input type="text" class="form-control" id="enquiryTitle" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="enquiryType" class="col-form-label">문의 종류</label>
+                                <input type="text" class="form-control" id="enquiryType" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="enquiryDate" class="col-form-label">문의 날짜</label>
+                                <input type="text" class="form-control" id="enquiryDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="enquiryContent" class="col-form-label">문의 내용</label>
+                                <textarea class="form-control" id="enquiryContent" rows="5" disabled></textarea>
+                            </div>
+
+                            <div class="hr-sect">답변</div>
+                            <div class="form-group">
+                                <label for="enquiryAnswer" class="col-form-label">문의 답변</label>
+                                <textarea class="form-control" id="enquiryAnswer" rows="5" disabled></textarea>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</th:block>
+
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+
+        /* 문의 내용 상세보기 및 답변보기 모달 생성 */
+        $('.enquiryList').on('click', function (e) {
+            e.preventDefault();
+
+            let enquiryId = $(this).data('id');
+            let userEmail = $(this).data('email');
+            let form = $('.enquiry-modal-form');
+
+            let enquiryTitle = $('#enquiryTitle');
+            let enquiryType = $('#enquiryType');
+            let enquiryDate = $('#enquiryDate');
+            let enquiryContent = $('#enquiryContent');
+            let enquiryAnswer = $('#enquiryAnswer');
+
+            // 모달 input 초기화
+            form[0].reset();
+
+            console.log(enquiryId);
+            console.log(userEmail);
+
+            $.ajax({
+                url: '/enquiry/' + enquiryId,
+                type: 'get',
+                data: {
+                    'enquiryId' : enquiryId,
+                    'email' : userEmail
+                },
+                dataType: 'json',
+                success: function (result) {
+                    enquiryTitle.val(result.title);
+                    enquiryDate.val(get_date_str(result.createdDate));
+                    enquiryContent.val(result.content);
+
+                    // 문의 타입에 따른 서비스 한글화
+                    if (result.enquiryType == "MEMBERSHIP") {
+                        enquiryType.val("멤버십");
+                    } else if(result.enquiryType == "RESERVE") {
+                        enquiryType.val("예약");
+                    } else if(result.enquiryType == "ETC") {
+                        enquiryType.val("기타");
+                    }
+
+                    if (result.answerDTO == null) {
+                        enquiryAnswer.val("");
+                    } else{
+                        enquiryAnswer.val(result.answerDTO.content);
+                    }
+
+                }
+            })
+
+            $('#enquiryModal').modal("show");
+        });
+
+        /* 문의 삭제버튼 클릭시 문의 삭제 */
+        $('.enquiryDeleteBtn').on('click', function (e) {
+
+            let id = $(this).data('id');
+            let email = $(this).data('email');
+
+            swal("문의를 삭제하시겠습니까?", {
+                buttons: {
+                    cancel: "닫기",
+                    catch: {
+                        text: "삭제",
+                        value: "delete",
+                    }
+                },
+            }).then((value) => {
+                if (value) {
+
+
+                    $.ajax({
+                        url: '/enquiry/delete',
+                        type: 'post',
+                        data: {
+                            enquiryId: id,
+                            userEmail: email,
+                        },
+                        success: function (result) {
+                            if (result) {
+                                swal({
+                                    title: "문의 삭제",
+                                    text: "문의가 성공적으로 삭제되었습니다.",
+                                    icon: "success",
+                                    button: true,
+                                })
+                                    .then((willDelete) => {
+                                        if (willDelete) {
+                                            self.location.reload(); // 문의 삭제 성공시 페이지 리로드
+                                        }
+                                    });
+
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            swal('문의 삭제', '문의 삭제에 실패하였습니다.');
+                        }
+                    })
+
+                }
+            });
+        })
+
+
+    });
+</script>
+</html>

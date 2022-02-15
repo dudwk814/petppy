@@ -1,0 +1,33 @@
+spring:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  thymeleaf:
+    cache: false
+
+
+  profiles:
+    include: oauth, email, db
+
+  servlet:
+    multipart:
+      enabled: true
+      location: C:\\upload
+      max-request-size: 30MB
+      max-file-size: 10MB
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+
+resources:
+  location: C:/upload/petppy/ckUpload/ # 실제 업로드되는 물리적 경로 (나중에 호스팅시 바꿔야함)
+  uri_path: /ckUpload # 웹에서 요청하는 논리적 경로  (이 경로로 요청하면 물리적 경로의 이미지를 표시해줌)
+

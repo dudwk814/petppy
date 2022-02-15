@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+    .ck-editor__editable {
+        min-height: 650px;
+    }
+</style>
+<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}">Home <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a th:href="@{/board/}">Board <i class="ion-ios-arrow-forward"></i></a></span> <span>Board Edit<i class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">Edit</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="ftco-section bg-light">
+            <div class="container">
+                <form action="/board/modify"  method="post" class="modify-submit-form">
+                    <input type="hidden" name="boardId" th:value="${board.boardId}">
+                    <input type="hidden" name="hit" th:value="${board.hit}">
+                    <input type="hidden" name="commentCount" th:value="${board.commentCount}">
+                    <input type="hidden" name="email" th:value="${board.email}">
+                    <div class="input-group">
+                        <input class="form-control"  name="title" placeholder="제목" style="margin-bottom: 15px;" th:value="${board.title}">
+                    </div>
+                    <textarea name="content" id="editor" th:value="${board.content}" th:text="${board.content}"></textarea>
+                    <div class="row d-flex">
+                        <div class="col-md-12" style="height: 70px; margin-top: 15px;">
+                            <a th:href="@{/board}" class="btn btn-secondary" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 목록으로 돌아가기">목록</a>
+                            <button type="submit" class="btn btn-success float-right" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="게시글 저장하기">저장</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </th:block>
+</th:block>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        /* ckeditor */
+        var ckeditor_config = {
+            resize_enaleb : false,
+            enterMode : CKEDITOR.ENTER_BR,
+            shiftEnterMode : CKEDITOR.ENTER_P,
+            filebrowserUploadUrl : "/board/uploadImg",
+        };
+
+        CKEDITOR.replace('editor', ckeditor_config);
+
+        /* 제목 공백 체크 */
+        $('submit').on('click', function (e) {
+            e.preventDefault();
+
+            var title = $("input[name='title']").val().trim();
+
+            if (title === "") { // 제목이 공백인 경우
+                $("input[name='title']").attr('class', 'form-control is-invalid')
+                $("input[name='title']").attr('placeholder', '제목을 입력해주세요.');
+                return false;
+            }
+
+            $('.modify-submit-form').submit();
+
+        });
+    });
+</script>
+</html>

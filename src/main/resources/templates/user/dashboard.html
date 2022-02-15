@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
+            <div class="overlay"></div>
+            <div class="container">
+                <div aria-live="polite" aria-atomic="true" style="position: fixed; z-index: 9999; min-height: 200px;">
+                    <!-- Position it -->
+                    <div style="position: fixed; top: 15px; right: 15px;" class="content-section">
+
+                    </div>
+                </div>
+                <div class="row no-gutters slider-text align-items-end">
+                    <div class="col-md-9 ftco-animate pb-5">
+                        <p class="breadcrumbs mb-2"><span class="mr-2"><a th:href="@{/}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">Home <i class="ion-ios-arrow-forward"></i></a></span>
+                            <span>DashBoard <i class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-0 bread">DashBoard</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="list-group" id="list-tab" role="tablist">
+                            <a class="list-group-item list-group-item-action active" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="home">내 프로필</a>
+                            <a class="list-group-item list-group-item-action" id="list-membership-list" data-toggle="list" href="#list-membership" role="tab" aria-controls="profile">내 멤버십</a>
+                            <a class="list-group-item list-group-item-action" id="list-notify-list" data-toggle="list" href="#list-notify" role="tab" aria-controls="notify">내 알림</a>
+                            <a class="list-group-item list-group-item-action" id="list-board-list" data-toggle="list" href="#list-board" role="tab" aria-controls="messages">작성글 관리</a>
+                            <a class="list-group-item list-group-item-action" id="list-comment-list" data-toggle="list" href="#list-comment" role="tab" aria-controls="settings">댓글 관리</a>
+                            <a class="list-group-item list-group-item-action" id="list-payment-list" data-toggle="list" href="#list-payment" role="tab" aria-controls="settings">결제 내역</a>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                                <div class="card text-center">
+                                   <!-- <div class="card-header bg-info text-white">
+                                        Profile
+                                    </div>-->
+                                    <div class="card-body">
+                                        <h5 class="card-title">[[${session.user.name}]]</h5>
+                                        <p class="card-text" th:text="${session.user.email}"></p>
+                                        <p th:if="${userDTO.type.toString() != 'NORMAL'}" class="card-text">SNS 회원</p>
+                                        <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text">멤버십 없음</p>
+                                        <p th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="card-text" th:text="${userDTO.membershipDTO.rating}"></p>
+                                        <p class="card-text">[[${#temporals.format(userDTO.joinedDate, 'yyyy-MM-dd')}]]일에 가입</p>
+                                        <a th:href="@{/user/modifyForm}" class="btn btn-primary">회원 정보 설정하기</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-membership" role="tabpanel" aria-labelledby="list-membership-list">
+                                <div class="jumbotron bg-transparent">
+                                    <h3>멤버십 상세정보</h3>
+                                    <p th:if="${userDTO.membershipDTO.rating.toString() == 'NONE'}">현재 이용중인 멤버십이 없습니다. <a th:href="@{/membership}">가입하기</a></p>
+                                    <div th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}">
+                                        <p>[[${userDTO.name}]]님의 멤버십은 <span class="text-success">[[${userDTO.membershipDTO.rating}]]</span>입니다.</p>
+                                        <br/>
+
+                                        <table class="table table-borderless table-hover">
+                                            <thead>
+                                            <tr th:align="center">
+                                                <th scope="col">강아지 산책</th>
+                                                <th scope="col">애완동물 미용</th>
+                                                <th scope="col">수의사 방문</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:align="center">
+                                                <td><span class="text-success">[[${userDTO.membershipDTO.dogWalkCount}]]</span>회 이용가능</td>
+                                                <td><span class="text-success">[[${userDTO.membershipDTO.petGroomingCount}]]</span>회 이용가능</td>
+                                                <td><span class="text-success">[[${userDTO.membershipDTO.vetVisitCount}]]</span>회 이용가능</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <p>이용가능한 서비스 횟수는 위의 표와 같습니다.</p>
+                                        <br/>
+                                        <p>
+                                            멤버십 기간: [[${#temporals.format(userDTO.membershipDTO.modifiedDate, 'yyyy.MM.dd')}]] ~  [[${#temporals.format(userDTO.membershipDTO.lastDate, 'yyyy.MM.dd')}]]
+                                        </p>
+                                        <p>아래 표에서 각 멤버십에 혜택을 확인할 수 있습니다.</p>
+                                        <p>※ <span style="color: red">환불</span>은 멤버십 가입 후 서비스를 이용하지 않은 경우만 가능합니다.</p>
+                                    </div>
+
+                                    <hr class="my-4">
+                                    <div class="row">
+                                        <div class="col-md-4 ftco-animate">
+                                            <div class="block-7">
+                                                <div class="text-center p-4">
+                                                    <span class="excerpt d-block">Personal</span>
+                                                    <span class="price"><sup>₩</sup> <span class="number" style="font-size: 40px;">27,000</span> <sub>/월</sub></span>
+
+                                                    <ul class="pricing-text mb-5">
+                                                        <li><span class="fa fa-check mr-2"></span>3 Dog Walk</li>
+                                                        <li><span class="fa fa-check mr-2"></span>1 Vet Visit</li>
+                                                        <li><span class="fa fa-check mr-2"></span>1 Pet Spa</li>
+                                                        <li><span class="fa fa-check mr-2"></span>Free Supports</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ftco-animate">
+                                            <div class="block-7">
+                                                <div class="text-center p-4">
+                                                    <span class="excerpt d-block">Business</span>
+                                                    <span class="price"><sup>₩</sup> <span class="number" style="font-size: 40px;">43,000</span> <sub>/월</sub></span>
+
+                                                    <ul class="pricing-text mb-5">
+                                                        <li><span class="fa fa-check mr-2"></span>5 Dog Walk</li>
+                                                        <li><span class="fa fa-check mr-2"></span>3 Vet Visit</li>
+                                                        <li><span class="fa fa-check mr-2"></span>3 Pet Spa</li>
+                                                        <li><span class="fa fa-check mr-2"></span>Free Supports</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 ftco-animate">
+                                            <div class="block-7">
+                                                <div class="text-center p-4">
+                                                    <span class="excerpt d-block">Ultimate</span>
+                                                    <span class="price"><sup>₩</sup> <span class="number" style="font-size: 40px;">78,000</span> <sub>/월</sub></span>
+
+                                                    <ul class="pricing-text mb-5">
+                                                        <li><span class="fa fa-check mr-2"></span>15 Dog Walk</li>
+                                                        <li><span class="fa fa-check mr-2"></span>5 Vet Visit</li>
+                                                        <li><span class="fa fa-check mr-2"></span>5 Pet Spa</li>
+                                                        <li><span class="fa fa-check mr-2"></span>Free Supports</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a th:unless="${userDTO.membershipDTO.rating.toString() == 'NONE'}" class="btn btn-outline-primary btn-lg membership-cancel-btn" href="#" role="button">해지</a>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-notify" role="tabpanel" aria-labelledby="list-membership-list">
+                                <div  class="row bg-light" >
+                                    <div class="col-md-12  p-2 d-flex justify-content-between">
+                                        <p class="font-weight-bold" style="font-size: 18px;">읽지 않은 알림  <span class="text-success notify-unChecked-count">[[${unCheckedNotifyCount}]]</span>개</p>
+                                        <a href="#" class="text-dark text-center notify-check-btn"> <span class="fa fa-check-circle-o" aria-hidden="true"></span>  모두 읽음 표시</a>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="list-group list-group-flush notify-list-group">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col text-center">
+                                        <div class="block-27">
+                                            <ul>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="notify-pagination-div">
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-board" role="tabpanel" aria-labelledby="list-messages-list">
+                                <ul class="list-group list-group-flush" id="board-group">
+
+                                </ul>
+
+                                <div class="row mt-5">
+                                    <div class="col text-center">
+                                        <div class="block-27">
+                                            <ul>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="board-pagination-div">
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-comment" role="tabpanel" aria-labelledby="list-settings-list">
+                                <ul class="comment-list pt-5">
+
+                                </ul>
+
+                                <div class="row mt-5">
+                                    <div class="col text-center">
+                                        <div class="block-27">
+                                            <ul>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comment-pagination-div">
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-payment" role="tabpanel" aria-labelledby="list-membership-list">
+                                <div class="jumbotron bg-transparent">
+                                    <div class="table-responsive-md">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">결제번호</th>
+                                                <th scope="col" class="text-center">상품명</th>
+                                                <th scope="col" class="text-center">승인번호</th>
+                                                <th scope="col" class="text-center">결제가격</th>
+                                                <th scope="col" class="text-center">결제일</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="payment-tbody">
+
+                                            </tbody>
+
+                                        </table>
+
+                                        <div class="row mt-5">
+
+                                        </div>
+                                        <div class="payment-pagination-div">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </th:block>
+</th:block>
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+
+
+       let email = [[${session.user.email}]];
+
+
+       /* 결제 취소 버튼 클릭시 확인 후 결제 취소 */
+       $(document).on('click', '.membership-cancel-btn',  function (e) {
+           e.preventDefault();
+
+            let currentRating = [[${session.user.membershipDTO.rating}]];
+
+           console.log(currentRating);
+
+           swal("예약을 취소하시겠습니까?", {
+               buttons: {
+                   cancel: "닫기",
+                   catch: {
+                       text: "멤버십 해지",
+                       value: "cancel",
+                   }
+               },
+           }).then((value) => {
+               if (value) {
+                   cancelMembershipRequest(email);
+               }
+
+       })
+
+
+       });
+
+
+
+       $(document).on('click', '.notify-check-btn', function (e) {  // 알림 모두 읽음 표시로 변경
+           e.preventDefault();
+
+           if (confirm("모두 읽음 표시로 변경 하시겠습니까?") == true) {
+               $.ajax({
+                   url : '/notify/allReadCheck/' + email,
+                   type : 'patch',
+                   data : 'email',
+                   success : function (result) {
+                       if (result === 'success') {
+                           $('.not_checked').addClass('checked');
+                           $('.not_checked').addClass('bg-light');
+                           $('.not_checked').find('p').prepend('<i class="fa fa-check" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="읽은 알림"></i>&nbsp;&nbsp;');
+                           $('.not_checked').removeClass('not_checked');
+                           $('.notify-unChecked-count').text('0');
+                           $('.badge-notify').text('0');
+                       }
+                   }
+               });
+           }
+
+       });
+
+
+       /* 내 알림 탭 클릭시 notifyList() 실행 */
+       $('#list-notify-list').on('click', function (e) {
+           e.preventDefault();
+
+           notifyList(1);
+
+       });
+
+
+
+       function notifyList(page) {  // 이메일로 알림 리스트 조회
+
+           var page = page || 1;
+
+           let notifyList = "";
+           let pagination = "";
+
+           $.ajax({
+                url : '/notify/' + email + '/' + page,
+                type : 'get',
+                success : function (result) {
+
+                    console.log('notifyList');
+
+                   $.each(result.dtoList, function (index, notify) {
+
+                       let notificationType = notify.notificationType;
+
+                       if (notify.isRead.toString() === 'Y') {
+                           notifyList += '<a href="' + notify.url + '" class="list-group-item list-group-item-action p-3 notify_url bg-light checked" data-id="' + notify.id +'">\n';
+
+                           notifyList += '    <p style="font-size: 16px;" class="mb-1 text-muted">' +
+                               '<i class="fa fa-check" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="읽은 알림"></i>&nbsp;&nbsp;' +
+                               '<span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message +
+                               '<small class="text-muted float-right">' + timeForToday(notify.createdDate)  +
+                               '</small>' + '</p>\n' +
+                               '  </a>';
+                       } else {
+                           notifyList += '<a href="' + notify.url + '" class="list-group-item list-group-item-action p-3 notify_url not_checked" data-id="' + notify.id +'">\n';
+
+                           notifyList += '    <p style="font-size: 16px;" class="mb-1"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                               '<small class="text-muted float-right">' + timeForToday(notify.createdDate)  +
+                               '</small>' + '</p>\n' +
+                               '  </a>';
+                       }
+                   });
+
+                   $('.notify-list-group').html(notifyList);
+
+                    /* 페이징 */
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination += '                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="notify" data-preve="' + (result.start - 1) + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="notify" data-page="' + page + '" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="notify" href="#" data-end="' + (result.end + 1) + '"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination += '                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.notify-pagination-div').html(pagination);
+               }
+           });
+       }
+
+        /* 작성글 관리 탭 클릭시 boardList() 실행 */
+        $('#list-board-list').on('click', function (e) {
+            e.preventDefault();
+
+            boardList(1);
+
+        });
+
+       /* 유저 이메일로 게시글 조회 */
+       function boardList(page) {
+
+           var page = page || 1;
+
+           $.ajax({
+               url : '/board/' + email + '/' + page,
+               data : {'email':email, 'page':page},
+               dataType: 'json',
+               success : function (result) {
+
+                   console.log('boardList');
+
+                   let boardList = "";
+                   let pagination = "";
+
+                   if (result.totalElements === 0) {    // 댓글이 없는 경우
+                       boardList += '<div class="jumbotron bg-transparent">\n' +
+                           '  <div class="container"> \n' +
+                           '    <h1 style="padding-left: 350px; padding-right: 350px;" class="display-4r"><span class="fa fa-frown-o fa-5x" aria-hidden="true"></span></h1>\n' +
+                           '    <p class="lead text-center">회원님께서 작성하신 게시글이 없습니다.</p>\n' +
+                           '  </div>\n' +
+                           '</div>';
+
+                       $('#list-board').html(boardList);
+                       return;
+                   } else {
+                       $.each(result.dtoList, function (index, board) {
+
+                           let name = board.email.split('@')[0];
+                           let date = board.createdDate.split('T')[0];
+
+                           boardList += '<a href="/board/read?id=' + board.boardId + '" class="list-group-item list-group-item-action">' +
+                               '<div class="d-flex w-100 justify-content-between">' +
+                               '<h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목">' + board.title + '</b></h5>' +
+                               '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">' + date + '</small></div>' +
+                               '<small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">' + maskingFunc.email(board.email) + '</small>&nbsp;' +
+                               '<span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수" style="color: #00bd56;"> ' + board.commentCount + '</span>' +
+                               '<small class="float-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="조회수">' + board.hit + '</small></a>';
+                       });
+
+                       $('#board-group').html(boardList);
+
+                       /* 페이징 */
+                       pagination += '<nav aria-label="Page navigation example">\n' +
+                           '                        <ul class="pagination justify-content-center">\n';
+
+                       if (result.prev) {
+                           pagination += '                            <li className="page-item disabled">\n' +
+                               '                                <a class="page-link page-prev" data-type="board" data-preve="' + (result.start - 1) + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                               '                            </li>\n';
+                       }
+
+
+                       $.each(result.pageList, function (index, page) {
+
+                           let active = result.page == page ? 'active' : '';
+                           pagination += '<li class="page-item ' + active + '">';
+                           pagination += '<a class="page-link page-num" id="page-link" data-type="board" data-page="' + page + '" href="#">' + page + '</a></li>'
+                       })
+
+                       if (result.next) {
+                           pagination += '                            <li class="page-item">\n' +
+                               '                                <a class="page-link page-next" data-type="board" href="#" data-end="' + (result.end + 1) + '"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                               '                            </li>\n';
+                       }
+
+                       pagination += '                        </ul>\n' +
+                           '                    </nav>';
+
+                       $('.board-pagination-div').html(pagination);
+                   }
+
+               }
+           });
+       }
+
+        /* 게시글 & 댓글 페이지 버튼 클릭 시 페이지 변경 */
+        $(document).on('click', '#page-link', function (e) {
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            var page = $(this).data('page');
+
+            let type = $(this).data("type");
+
+            console.log(page);
+
+            if (type == "board") {
+                boardList(page);
+            } else if (type == "notify") {
+                notifyList(page)
+            } else if(type == "comment") {
+                commentList(page)
+            } else if (type == "payment") {
+                paymentList(page)
+            }
+
+        });
+
+        /* 게시글 & 댓글 이전 페이지 클릭 시 start - 1 페이지로 변경 */
+        $(document).on('click', '.page-prev', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('preve');
+
+            let type = $(this).data("type");
+
+
+            if (type == "board") {
+                boardList(page);
+            } else if (type == "notify") {
+                notifyList(page)
+            } else if(type == "comment") {
+                commentList(page)
+            } else if (type == "payment") {
+                paymentList(page)
+            }
+        });
+
+
+        /* 게시글 & 댓글 다음 페이지 클릭 시 end + 1 페이지로 변경 */
+        $(document).on('click', '.page-next', function (e) {
+            e.preventDefault();
+
+            var page = $(this).data('end');
+
+            let type = $(this).data("type");
+
+            if (type == "board") {
+                boardList(page);
+            } else if (type == "notify") {
+                notifyList(page)
+            } else if(type == "comment") {
+                commentList(page)
+            } else if (type == "payment") {
+                paymentList(page)
+            }
+        });
+
+
+        /* 댓글 관리 탭 클릭시 commentList() 실행 */
+        $('#list-comment-list').on('click', function (e) {
+            e.preventDefault();
+
+            commentList(1);
+
+        });
+
+       /* 유저 이메일로 댓글 목록 조회 */
+       function commentList(page) {
+
+           var page = page || 1;
+
+           $.ajax({
+               url : '/comment/userPage/' + email + '/' + page,
+               data : {'email':email, 'page':page},
+               dataType: 'json',
+               success : function (result) {
+
+                   console.log('commentList');
+
+                   let commentList = "";
+
+                   let pagination = "";
+
+                   if (result.totalElements === 0) {    // 댓글이 없는 경우
+                        commentList += '<div class="jumbotron bg-transparent">\n' +
+                            '  <div class="container"> \n' +
+                            '    <h1 style="padding-left: 350px; padding-right: 350px;" class="display-4r"><span class="fa fa-frown-o fa-5x" aria-hidden="true"></span></h1>\n' +
+                            '    <p class="lead text-center">회원님께서 작성하신 댓글이 없습니다.</p>\n' +
+                            '  </div>\n' +
+                            '</div>';
+
+                        $('#list-comment').html(commentList);
+                        return;
+                   } else {
+                       $.each(result.dtoList, function (index, comment) { // 댓글이 존재하면 댓글 관리창에 표시
+
+                           let name = comment.email.split('@')[0];
+                           let date = comment.createdDate.split('T')[0];
+
+                           if (comment.deleteStatus === 'Y') {  // 댓글이 삭제된 경우
+                               commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                                   '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                                   '                                        <span class="meta">' +  date  + '</span>\n' +
+                                   '                                        <p class="comment-content">삭제된 댓글입니다.</p>\n' +
+                                   '                                        <p class="mr-auto">\n' +
+                                   '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
+                                   '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
+                               commentList += '                                        </p>\n' +
+                                   '                                        <p class="d-flex">\n' +
+                                   '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                                   '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
+                                   '                                            </a>\n' +
+                                   '                                        </p>\n' +
+                                   '                                    </div>';
+                           } else {
+                               commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
+                                   '                                    <div class="comment-body" id="comment-body' + comment.id + '" data-comment="' + comment.id + '">' + maskingFunc.email(comment.email) + '&nbsp;/&nbsp;\n' +
+                                   '                                        <span class="meta">' +  date  + '</span>\n' +
+                                   '                                        <p class="comment-content">' + comment.content + '</p>\n' +
+                                   '                                        <p class="mr-auto">\n' +
+                                   '                                            <a href="/board/read?id=' + comment.boardId + '" class="text-black-50 comment-input" aria-hidden="true"\n' +
+                                   '                                               data-toggle="tooltip" data-placement="top" title="게시글로 이동">게시글</a>\n';
+                               commentList +=  '                                                    /&nbsp;\n' +
+                                   '                                                    <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                                   '                                                       data-comment="' + comment.id + '" aria-hidden="true"\n' +
+                                   '                                                       data-toggle="tooltip" data-placement="top" title="댓글 수정">수정</a>\n' +
+                                   '                                                    &nbsp;/&nbsp;\n' +
+                                   '                                                    <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                                   '                                                       data-comment="' + comment.id + '" aria-hidden="true" data-board="' + comment.boardId + '" \n' +
+                                   '                                                       data-toggle="tooltip" data-placement="top" title="댓글 삭제">삭제</a>\n';
+                               commentList += '                                        </p>\n' +
+                                   '                                        <p class="d-flex">\n' +
+                                   '                                            <a href="#" class="reply" data-comment="' + comment.id + '">\n' +
+                                   '                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i> 답글\n' + comment.childrenCount + '개 보기\n' +
+                                   '                                            </a>\n' +
+                                   '                                        </p>\n' +
+                                   '                                    </div>';
+                           }
+
+
+                       });
+                   }
+
+
+
+                   $('.comment-list').html(commentList);
+
+                   /* 페이징 */
+                   pagination += '<nav aria-label="Page navigation example">\n' +
+                       '                        <ul class="pagination justify-content-center">\n';
+
+                   if (result.prev) {
+                       pagination +='                            <li className="page-item disabled">\n' +
+                           '                                <a class="page-link page-prev" data-type="comment" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                           '                            </li>\n';
+                   }
+
+
+                   $.each(result.pageList, function (index, page) {
+
+                       let active = result.page == page ? 'active' : '';
+                       pagination += '<li class="page-item ' + active + '">';
+                       pagination += '<a class="page-link page-num" id="page-link" data-type="comment" data-page="' + page +'" href="#">' + page + '</a></li>'
+                   })
+
+                   if (result.next) {
+                       pagination += '                            <li class="page-item">\n' +
+                           '                                <a class="page-link page-next" data-type="comment" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                           '                            </li>\n';
+                   }
+
+                   pagination +='                        </ul>\n' +
+                       '                    </nav>';
+
+                   $('.comment-pagination-div').html(pagination);
+               }
+           });
+
+           /* 답글 삭제 클릭 시 확인 후 댓글 삭제 */
+           $(document).on('click', '.comment-remove-btn', function (e) {
+               e.preventDefault();
+
+               let commentId = $(this).data("comment");
+               let boardId = $(this).data("board");
+
+               let commentDTO = {
+                   boardId: boardId,
+                   id: commentId
+               }
+
+               if (confirm("댓글을 삭제하시겠습니까?") === true) {
+                   $.ajax({
+                       url: '/comment/' + commentId,
+                       type: 'delete',
+                       data: JSON.stringify(commentDTO),
+                       contentType: 'application/json; charset=utf-8',
+                       dataType: 'text',
+                       success: function (result) {
+                           console.log(result);
+
+                           self.location.reload();
+                       }
+                   });
+               }
+           });
+
+           /* 답글 조회  */
+           $(document).on('click', '.reply', function (e) {
+               e.preventDefault();
+
+               let parentId = $(this).data('comment');
+
+               console.log(parentId);
+
+               $.ajax({
+                   url : '/comment/' + parentId,
+                   type : 'get',
+                   data: parentId,
+                   dataType : 'json',
+                   success : function (result) {
+
+                       if ($('#comment' + parentId).find('.children').length) {
+                           $('#comment' + parentId).find('.children').remove();
+                       } else {
+                           let childrenList = '<ul class="children">';
+
+                           console.log(result);
+
+                           $.each(result, function (index, children) {
+
+                               let name = children.email.split('@')[0];
+                               let date = children.createdDate.split('T')[0];
+
+
+                               childrenList += '                                            <li class="comment">\n' +
+                                   '                                                <div class="vcard bio">\n' +
+                                   '                                                    <img src="/petppy/images/simbolLogo.PNG" alt="Image placeholder">\n' +
+                                   '                                                </div>\n' +
+                                   '                                                <div class="comment-body" id="comment-body">\n' +
+                                   maskingFunc.email(children.email) + '&nbsp;/&nbsp;\n' +
+                                   '                                                    <span class="meta">' + date + '</span>\n' +
+                                   '                                                    <p class="comment-content">' + children.content + '</p>\n' +
+                                   '                                                    <p class="mr-auto">\n' +
+                                   '                                                        <a href="#" class="text-black-50 comment-input"\n' +
+                                   '                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"\n' +
+                                   '                                                           title="답글 작성">답글</a>\n';
+                                   childrenList +='                                                                /&nbsp;\n' +
+                                       '                                                                <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
+                                       '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                                       '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                                       '                                                                   title="댓글 수정">수정</a> &nbsp;/&nbsp;\n' +
+                                       '                                                                <a href="#" class="p2 text-black-50 comment-remove-btn"\n' +
+                                       '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
+                                       '                                                                   data-toggle="tooltip" data-placement="top"\n' +
+                                       '                                                                   title="댓글 삭제">삭제</a>\n';
+                                   childrenList +=  '                                                    </p>\n' +
+                                       '                                                </div>\n' +
+                                       '                                            </li>\n';
+
+                           });
+
+                           childrenList += '</ul>';
+
+                           $('#comment' + parentId).append(childrenList);
+                       }
+
+                   }
+               });
+           });
+
+       }
+
+        /* 결제 내역 탭 클릭시 paymentList()실행 */
+        $('#list-payment-list').on('click', function (e) {
+            e.preventDefault();
+
+            paymentList(1);
+
+        });
+
+        function paymentList(page) {
+            var page = page || 1;
+            let paymentListTable = "";
+            let pagination = "";
+
+            $.ajax({
+                url: '/payment/list/' + email,
+                type: 'get',
+                data: {
+                    'email': email,
+                    'page' : page
+                },
+                success: function (result) {
+
+                    console.log('paymentList');
+
+                    // 결제 내역 테이블
+                    $.each(result.dtoList, function (index, paymentList) {
+
+                        let service = "";
+
+                        if (paymentList.price == 27000) {
+                            service = "PERSONAL";
+                        } else if (paymentList.price == 43000) {
+                            service = "BUSINESS";
+                        } else if (paymentList.price == 78000) {
+                            service = "ULTIMATE";
+                        }
+
+                        paymentListTable += '<tr aria-hidden="true" data-toggle="tooltip" data-placement="top" title="메인 화면으로 이동">' +
+                            '<th scope="row" class="text-center">' + paymentList.id + '</th>' +
+                            '<td class="text-center">' + service + '</td>' +
+                            '<td class="text-center">' + paymentList.approvalNumber + '</td>' +
+                            '<td class="text-center">' + paymentList.price + '</td>' +
+                            '<td class="text-center">' + get_date_str(paymentList.createdDate) + '</td>';
+                    });
+
+                    $('.payment-tbody').html(paymentListTable);
+
+                    // 결제 내역 테이블 페이징
+                    pagination += '<nav aria-label="Page navigation example">\n' +
+                        '                        <ul class="pagination justify-content-center">\n';
+
+                    if (result.prev) {
+                        pagination +='                            <li className="page-item disabled">\n' +
+                            '                                <a class="page-link page-prev" data-type="payment" data-preve="' + (result.start - 1)  + '" href="#" tabIndex="-1" aria-disabled="true"><span aria-hidden="true">&laquo;</span></a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    $.each(result.pageList, function (index, page) {
+
+                        let active = result.page == page ? 'active' : '';
+                        pagination += '<li class="page-item ' + active + '">';
+                        pagination += '<a class="page-link page-num" id="page-link" data-type="payment" data-page="' + page +'" href="#">' + page + '</a></li>'
+                    })
+
+                    if (result.next) {
+                        pagination += '                            <li class="page-item">\n' +
+                            '                                <a class="page-link page-next" data-type="payment" href="#" data-end="' + (result.end + 1) +'"><span aria-hidden="true">&raquo;</span> </a>\n' +
+                            '                            </li>\n';
+                    }
+
+                    pagination +='                        </ul>\n' +
+                        '                    </nav>';
+
+                    $('.payment-pagination-div').html(pagination);
+
+                }
+            })
+        }
+    });
+</script>
+</html>

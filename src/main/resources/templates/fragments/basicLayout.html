@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<th:block th:fragment="setContent(content)">
+    <head>
+        <title>Petppy</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800&display=swap"
+              rel="stylesheet">
+
+        <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
+        <link rel="stylesheet" th:href="@{/petppy/fontawesome/css/font-awesome.min.css}">
+
+        <link rel="stylesheet" th:href="@{/petppy/css/animate.css}">
+
+        <link rel="stylesheet" th:href="@{/petppy/css/owl.carousel.min.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/owl.theme.default.min.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/magnific-popup.css}">
+
+
+        <link rel="stylesheet" th:href="@{/petppy/css/bootstrap-datepicker.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/jquery.timepicker.css}">
+
+        <link rel="stylesheet" th:href="@{/petppy/css/flaticon.css}">
+        <link rel="stylesheet" th:href="@{/petppy/css/style.css}">
+    </head>
+    <body>
+
+    <div class="wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-center">
+                    <p class="mb-0 phone pl-md-2">
+                        <a href="#"><span class="fa fa-paper-plane mr-1"></span> kj99658103@gmail.com</a>
+                    </p>
+                </div>
+                <div class="col-md-6 d-flex justify-content-md-end">
+                    <div class="social-media">
+                        <p class="mb-0 d-flex">
+                            <a target="_blank" href="https://github.com/dudwk814" class="d-flex align-items-center justify-content-center"><span class="fa fa-github"><i class="sr-only">Github</i></span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/"><span class="flaticon-pawprint-1 mr-2"></span>Petppy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                    aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="fa fa-bars"></span> Menu
+            </button>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+
+                    <!--<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>-->
+                    <li class="nav-item"><a th:href="@{/membership}" class="nav-link">Membership</a></li>
+                    <li class="nav-item"><a th:href="@{/vet}" class="nav-link">Veterinarian</a></li>
+                    <li class="nav-item"><a th:href="@{/services}" class="nav-link">Services</a></li>
+                    <li class="nav-item"><a th:href="@{/QnA}" class="nav-link">Q&A</a></li>
+                    <li class="nav-item"><a th:href="@{/board}" class="nav-link">Board</a></li>
+                    <li th:if="${session.user == null}" class="nav-item">
+                        <a class="nav-link" data-toggle="modal" data-target="#loginModal">Login</a>
+                    </li>
+                    <li th:unless="${session.user == null}" class="nav-item dropdown" >
+                        <button data-toggle="dropdown" data-display="static" aria-expanded="false" aria-haspopup="true" type="button" class="nav-link btn btn-link" id="notifyBtn" th:data-email="${session.user.email}">
+                            <i class="fa fa-bell-o fa-lg" aria-hidden="true"></i>
+                            <span class="badge badge-notify" style="font-size:10px;"></span>
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="dropdownMenuButton">
+
+                        </div>
+                    </li>
+                    <li th:unless="${session.user == null}" class="nav-item dropdown">
+                        <button class="nav-link btn btn-link" type="button" href="#" data-toggle="dropdown" data-display="static"
+                           aria-expanded="false" aria-haspopup="true">
+                            <img th:src="@{'/petppy/images/simbolLogo.PNG'}">
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-lg-left px-4 py-3">
+                            <h6 class="dropdown-header">[[${session.user.name}]]님 반갑습니다!</h6>
+                            <h6></h6>
+                            <div class="dropdown-divider"></div>
+
+                            <a th:if=" ${#strings.equals(session.user.role, 'ADMIN')}" th:href="@{/admin/}" class="dropdown-item"><h6><i class="fa fa-lock fa-lg"
+                                                                                                                    aria-hidden="true"></i>&nbsp;&nbsp;관리자 메뉴</h6></a>
+
+                            <a class="dropdown-item" th:href="@{/user}"><h6><i class="fa fa-cog fa-lg"
+                                                                     aria-hidden="true"></i>&nbsp;&nbsp;회원설정</h6></a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout-btn" href="#"><h6><i class="fa fa-share-square-o fa-lg"
+                                                                                aria-hidden="true"></i>&nbsp;&nbsp;로그아웃
+                            </h6></a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- END nav -->
+
+    <th:block th:replace="${content}">
+
+    </th:block>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4 mb-md-0">
+                    <h2 class="footer-heading">PETPPY</h2>
+                    <p>PETTPY는 포트폴리오 프로젝트이며, 실제 결제기능 및 서비스를 제공하지 않습니다.</p>
+                    <ul class="ftco-footer-social p-0">
+                        <li class="ftco-animate"><a href="https://github.com/dudwk814" target="_blank" data-toggle="tooltip" data-placement="top" title="github"><span
+                                class="fa fa-github"></span></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4 mb-md-0">
+                    <h2 class="footer-heading">Latest News</h2>
+                    <div class="block-21 mb-4 d-flex">
+                        <a class="img mr-4 rounded" style="background-image: url('/petppy/images/image_1.jpg');"></a>
+                        <div class="text">
+                            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
+                            <div class="meta">
+                                <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
+                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
+                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-21 mb-4 d-flex">
+                        <a class="img mr-4 rounded" style="background-image: url('/petppy/images/image_2.jpg');"></a>
+                        <div class="text">
+                            <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
+                            <div class="meta">
+                                <div><a href="#"><span class="icon-calendar"></span> April 7, 2020</a></div>
+                                <div><a href="#"><span class="icon-person"></span> Admin</a></div>
+                                <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 pl-lg-5 mb-4 mb-md-0">
+                    <h2 class="footer-heading">Quick Links</h2>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/}" class="py-2 d-block">Home</a></li>
+                        <li><a th:href="@{/membership}" class="py-2 d-block">Membership</a></li>
+                        <li><a th:href="@{/vet}" class="py-2 d-block">Veterinarian</a></li>
+                        <li><a th:href="@{/services}" class="py-2 d-block">Services</a></li>
+                        <li><a th:href="@{/QnA}" class="py-2 d-block">Q&A</a></li>
+                        <li><a th:href="@{/board}" class="py-2 d-block">Baord</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4 mb-md-0">
+                    <h2 class="footer-heading">Have a Questions?</h2>
+                    <div class="block-23 mb-3">
+                        <ul>
+                            <li><a href="#"><span class="icon fa fa-paper-plane"></span><span class="text">kj99658103@gmail.com</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12 text-center">
+
+                    <p class="copyright">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                        All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i>
+                        by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!--<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+        &lt;!&ndash; Position it &ndash;&gt;
+        <div class="toast-div" style="position: absolute; top: 0; right: 0;">
+
+        </div>
+    </div>-->
+
+    <!-- 로그인 모달 -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-4 ml-auto">
+                                <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row no-gutters slider-text align-items-center justify-content-center"
+                             data-scrollax-parent="true">
+                            <div class="col-md-11 text-center">
+                                <img th:src="@{'/petppy/images/logo.PNG'}">
+                            </div>
+                        </div>
+                        <div class="form-group"></div>
+                        <div class="roe slider-text align-items-center justify-content-center">
+                            <form action="/login" method="post" id="login-form">
+
+                                <div class="form-group" id="login-modal-email-group">
+                                    <input type="email" class="form-control" id="login-modal-email"
+                                           aria-describedby="emailHelp" name="email" placeholder="이메일 또는 아이디 입력">
+                                </div>
+                                <div class="form-group" id="login-modal-password-group">
+                                    <input type="password" class="form-control" id="login-modal-password"
+                                           name="password"
+                                           placeholder="비밀번호">
+                                </div>
+                                <button type="submit" id="login-btn" class="btn btn-success btn-lg btn-block"
+                                        style="font-size: 20px;">로그인
+                                </button>
+                                <div class="form-group"></div>
+                                <div align="center">
+                                    <p>
+                                        <a href="/user/findPassword" style="color: #000a12;"><u>비밀번호 찾기</u></a> &#124;
+                                        <a href="/user/signupForm" style="color: #000a12;"><u>회원가입</u></a>
+                                    </p>
+                                </div>
+
+                            </form>
+                            <div class="hr-sect">소셜 로그인</div>
+                            <div class="social-login-buttons" align="center">
+                                <a href="/oauth2/authorization/google"><img style="width: 44px; height: 44px;"
+                                                                            th:src="@{'/petppy/images/google_login_btn.png'}"></a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/oauth2/authorization/naver"><img style="width: 44px; height: 44px;"
+                                                                           th:src="@{'/petppy/images/naver_login_btn.png'}"></a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/oauth2/authorization/kakao"><img style="width: 44px; height: 44px;"
+                                                 th:src="@{'/petppy/images/kakao_login_btn.png'}"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="container-fluid">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="popupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <div class="col-md-11 text-center">
+                        <img th:src="@{'/petppy/images/logo.PNG'}">
+                    </div>
+                    <!--<h5 class="modal-title" id="exampleModalCenterTitle">PETPPY 공지</h5>-->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>'PETPPY'는 포트폴리오 프로젝트이며, 실제 서비스는 제공하지 않습니다.</p>
+                    <p>'PETPPY'의 이용방법을 확인하시려면 <a th:href="@{/QnA}" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="홈페이지 이용방법 확인하기">QnA</a>를 클릭하여 이용방법을 확인해주세요.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <input type="checkbox" class="popupModalSetCookie"> 하루동안 팝업 열지않기
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/petppy/js/jquery.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery-migrate-3.0.1.min.js}"></script>
+    <script th:src="@{/petppy/js/popper.min.js}"></script>
+    <script th:src="@{/petppy/js/bootstrap.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.easing.1.3.js}"></script>
+    <script th:src="@{/petppy/js/jquery.waypoints.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.stellar.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.animateNumber.min.js}"></script>
+    <script th:src="@{/petppy/js/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/petppy/js/jquery.timepicker.min.js}"></script>
+    <script th:src="@{/petppy/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/petppy/js/jquery.magnific-popup.min.js}"></script>
+    <script th:src="@{/petppy/js/scrollax.min.js}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script th:src="@{/petppy/js/google-map.js}"></script>
+    <script th:src="@{/petppy/js/main.js}"></script>
+    <script th:src="@{/petppy/ckeditor/ckeditor.js}"></script>
+    <script th:src="@{/petppy/js/masking.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script th:inline="javascript">
+
+        // 팝업용 쿠키 생성 함수
+        function setCookie(cookie_name, value, days) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + days);
+            // 설정 일수만큼 현재시간에 만료값으로 지정
+
+            var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+            document.cookie = cookie_name + '=' + cookie_value;
+        }
+
+        // 쿠키 조회 함수
+        function getCookie(cookie_name) {
+            var x, y;
+            var val = document.cookie.split(';');
+
+            for (var i = 0; i < val.length; i++) {
+                x = val[i].substr(0, val[i].indexOf('='));
+                y = val[i].substr(val[i].indexOf('=') + 1);
+                x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+                if (x == cookie_name) {
+                    return unescape(y); // unescape로 디코딩 후 값 리턴
+                }
+            }
+        }
+
+        // 비밀번호 유효성 검증
+        function passwordCheck(password1, password2) {
+
+            if ($(".password").hasClass("is-invalid") === true) {
+                $(".password").removeClass("is-invalid");
+                $(".password1-invalid-div").remove();
+            }
+
+            if ($(".password2").hasClass("is-invalid") === true) {
+                $(".password2").removeClass("is-invalid");
+                $(".password2-invalid-div").remove();
+            }
+
+            if (password1 == "" || password1.length < 4 || password2 == "" || password2.length < 4 || password1 !== password2) {
+                if (password1 == "" || password1.length < 4) {
+                    $(".password").addClass("is-invalid");
+                    $("#password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
+                }
+
+                if (password2 == "" || password2.length < 4) {
+                    $(".password2").addClass("is-invalid");
+                    $("#password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "올바른 비밀번호를 입력하세요. </div>");
+                }
+
+                if (password1 !== password2) {
+
+                    $("#password").addClass("is-invalid");
+                    $("#password-group1").append("<div class='invalid-feedback password1-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
+
+                    $("#password2").addClass("is-invalid");
+                    $("#password-group2").append("<div class='invalid-feedback password2-invalid-div'>" + "비밀번호가 서로 다릅니다. </div>");
+                }
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var roadAddr = data.roadAddress; // 도로명 주소 변수
+                    var extraRoadAddr = ''; // 참고 항목 변수
+
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraRoadAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraRoadAddr !== ''){
+                        extraRoadAddr = ' (' + extraRoadAddr + ')';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('sample4_postcode').value = data.zonecode;
+                    document.getElementById("sample4_roadAddress").value = roadAddr;
+                    document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+
+                    // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                    if(roadAddr !== ''){
+                        document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                    } else {
+                        document.getElementById("sample4_extraAddress").value = '';
+                    }
+
+                    var guideTextBox = document.getElementById("guide");
+                    // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                    if(data.autoRoadAddress) {
+                        var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                        guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                        guideTextBox.style.display = 'block';
+
+                    } else if(data.autoJibunAddress) {
+                        var expJibunAddr = data.autoJibunAddress;
+                        guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                        guideTextBox.style.display = 'block';
+                    } else {
+                        guideTextBox.innerHTML = '';
+                        guideTextBox.style.display = 'none';
+                    }
+                }
+            }).open();
+        }
+
+        // socket 전역변수 설정
+        var socket = null;
+
+        var IMP = window.IMP; // 생략 가능
+        IMP.init("imp59501026"); // 예: imp00000000
+
+        // iamport kakaoPay 결제 요청
+        function changeMembershipRequestKakaoPay(request) {
+            // IMP.request_pay(param, callback) 결제창 호출
+            IMP.request_pay({
+                pg : 'kakaopay',
+                pay_method : 'card',
+                merchant_uid: "petppy_" + new Date().getTime(), // 상점에서 관리하는 주문 번호
+                name : '주문명:' + request.rating,
+                amount : request.price,
+                buyer_email : request.email,
+                buyer_name : request.name,
+                buyer_tel : '010-1234-5678',
+                buyer_addr : '서울특별시 강남구 삼성동',
+                buyer_postcode : '123-456'
+            }, function(rsp) {
+
+                $.ajax({    // 결제 검증 함수
+                    type: "POST",
+                    url: "/payment/verifyIamport/" + rsp.imp_uid
+                }).done(function (data) {   // 결제 함수
+                    if (rsp.paid_amount == data.response.amount && rsp.success) {
+                        $.ajax({
+                            url: '/payment/complete',
+                            type: 'post',
+                            dataType: 'json',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify({
+                                pg: 'kakao',
+                                price: request.price,
+                                userId: request.userId,
+                                email: request.email,
+                                transactionNumber: rsp.imp_uid,
+                                approvalNumber: rsp.pg_tid,
+                                paymentStatus: rsp.success,
+                                detailMessage: '결제성공'
+                            })
+                        })
+                    } else {
+                        $.ajax({    // 결제 정보 DB에 저장
+                            url: '/payment/complete',
+                            type: 'post',
+                            dataType: 'json',
+                            contentType: 'application/json; charset=utf-8',
+                            data: JSON.stringify({
+                                pg: 'kakao',
+                                price: request.price,
+                                userId: request.userId,
+                                email: request.email,
+                                transactionNumber: rsp.imp_uid,
+                                approvalNumber: rsp.pg_tid,
+                                paymentStatus: rsp.success,
+                                detailMessage: rsp.error_msg
+                            })
+                        })
+                    }
+                }).done(function () {   // 멤버쉽 등급 변경 함수
+
+                    if (rsp.success) {
+                        $.ajax({
+                            url: '/membership/change/' + request.userId,
+                            type: 'patch',
+                            data: {
+                                userId: request.userId,
+                                rating: request.rating
+                            }
+
+                        });
+                    }
+                }).done(function () {
+                    if ([[${session.user != null}]] && rsp.success) {
+                        let targetEmail = $('#notifyBtn').data('email');
+                        let message =  "멤버십 등급 변경 결제가 완료되었습니다.";
+                        let url = "#";
+
+                        let notificationData = {
+                            targetEmail : targetEmail,
+                            message : message,
+                            notificationType : "payment",
+                            url : url
+                        };
+
+                        $.ajax({ // 알림 저장
+                            type : 'post',
+                            url : '/notify/save',
+                            data : JSON.stringify(notificationData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType : 'text',
+                        })
+
+                    }
+                }).done(function () {   // 상단 알림 표시
+                    if ([[${session.user != null}]] && rsp.success) {
+                        let targetEmail = $('#notifyBtn').data('email');
+                        let message = "멤버십 등급 변경 결제가 완료되었습니다.";
+                        let url = "#";
+                        if(socket){
+                            let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
+                            /*console.log("msgmsg : " + socketMsg);*/
+                            socket.send(socketMsg);
+                        }
+                    }
+
+                }).always(function (data) { // 결제 결과 alert
+                    if (rsp.success) {
+                        let msg = '결제가 완료되었습니다.\n';
+                        msg += '고유ID : ' + rsp.imp_uid + '\n';
+                        msg += '상점 거래ID : ' + rsp.merchant_uid + '\n';
+                        msg += '결제 금액 : ' + rsp.paid_amount + '\n';
+                        msg += '카드 승인번호 : 실제 결제는 되지않습니다.\n';
+                        swal("결제 성공", msg);
+                    } else {
+                        let msg = '결제에 실패하였습니다.\n';
+                        msg += '에러내용 : ' + rsp.error_msg;
+                        swal("결제실패", msg);
+                    }
+                });
+            });
+        }
+
+        function cancelMembershipRequest(email) {   // 멤버십 취소 함수
+            $.ajax({    // 결제 정보 조회
+                url: '/payment/' + email,
+                type: 'post',
+
+            }).done(function (paymentData) {
+                let imp_uid = paymentData.transactionNumber;
+
+                $.ajax({ // 아임포트 서버에서 토큰 회득
+                    url: '/payment/accessToken/' + imp_uid,
+                    type : 'post'
+                }).done(function (token) {
+                    console.log(paymentData);
+                    console.log(token);
+                    console.log(token.response.token);
+
+                    $.ajax({ // 토큰 획득 후 아임포트 서버에 결제 취소 요청
+                        url : "/payment/cancel/" + imp_uid,
+                        type : "post",
+                        data : {
+                            imp_uid : imp_uid,
+                            price : paymentData.price
+                        }
+                    }).done(function (getCancelData) {
+                        $.ajax({    // 멤버십 등급 'NONE'으로 변경
+                            url: '/membership/change/' + paymentData.userId,
+                            type: 'patch',
+                            data: {
+                                userId : paymentData.userId,
+                                rating : 'NONE'
+                            }
+                        }).done(function () {   // 상단 알림 표시
+                            if (getCancelData.code == 0) {
+                                let targetEmail = paymentData.email;
+                                let message = "멤버십이 해지되었습니다.";
+                                let url = "/user/userPage";
+                                if(socket){
+                                    let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
+                                    /*console.log("msgmsg : " + socketMsg);*/
+                                    socket.send(socketMsg);
+                                }
+                            }
+
+                        }).always(function () { // 결제 취소 결과 alert
+                            console.log(getCancelData);
+                            if (getCancelData.code == 0) {
+                                swal("결제 취소", "결제가 취소되었습니다.");
+                            } else {
+                                swal("결제 취소", getCancelData.message);
+                            }
+                        });
+
+                    });
+                });
+
+            });
+        };
+
+        function connectWs(){
+            sock = new SockJS( "/echo" );
+            socket = sock;
+
+            sock.onopen = function() {
+                console.log('info: connection opened.');
+
+                if ([[${session.user}]] != null) {
+                    let email = $('#notifyBtn').data('email');
+                    $.ajax({
+                        url : '/notify/unChecked/' + email,
+                        type : 'get',
+                        dataType : 'json',
+                        success : function (result) {
+
+                            $('.badge-notify').text(result);
+
+
+                        }
+                    });
+                }
+
+            };
+
+            sock.onmessage = function(evt) {
+                let data = evt.data;
+                /*console.log("ReceivMessage : " + data + "\n");*/
+
+                let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
+                toast += "<div class='toast-header'><i class='fa fa-bell-o mr-2'></i><strong class='mr-auto'>알림</strong>";
+                toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
+                toast += "<span aria-hidden='true'>&times;</span></button>";
+                toast += "</div> <div class='toast-body'>" + data + "</div></div>";
+                $(".content-section").prepend(toast);   // toast-div에 생성한 toast 추가
+                $(".toast").toast({"animation": true, "autohide": false});
+                $('.toast').toast('show');
+
+                let email = $('#notifyBtn').data('email');
+                $.ajax({
+                    url : '/notify/unChecked/' + email,
+                    type : 'get',
+                    dataType : 'json',
+                    success : function (result) {
+
+                        $('.badge-notify').text(result);
+                    }
+                });
+
+            };
+
+            sock.onclose = function() {
+                console.log('connect close');
+                /* setTimeout(function(){conntectWs();} , 1000); */
+            };
+
+            sock.onerror = function (err) {console.log('Errors : ' , err);};
+
+        }
+
+        // 알람 시간 계산 함수
+        function timeForToday(value) {
+            const today = new Date();
+            const timeValue = new Date(value);
+
+            const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+            if (betweenTime < 1) return '방금전';
+            if (betweenTime < 60) {
+                return `${betweenTime}분전`;
+            }
+
+            const betweenTimeHour = Math.floor(betweenTime / 60);
+            if (betweenTimeHour < 24) {
+                return `${betweenTimeHour}시간전`;
+            }
+
+            const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+            if (betweenTimeDay < 365) {
+                return `${betweenTimeDay}일전`;
+            }
+
+            return `${Math.floor(betweenTimeDay / 365)}년전`;
+        }
+
+        /* date형을 string형 yyyy-mm-dd로 변환 */
+        function get_date_str(date) {
+
+            return date.substring(0,10);
+        }
+
+        $(document).ready(function (e) {
+
+
+
+            // 홈 화면 팝업 모달
+            $(".popupModalSetCookie").change(function () {
+                if ($(".popupModalSetCookie").is(":checked") == true) {
+                    setCookie('popupModalCookie', 'Y', '1') // 하루동안 쿠키 유지
+                    console.log("Y");
+                    $("#popupModal").modal("hide");
+                }
+            });
+
+            // 레이어 팝업 show
+            console.log(getCookie('popupModalCookie'));
+            if (getCookie('popupModalCookie') == "Y") {
+                $("#popupModal").modal("hide");
+            } else {
+                $("#popupModal").modal("show");
+            }
+
+            // 웹 소켓 연결
+            connectWs();
+
+            // 툴팁 활성화
+            $('[data-toggle="tooltip"]').tooltip();
+
+            // 카카오페이 간편 결제 버튼 클릭 시 카카오페이 결제창 생성
+            $(".kakaoPay").on("click", function (e) {
+                e.preventDefault();
+
+
+
+                if ([[${session.user}]] == null) {
+                    $("#loginModal").modal("show");
+                } else {
+                    /*[# th:if = "${session.user != null}"]*/
+                    if ([[${session.user.membershipDTO.rating}]] === $(this).data('membership').toUpperCase()) {
+                        swal("결제실패", '이미 이용중인 멤버십 등급입니다.');
+                        return false;
+                    }
+                    /*[/]*/
+                }
+
+                /*[# th:if = "${session.user != null}"]*/
+                var rating = $(this).data('membership');
+                var price = $(this).data('price');
+                var userId = [[${session.user.id}]];
+                var email = [[${session.user.email}]];
+                var name = [[${session.user.name}]];
+                var request = {
+                    rating : rating,
+                    userId : userId,
+                    email : email,
+                    name : name,
+                    price : price
+                }
+
+
+
+
+                changeMembershipRequestKakaoPay(request);
+                /*[/]*/
+
+
+            });
+
+            // 알림 벨 버튼 클릭시 알람 dropdown show
+            $('#notifyBtn').on('click', function (e) {
+
+                let email = $(this).data('email');
+                let notifyList = "";
+                let unCheckedNotify = $('.badge-notify').text();
+
+                $.ajax({
+                    url: '/notify/recent/' + email,
+                    type: 'get',
+                    data: email,
+                    dataType: 'json',
+                    success : function (result) {
+
+                        notifyList +=
+                            '<h6 class="dropdown-item-text text-center p-3">읽지 않은 알림 <span class="text-success">' +  unCheckedNotify + '</span>개</h6>' +
+                            '<div class="dropdown-divider"></div>';
+
+
+                        $.each(result, function (index, notify) {
+
+                            let notificationType = notify.notificationType;
+
+                            if (notify.isRead.toString() === 'Y') {
+                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url bg-light" data-id="' + notify.id +'">\n';
+
+                                notifyList += '    <p style="font-size: 16px;" class="mb-1 text-muted"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
+                                    '  </a><div class="dropdown-divider"></div>';
+                            } else {
+                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url" data-id="' + notify.id +'">\n';
+
+                                notifyList += '    <p style="font-size: 16px;" class="mb-1"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
+                                    '  </a><div class="dropdown-divider"></div>';
+                            }
+
+
+                        });
+
+                        notifyList += '<a href="/user/dashboard" class="dropdown-item notify-more">\n' +
+                            '<div class="d-flex w-100 justify-content-between">' +
+                            '<h6 class="mb-1 text-center"><span class="fa fa-bell-o"></span> 알림 더 확인하기</h6> </div></a>';
+
+                        $('#notifyBtn').closest('li').children('.dropdown-menu').html(notifyList);
+                    }
+                });
+
+            });
+
+            // 알림 목록에서 알림 클릭시 읽음 처리
+            $(document).on('click', '.notify_url', function (e) {
+                e.preventDefault();
+
+                let url = $(this).attr('href');
+                let id = $(this).data('id');
+
+                $.ajax({
+                    url : '/notify/' + id,
+                    type : 'patch',
+                    data : id,
+                    success : function (result) {
+                        if (result === 'success') {
+                            location.href = url;
+                        }
+                    }
+                })
+            })
+
+
+            // 로그아웃
+            $(".logout-btn").on("click", function (e) {
+                e.preventDefault();
+
+                let logoutForm = $('<form></form>');
+                //set attribute (form)
+                logoutForm.attr("name", "logoutForm");
+                logoutForm.attr("method", "post");
+                logoutForm.attr("action", "/logout");
+
+                logoutForm.appendTo('body');
+
+                logoutForm.submit();
+            });
+
+
+            /* 로그인 폼 유효성 검증 */
+            $("#login-btn").on("click", function (e) {
+                    e.preventDefault();
+
+                    loginFormCheck();
+
+                    if (loginFormCheck() === false) {
+                        return;
+                    }
+
+                    $("#login-form").submit();
+
+                }
+            );
+
+            /* 로그인 input 입력 항목 유효성 체크 */
+            function loginFormCheck() {
+
+                /* 이메일 포맷 유효성 */
+                let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+                if ($("#login-modal-email").hasClass("is-invalid") === true) {
+                    $("#login-modal-email").removeClass("is-invalid");
+                    $("#email-invalid-div").remove();
+                }
+
+                if ($("#login-modal-password").hasClass("is-invalid") === true) {
+                    $("#login-modal-password").removeClass("is-invalid");
+                    $("#password-invalid-div").remove();
+                }
+
+                /* email칸 & password칸이 공백인 경우 invalid-feedback 클래스 추가 */
+                if ($("#login-modal-email").val().trim() == "" || !re.test($("#login-modal-email").val()) || $("#login-modal-password").val().trim() == "") {
+
+                    /* email칸이 공백인 경우 invalid-feedback 클래스 추가 */
+                    if ($("#login-modal-email").val().trim() == "" || !re.test($("#login-modal-email").val())) {
+                        $("#login-modal-email").addClass("is-invalid");
+                        $("#login-modal-email-group").append("<div class='invalid-feedback' id='email-invalid-div'>" + "올바른 이메일을 입력하세요 </div>");
+                    }
+
+                    /* password칸이 공백인 경우 invalid-feedback 클래스 추가 */
+                    if ($("#login-modal-password").val().trim() == "") {
+                        $("#login-modal-password").addClass("is-invalid");
+                        $("#login-modal-password-group").append("<div class='invalid-feedback' id='password-invalid-div'>" + "비밀번호를 입력하세요 </div>");
+                    }
+
+                    return false;
+                }
+
+            }
+
+        });
+    </script>
+    </body>
+</th:block>
+</html>
