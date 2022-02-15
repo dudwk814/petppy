@@ -26,7 +26,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-*.yml
+#yml 파일
+application-db.yml
+application-email.yml
+application-oauth.yml
 
 ### NetBeans ###
 /nbproject/private/
