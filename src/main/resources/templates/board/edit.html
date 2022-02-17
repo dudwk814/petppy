@@ -5,7 +5,7 @@
     min-height: 650px;
   }
 </style>
-<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
   <th:block th:fragment="content">
     <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -49,6 +49,7 @@
       enterMode : CKEDITOR.ENTER_BR,
       shiftEnterMode : CKEDITOR.ENTER_P,
       filebrowserUploadUrl : "/board/uploadImg",
+      height : "500"
     };
 
     CKEDITOR.replace('editor', ckeditor_config);

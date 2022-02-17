@@ -54,7 +54,7 @@ public class UserController {
 
         model.addAttribute("userDTO", userService.findByEmailAndType(userEmail, type));
 
-        return "/user/userPage";
+        return "user/userPage";
     }
 
     /**
@@ -71,7 +71,7 @@ public class UserController {
         model.addAttribute("userDTO", userService.findByEmailAndType(userEmail, type));
         model.addAttribute("unCheckedNotifyCount", notificationService.unCheckedCount(userEmail));
 
-        return "/user/dashboard";
+        return "user/dashboard";
     }
 
     /**

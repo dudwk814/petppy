@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import petppy.config.util.FormValidator;
 import petppy.domain.board.Board;
+import petppy.domain.email.Email;
 import petppy.dto.board.BoardDTO;
 import petppy.dto.PageRequestDTO;
 import petppy.dto.PageResultDTO;
@@ -54,7 +55,7 @@ public class BoardController {
 
         model.addAttribute("boardList", result);
 
-        return "/board/boardList";
+        return "board/boardList";
     }
 
     @GetMapping("/read")
@@ -68,16 +69,16 @@ public class BoardController {
 
         model.addAttribute("recentBoardList", boardService.findRecentBoardList(PageRequest.of(0, 5)));
 
-        return "/board/read";
+        return "board/read";
     }
 
     /**
      * 글 작성 폼으로 이동
      */
     @GetMapping("/edit")
-    public String editForm(BoardDTO boardDto) {
+    public String editForm(@ModelAttribute("boardDto") BoardDTO boardDto) {
 
-        return "/board/edit";
+        return "board/edit";
     }
 
     /**
@@ -92,7 +93,7 @@ public class BoardController {
                 model.addAttribute(key, validatorResult.get(key));
             }
 
-            return "/board/edit";
+            return "board/edit";
         }
 
         String userEmail = (String) session.getAttribute("userEmail");
@@ -116,8 +117,9 @@ public class BoardController {
 
 
         BoardDTO boardDto = boardService.searchBoard(id);
+        String email = (String)session.getAttribute("userEmail");
 
-        if (boardDto.getEmail() != session.getAttribute("userEmail")) {
+        if (!boardDto.getEmail().equals(email)) {
             return "redirect:/board/read?id=" + boardDto.getBoardId();
         }
 
@@ -125,7 +127,7 @@ public class BoardController {
 
         model.addAttribute("board", boardDto);
 
-        return "/board/modify";
+        return "board/modify";
     }
 
     /**

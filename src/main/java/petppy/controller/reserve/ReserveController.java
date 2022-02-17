@@ -45,7 +45,7 @@ public class ReserveController {
 
         model.addAttribute("reserveList", reserveService.findReserveList(reserveDTO, pageRequestDTO));
 
-        return "/reserve/reserveList";
+        return "reserve/reserveList";
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -2,14 +2,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
 
   thymeleaf:
     cache: false
-
 
   profiles:
     include: oauth, email, db

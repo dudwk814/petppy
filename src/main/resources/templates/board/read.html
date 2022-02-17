@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{/fragments/basicLayout :: setContent(~{this::content})}">
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
     <th:block th:fragment="content">
         <section class="hero-wrap hero-wrap-2" style="background-image: url('/petppy/images/bg_2.jpg');"
                  data-stellar-background-ratio="0.5">
@@ -56,7 +56,7 @@
                         <h2 class="mb-3" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="제목"
                             th:utext="${board.title}"></h2>
                         <hr>
-                        <div th:utext="${board.content}">Content</div>
+                        <div class="w-100" th:utext="${board.content}">Content</div>
 
                         <div class="tag-widget post-tag-container mb-5 mt-5">
 

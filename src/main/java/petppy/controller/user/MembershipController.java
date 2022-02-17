@@ -17,7 +17,7 @@ public class MembershipController {
     @GetMapping("")
     public String membership() {
 
-        return "/membership/membership";
+        return "membership/membership";
     }
 
     @ResponseBody
