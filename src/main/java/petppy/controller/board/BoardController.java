@@ -208,7 +208,8 @@ public class BoardController {
             printWriter = res.getWriter();
             String fileUrl = resourcesUriPath + "/" + uuid + "_" + fileName;  // DB에 저장되는 url 경로
 
-
+            System.out.println("defaultPath: " + defaultPath);
+            System.out.println("ckUploadPath: " + ckUploadPath);
 
             // 업로드시 메시지 출력
             printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
