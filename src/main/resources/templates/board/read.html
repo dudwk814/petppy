@@ -100,7 +100,7 @@
 
                     </div> <!-- .col-md-8 -->
                     <div class="col-lg-4 sidebar pl-lg-5 ftco-animate">
-                        <div class="sidebar-box">
+                        <!--<div class="sidebar-box">
                             <form action="/board" class="search-form">
                                 <input type="hidden" name="page" value="1">
                                 <input type="hidden" name="size" value="10">
@@ -115,14 +115,14 @@
                                         <option value="ct" th:selected="${requestDTO.type == 'ct'}">내용 or 작성자</option>
                                         <option value="tcw" th:selected="${requestDTO.type == 'tcw'}">제목 or 내용 or 작성자</option>
                                     </select>
-                                    <!--</div>-->
+                                    &lt;!&ndash;</div>&ndash;&gt;
                                     <input style="width: 150px !important;" th:value="${requestDTO.keyword}" name="keyword" type="text" class="form-control" placeholder="제목 OR 내용 OR 작성자" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="검색">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="submit" style="width: 55px;"><span class="fa fa-search"></span></button>
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div>-->
 
                         <div class="sidebar-box ftco-animate">
                             <h3>최근 게시글</h3>
