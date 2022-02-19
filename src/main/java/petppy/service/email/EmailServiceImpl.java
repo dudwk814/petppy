@@ -20,8 +20,8 @@ import java.util.Random;
 //@PropertySource(value = "classpath:/application-email.yml")
 public class EmailServiceImpl implements EmailService {
 
-//    @Value("${email.username}")
-    private String fromEmail = "projectPetppy@gmail.com";
+    @Value("${email.username}")
+    private String fromEmail;
 
     private final JavaMailSender mailSender;
     private final EmailRepository emailRepository;
