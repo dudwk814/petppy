@@ -17,10 +17,9 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-//@PropertySource(value = "classpath:/application-email.yml")
 public class EmailServiceImpl implements EmailService {
 
-    @Value("${email.username}")
+    @Value("${mail.username}")
     private String fromEmail;
 
     private final JavaMailSender mailSender;
