@@ -19,7 +19,7 @@ import java.util.Random;
 @Transactional(readOnly = true)
 public class EmailServiceImpl implements EmailService {
 
-    @Value("${mail.username}")
+    @Value("${spring.mail.username}")
     private String fromEmail;
 
     private final JavaMailSender mailSender;
