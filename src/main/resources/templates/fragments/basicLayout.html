@@ -68,15 +68,18 @@
                     <li th:if="${session.user == null}" class="nav-item">
                         <a class="nav-link" data-toggle="modal" data-target="#loginModal">Login</a>
                     </li>
-                    <li th:unless="${session.user == null}" class="nav-item dropdown" >
+                    <li th:unless="${session.user == null}" class="nav-item dropdown">
                         <button data-toggle="dropdown" data-display="static" aria-expanded="false" aria-haspopup="true" type="button" class="nav-link btn btn-link" id="notifyBtn" th:data-email="${session.user.email}">
                             <i class="fa fa-bell-o fa-lg" aria-hidden="true"></i>
                             <span class="badge badge-notify" style="font-size:10px;"></span>
                         </button>
 
+
                         <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="dropdownMenuButton">
 
                         </div>
+
+
                     </li>
                     <li th:unless="${session.user == null}" class="nav-item dropdown">
                         <button class="nav-link btn btn-link" type="button" href="#" data-toggle="dropdown" data-display="static"
@@ -530,7 +533,7 @@
                         let message = "멤버십 등급 변경 결제가 완료되었습니다.";
                         let url = "#";
                         if(socket){
-                            let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
+                            let socketMsg = "결제," + targetEmail +","+ message +","+ url;
                             /*console.log("msgmsg : " + socketMsg);*/
                             socket.send(socketMsg);
                         }
@@ -590,7 +593,7 @@
                                 let message = "멤버십이 해지되었습니다.";
                                 let url = "/user/userPage";
                                 if(socket){
-                                    let socketMsg = "[결제]," + targetEmail +","+ message +","+ url;
+                                    let socketMsg = "결제," + targetEmail +","+ message +","+ url;
                                     /*console.log("msgmsg : " + socketMsg);*/
                                     socket.send(socketMsg);
                                 }
@@ -782,8 +785,8 @@
                     success : function (result) {
 
                         notifyList +=
-                            '<h6 class="dropdown-item-text text-center p-3">읽지 않은 알림 <span class="text-success">' +  unCheckedNotify + '</span>개</h6>' +
-                            '<div class="dropdown-divider"></div>';
+                            '<h6 class="dropdown-item-text text-center p-3 w-100">읽지 않은 알림 <span class="text-success">' +  unCheckedNotify + '</span>개</h6>' +
+                            '<div class="dropdown-divider w-100"></div>';
 
 
                         $.each(result, function (index, notify) {
@@ -791,22 +794,22 @@
                             let notificationType = notify.notificationType;
 
                             if (notify.isRead.toString() === 'Y') {
-                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url bg-light" data-id="' + notify.id +'">\n';
+                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url bg-light w-100" data-id="' + notify.id +'">\n';
 
-                                notifyList += '    <p style="font-size: 16px;" class="mb-1 text-muted"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
-                                    '  </a><div class="dropdown-divider"></div>';
+                                notifyList += '    <p style="font-size: 16px;" class="mb-1 text-muted w-100"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
+                                    '  </a><div class="dropdown-divider w-100"></div>';
                             } else {
-                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url" data-id="' + notify.id +'">\n';
+                                notifyList += '<a href="' + notify.url + '" class="dropdown-item p-3 notify_url w-100" data-id="' + notify.id +'">\n';
 
-                                notifyList += '    <p style="font-size: 16px;" class="mb-1"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
-                                    '  </a><div class="dropdown-divider"></div>';
+                                notifyList += '    <p style="font-size: 16px;" class="mb-1 w-100"><span class="mb-1 text-success">['+ notificationType + ']    </span>' + notify.message + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small class="text-muted">' + timeForToday(notify.createdDate)  + '</small>' + '</p>\n' +
+                                    '  </a><div class="dropdown-divider w-100"></div>';
                             }
 
 
                         });
 
-                        notifyList += '<a href="/user/dashboard" class="dropdown-item notify-more">\n' +
-                            '<div class="d-flex w-100 justify-content-between">' +
+                        notifyList += '<a href="/user/dashboard" class="dropdown-item notify-more w-100">\n' +
+                            '<div class="d-flex  justify-content-between">' +
                             '<h6 class="mb-1 text-center"><span class="fa fa-bell-o"></span> 알림 더 확인하기</h6> </div></a>';
 
                         $('#notifyBtn').closest('li').children('.dropdown-menu').html(notifyList);
