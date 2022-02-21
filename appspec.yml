@@ -12,3 +12,15 @@ permissions:
     pattern: "**"
     owner: ec2-user
     group: ec2-user
+
+hooks:
+  ApplicationStart:
+    - location: script/run_new_was.sh
+      timeout: 180
+      runas: ec2-user
+    - location: script/health_check.sh
+      timeout: 180
+      runas: ec2-user
+    - location: script/switch.sh
+      timeout: 180
+      runas: ec2-user

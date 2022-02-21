@@ -55,7 +55,7 @@
                                     <h5 class="mb-1"><b aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="제목" th:utext="${dto.title}"></b></h5>
                                     <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성 일">[[${#temporals.format(dto.createdDate, 'yyyy-MM-dd')}]]</small>
                                 </div>
-                                <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">[[${dto.email}]] &nbsp;&nbsp;</small><span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수"
+                                <small aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="작성자">[[${#strings.substringBefore(dto.email,'@')}]] &nbsp;&nbsp;</small><span class="fa fa-comment" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="댓글 수"
                                                                        style="color: #00bd56;">&nbsp;[[${dto.commentCount}]]</span>
                                 <small class="float-right" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="조회수">[[${dto.hit}]]</small>
                             </a>
