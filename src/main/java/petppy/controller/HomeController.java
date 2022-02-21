@@ -1,7 +1,10 @@
 package petppy.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 
@@ -33,6 +36,12 @@ public class HomeController {
     @GetMapping("/QnA")
     public String QnA() {
         return "QnA";
+    }
+
+    @ResponseBody
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return new ResponseEntity<String>("success", HttpStatus.OK);
     }
 
 
