@@ -7,6 +7,8 @@
  - 카카오 페이 간편 결제 제공
  - 구글, 네이버, 카카오 간편 로그인 제공
  - socket을 이용한 알림 시스템 제공
+ - Google SMTP를 통한 인증코드로 비밀번호 변경
+ - Github Actions, Nginx를 이용한 무중단 배포 구축
  
  산책, 미용, 의료 서비스를 제공하는 구독형 서비스!
  
@@ -16,9 +18,11 @@
 
 ## Stack
 <img alt="Spring_Boot" src ="https://img.shields.io/badge/Spring_Boot-6DB33F.svg?&style=for-the-badge&logo=Spring-Boot&logoColor=white"/> <img alt="Spring_Security" src ="https://img.shields.io/badge/Spring Security-6DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white"/> 
+<img alt="Gradle" src ="https://img.shields.io/badge/Gradle-02303A.svg?&style=for-the-badge&logo=Gradle&logoColor=white"/>
 <img alt="JPA" src ="https://img.shields.io/badge/JPA-59666C.svg?&style=for-the-badge&logo=Hibernate&logoColor=white"/>
 <img alt="MariaDB" src ="https://img.shields.io/badge/MariaDB-003545.svg?&style=for-the-badge&logo=MariaDB&logoColor=white"/> 
 <img alt="Thymeleaf" src ="https://img.shields.io/badge/Thymeleaf-005F0F.svg?&style=for-the-badge&logo=Thymeleaf&logoColor=white"/>
+
  
 <img alt="Bootstrap" src ="https://img.shields.io/badge/Bootstrap-7952B3.svg?&style=for-the-badge&logo=Bootstrap&logoColor=white"/> <img alt="jQuery" src ="https://img.shields.io/badge/jQuery-0769AD.svg?&style=for-the-badge&logo=jQuery&logoColor=white"/>
 <img alt="Amazon_AWS" src ="https://img.shields.io/badge/Amazon_AWS-232F3E.svg?&style=for-the-badge&logo=Amazon-AWS&logoColor=white"/>
