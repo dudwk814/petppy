@@ -25,4 +25,5 @@ public interface EnquiryRepository extends JpaRepository<Enquiry, Long>, Enquiry
     @Query("select new petppy.dto.enquiry.EnquiryCountDTO(count(e), e.enquiryType) from Enquiry e where e.enquiryStatus = :enquiryStatus group by e.enquiryType")
     List<EnquiryCountDTO> countByEnquiryWithEnquiryType(@Param("enquiryStatus") EnquiryStatus enquiryStatus);
 
+    void deleteByUserId(Long id);
 }

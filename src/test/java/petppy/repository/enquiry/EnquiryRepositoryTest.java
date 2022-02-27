@@ -72,4 +72,11 @@ class EnquiryRepositoryTest {
             System.out.println("enquiryCountDTO = " + enquiryCountDTO);
         }
     }
+
+    @Test
+    @Commit
+    public void 회원번호로_문의삭제() throws Exception {
+        User findUser = userRepository.findByEmail("admin@123.com").get();
+        enquiryRepository.deleteByUserId(findUser.getId());
+    }
 }

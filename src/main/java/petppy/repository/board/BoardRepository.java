@@ -25,4 +25,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPre
     @Query("select b.commentCount from Board b where b.id = :id")
     Long countComment(@Param("id") Long id);
 
+    void deleteByUserId(Long id);
+
 }

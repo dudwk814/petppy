@@ -87,7 +87,7 @@ public class UserController {
      * 회원가입
      */
     @PostMapping("/signup")
-    public String signup(@Valid UserDTO userDTO, BindingResult result,  Model model) {
+    public String signup(@Valid UserDTO userDTO, BindingResult result,  Model model, RedirectAttributes rttr) {
 
         if (result.hasErrors()) {
 
@@ -100,9 +100,9 @@ public class UserController {
         }
         userDTO.setType(NORMAL);
 
-
-
         String name = userService.joinedMember(userDTO);
+
+        rttr.addFlashAttribute("success", name);
 
         return "redirect:/";
 
@@ -124,6 +124,22 @@ public class UserController {
         model.addAttribute("address", findUserDTO);
 
         return "user/modifyForm";
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/disabled")
+    public String disabled(UserDTO userDTO, HttpSession session) {
+
+        userService.disabled(userDTO);
+
+        session.removeAttribute("user");
+        session.removeAttribute("userEmail");
+        session.removeAttribute("type");
+
+        return "redirect:/";
     }
 
     /**

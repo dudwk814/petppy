@@ -40,6 +40,14 @@ class PaymentRepositoryTest {
 
     }
 
+    @Test
+    @Commit
+    public void 회원번호로_결제내역_삭제() throws Exception {
+        User user = userRepository.findByEmail("admin@123.com").get();
+
+        paymentRepository.deleteByUserId(user.getId());
+    }
+
     private User findUser() {
         return userRepository.findByEmail("kj99658103@gmail.com").orElseThrow(UserNotFoundException::new);
     }

@@ -181,6 +181,14 @@ class ReserveRepositoryTest {
         }
     }
 
+    @Test
+    @Commit
+    public void 회원번호로_예약삭제() throws Exception {
+        User findUser = userRepository.findByEmail("admin@123.com").get();
+
+        reserveRepository.deleteByUserId(findUser.getId());
+    }
+
     private User addUser() {
 
         return userRepository.save(User

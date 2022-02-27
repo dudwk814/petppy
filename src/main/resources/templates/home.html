@@ -593,4 +593,13 @@
         </section>-->
     </th:block>
 </th:block>
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+        let signResult = [[${success}]];
+
+        if (signResult) {
+            swal('회원가입 성공', [[${success}]] + '님 회원가입을 축하합니다!');
+        }
+    });
+</script>
 </html>

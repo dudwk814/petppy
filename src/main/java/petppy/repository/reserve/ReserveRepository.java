@@ -39,5 +39,7 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long>, Reserve
 
     List<Reserve> findReserveByReserveStartDateBetweenAndServicesServicesType(LocalDateTime start, LocalDateTime end, ServicesType servicesType);
 
+    void deleteByUserId(Long id);
+
 
 }

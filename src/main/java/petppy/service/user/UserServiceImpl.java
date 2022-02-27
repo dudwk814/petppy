@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import petppy.domain.*;
+import petppy.domain.notificaton.Notification;
 import petppy.domain.user.Membership;
 import petppy.domain.user.Rating;
 import petppy.domain.user.Type;
@@ -17,6 +18,12 @@ import petppy.dto.PageResultDTO;
 import petppy.dto.user.MembershipDTO;
 import petppy.dto.user.UserDTO;
 import petppy.exception.UserNotFoundException;
+import petppy.repository.board.BoardRepository;
+import petppy.repository.comment.CommentRepository;
+import petppy.repository.enquiry.EnquiryRepository;
+import petppy.repository.notification.NotificationRepository;
+import petppy.repository.payment.PaymentRepository;
+import petppy.repository.reserve.ReserveRepository;
 import petppy.repository.user.UserRepository;
 import petppy.repository.user.MembershipRepository;
 
@@ -36,6 +43,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final MembershipRepository membershipRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
+    private final PaymentRepository paymentRepository;
+    private final EnquiryRepository enquiryRepository;
+    private final ReserveRepository reserveRepository;
+    private final NotificationRepository notificationRepository;
 
     /**
      * 멤버십 등급 변경
@@ -162,8 +175,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteMember(String id) {
-        userRepository.deleteByEmail(id);
+    public void disabled(UserDTO dto) {
+        commentRepository.deleteByUserId(dto.getId());
+        boardRepository.deleteByUserId(dto.getId());
+        paymentRepository.deleteByUserId(dto.getId());
+        enquiryRepository.deleteByUserId(dto.getId());
+        reserveRepository.deleteByUserId(dto.getId());
+        notificationRepository.deleteByTargetEmail(dto.getEmail());
+        userRepository.deleteByEmail(dto.getEmail());
+
     }
 
     @Override
@@ -220,7 +240,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *
      * @param userDTO
      */
     @Override
@@ -236,6 +255,7 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
+
 
 
 }

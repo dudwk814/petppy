@@ -20,4 +20,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>, Payment
     @EntityGraph(attributePaths = {"user"}, type = FETCH)
     public Optional<Payment> findByTransactionNumber(String imp_uid);
 
+    void deleteByUserId(Long id);
+
 }

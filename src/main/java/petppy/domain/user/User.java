@@ -49,12 +49,13 @@ public class User extends BaseTimeEntity {
     private Membership membership;
 
     @Builder
-    public User(Long id, String email, String name, String password, Address address, Role role, String picture, Type type) {
+    public User(Long id, String email, String name, String password, Address address, Role role,  String picture, Type type) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.address = address;
+
         this.role = role;
         this.picture = picture;
         this.type = type;
@@ -70,6 +71,7 @@ public class User extends BaseTimeEntity {
 
         return this;
     }
+
 
     public void changePassword(String password) {
         this.password = password;

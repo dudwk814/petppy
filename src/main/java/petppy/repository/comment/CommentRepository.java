@@ -21,5 +21,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, CustomC
     @Query("delete from Comment c where c.board.id =:id")
     void deleteByBoardId(@Param("id") Long id);
 
+    void deleteByUserId(Long id);
+
 
 }

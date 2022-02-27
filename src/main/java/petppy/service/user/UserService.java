@@ -21,7 +21,7 @@ public interface UserService {
 
     public boolean ModifyUserAddress(UserDTO dto);
 
-    public void deleteMember(String email);
+    public void disabled(UserDTO dto);
 
     public UserDTO findByEmail(String email);
 
@@ -42,6 +42,7 @@ public interface UserService {
     public boolean checkEmailExist(String email);
 
     public boolean changePassword(UserDTO userDTO);
+
 
     default User dtoToEntity(UserDTO dto) {
         User user = User.builder()

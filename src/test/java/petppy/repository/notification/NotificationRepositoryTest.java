@@ -19,6 +19,12 @@ class NotificationRepositoryTest {
     @Autowired
     NotificationRepository notificationRepository;
 
+    @Test
+    @Commit
+    public void 이메일로_알림삭제() throws Exception {
+        notificationRepository.deleteByTargetEmail("admin@123.com");
+    }
+
     @Commit
     @Test
     public void 알림_생성_100개() throws Exception {
