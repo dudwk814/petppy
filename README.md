@@ -15,7 +15,7 @@
   **Petppy 포로젝트는 아래의 브라우저에서 최적화 되어있습니다.**  
 ![enter image description here](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https://blog.kakaocdn.net/dn/dOnlnt/btqETnBKL33/wTdqSwKSN7QmF24d2G4EG1/img.png)
  
-![simbolLogo](https://user-images.githubusercontent.com/50799296/155330350-297489be-46f1-4904-9bad-3155ba78f7d1.PNG)  **[PETPPY로 이동!](http://petppy.shop/)** ![simbolLogo](https://user-images.githubusercontent.com/50799296/155330350-297489be-46f1-4904-9bad-3155ba78f7d1.PNG)
+![simbolLogo](https://user-images.githubusercontent.com/50799296/155330350-297489be-46f1-4904-9bad-3155ba78f7d1.PNG)  **[PETPPY로 이동!](http://petppy.shop/)**![simbolLogo](https://user-images.githubusercontent.com/50799296/155330350-297489be-46f1-4904-9bad-3155ba78f7d1.PNG)
 
 
 
