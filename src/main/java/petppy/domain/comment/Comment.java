@@ -29,7 +29,7 @@ public class Comment extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "board_id")
     private Board board;
 
