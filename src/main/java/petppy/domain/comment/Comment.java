@@ -29,7 +29,7 @@ public class Comment extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
@@ -44,7 +44,7 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent",  orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
     private int childrenCount;

@@ -49,6 +49,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
 
         if (board.getCommentCount() >= 1) {
+            commentRepository.deleteByBoardIdAndParentNotNull(id);
             commentRepository.deleteByBoardId(id);
         }
         boardRepository.deleteById(id);

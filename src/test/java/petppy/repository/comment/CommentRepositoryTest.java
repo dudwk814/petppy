@@ -86,6 +86,14 @@ public class CommentRepositoryTest {
 
     @Test
     @Commit
+    public void 특정_게시글_대댓글_지우기() throws Exception {
+        Long id = 44L;
+
+        commentRepository.deleteByBoardIdAndParentNotNull(id);
+    }
+
+    @Test
+    @Commit
     public void 회원번호로_댓글삭제() throws Exception {
         //given
         User findUser = userRepository.findByEmail("admin@123.com").get();
