@@ -37,6 +37,8 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
+    implementation 'org.apache.commons:commons-text:1.8'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:'
 //    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
     implementation group: 'com.navercorp.lucy', name: 'lucy-xss-servlet', version: '2.0.0'
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.15'
