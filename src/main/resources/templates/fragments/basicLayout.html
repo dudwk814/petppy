@@ -300,10 +300,11 @@
         // 팝업용 쿠키 생성 함수
         function setCookie(cookie_name, value, days) {
             var exdate = new Date();
+
             exdate.setDate(exdate.getDate() + days);
             // 설정 일수만큼 현재시간에 만료값으로 지정
-
             var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+
             document.cookie = cookie_name + '=' + cookie_value;
         }
 
@@ -660,9 +661,10 @@
         // 알람 시간 계산 함수
         function timeForToday(value) {
             const today = new Date();
-            const timeValue = new Date(value);
 
+            const timeValue = new Date(value[0],value[1] - 1,value[2],value[3], value[4]);
             const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+
             if (betweenTime < 1) return '방금전';
             if (betweenTime < 60) {
                 return `${betweenTime}분전`;
@@ -689,13 +691,12 @@
 
         $(document).ready(function (e) {
 
-
+            let url = window.location.pathname;
 
             // 홈 화면 팝업 모달
             $(".popupModalSetCookie").change(function () {
                 if ($(".popupModalSetCookie").is(":checked") == true) {
-                    setCookie('popupModalCookie', 'Y', '1') // 하루동안 쿠키 유지
-                    console.log("Y");
+                    setCookie('popupModalCookie', 'Y', 1) // 하루동안 쿠키 유지
                     $("#popupModal").modal("hide");
                 }
             });
@@ -705,7 +706,9 @@
             if (getCookie('popupModalCookie') == "Y") {
                 $("#popupModal").modal("hide");
             } else {
-                $("#popupModal").modal("show");
+                if (url === "/") {
+                    $("#popupModal").modal("show");
+                }
             }
 
             // 웹 소켓 연결

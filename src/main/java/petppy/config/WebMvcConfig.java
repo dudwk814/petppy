@@ -66,9 +66,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.getFactory().setCharacterEscapes(new HTMLCharacterEscapes());
         objectMapper.registerModule(new JavaTimeModule());
+
         MappingJackson2HttpMessageConverter escapingConverter =
                 new MappingJackson2HttpMessageConverter();
         escapingConverter.setObjectMapper(objectMapper);
+
 
         return escapingConverter;
     }

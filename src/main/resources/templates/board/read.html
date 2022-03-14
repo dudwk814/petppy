@@ -155,8 +155,8 @@
 
                         var date = timeForToday(comment.createdDate);
 
-
-                        console.log(comment.deleteStatus);
+                        console.log(comment.createdDate);
+                        console.log(date);
 
                         if (comment.deleteStatus === 'Y') {
                             commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +

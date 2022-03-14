@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 import static petppy.domain.user.Rating.NONE;
+import static petppy.domain.user.Rating.PERSONAL;
 
 @Entity
 @Getter
@@ -31,14 +32,14 @@ public class Membership extends BaseTimeEntity {
     private Rating rating;
 
 
-    private int dogWalkCount = 0;
-    private int petGroomingCount = 0;
-    private int vetVisit = 0;
+    private int dogWalkCount = 3;
+    private int petGroomingCount = 1;
+    private int vetVisit = 1;
 
     @Builder
     public Membership(User user) {
         this.user = user;
-        this.rating = NONE;
+        this.rating = PERSONAL;
     }
 
 

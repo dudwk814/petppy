@@ -412,7 +412,9 @@
                        $.each(result.dtoList, function (index, board) {
 
                            let name = board.email.split('@')[0];
-                           let date = board.createdDate.split('T')[0];
+
+                           let date = board.createdDate[0] + '-' + board.createdDate[1] + '-' + board.createdDate[2]
+                           // let date = board.createdDate.split('T')[0];
 
                            boardList += '<a href="/board/read?id=' + board.boardId + '" class="list-group-item list-group-item-action">' +
                                '<div class="d-flex w-100 justify-content-between">' +
@@ -563,7 +565,8 @@
                        $.each(result.dtoList, function (index, comment) { // 댓글이 존재하면 댓글 관리창에 표시
 
                            let name = comment.email.split('@')[0];
-                           let date = comment.createdDate.split('T')[0];
+                           let date = comment.createdDate[0] + '-' + comment.createdDate[1] + '-' + comment.createdDate[2]
+                           // let date = comment.createdDate.split('T')[0];
 
                            if (comment.deleteStatus === 'Y') {  // 댓글이 삭제된 경우
                                commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
@@ -733,6 +736,7 @@
         $('#list-payment-list').on('click', function (e) {
             e.preventDefault();
 
+
             paymentList(1);
 
         });
@@ -757,6 +761,8 @@
                     $.each(result.dtoList, function (index, paymentList) {
 
                         let service = "";
+
+                        console.log(result);
 
                         if (paymentList.price == 27000) {
                             service = "PERSONAL";
