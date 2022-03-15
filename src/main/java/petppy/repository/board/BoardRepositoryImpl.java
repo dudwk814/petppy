@@ -9,12 +9,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import petppy.domain.board.Board;
+import petppy.domain.comment.QComment;
 import petppy.dto.PageRequestDTO;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 import static petppy.domain.board.QBoard.board;
+import static petppy.domain.comment.QComment.*;
 import static petppy.domain.user.QUser.user;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom {

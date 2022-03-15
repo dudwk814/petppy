@@ -32,7 +32,7 @@ class BoardServiceImplTest {
     @Rollback(value = false)
     public void 게시글_등록() throws Exception {
         //given
-        User user = userRepository.findById(5L).get();
+        User user = userRepository.findById(1L).get();
 
         em.flush();
         em.clear();
@@ -41,6 +41,7 @@ class BoardServiceImplTest {
         for (int i = 0; i < 1000; i++) {
             BoardDTO boardDto = BoardDTO.builder()
                     .email(user.getEmail())
+                    .userId(user.getId())
                     .title("testTitle" + i)
                     .content("testContent" + i)
                     .build();

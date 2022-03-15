@@ -135,7 +135,14 @@ public class CommentServiceImpl implements CommentService {
             board.minusCommentCount();
 
             if (comment.getParent() != null) {
-                comment.getParent().minusChildrenCount();
+                // 만약 부모 댓글의 상태가 삭제 상태면서 자식 댓글이 자신 밖에 없다면 부모 댓글도 삭제
+                if (comment.getParent().getIsDeleted() == DeleteStatus.Y && comment.getParent().getChildren().size() == 1) {
+                    commentRepository.delete(comment.getParent());
+                    board.minusCommentCount();
+                } else {
+                    comment.getParent().minusChildrenCount();
+                }
+
             }
         }
 

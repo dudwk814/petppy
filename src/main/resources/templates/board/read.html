@@ -155,9 +155,6 @@
 
                         var date = timeForToday(comment.createdDate);
 
-                        console.log(comment.createdDate);
-                        console.log(date);
-
                         if (comment.deleteStatus === 'Y') {
                             commentList += '<li class="comment" id="comment' + comment.id + '" data-comment="'+ comment.id + '">\n' +
                                 '                                    <div class="vcard bio">\n' +
@@ -287,8 +284,6 @@
 
             var parentId = $(this).data('comment');
 
-            console.log(parentId);
-
             $.ajax({
                 url : '/comment/' + parentId,
                 type : 'get',
@@ -301,7 +296,6 @@
                     } else {
                         var childrenList = '<ul class="children">';
 
-                        console.log(result);
 
                         $.each(result, function (index, children) {
 
@@ -316,14 +310,12 @@
                                 maskingFunc.email(children.email) + '&nbsp;/&nbsp;\n' +
                                 '                                                    <span class="meta">' + date + '</span>\n' +
                                 '                                                    <p class="comment-content">' + children.content + '</p>\n' +
-                                '                                                    <p class="mr-auto">\n' +
-                                '                                                        <a href="#" class="text-black-50 comment-input"\n' +
-                                '                                                           aria-hidden="true" data-toggle="tooltip" data-placement="top"\n' +
-                                '                                                           title="답글 작성">답글</a>\n';
+                                '                                                    <p class="mr-auto">\n';
+
                             /*[# th:if = "${session.user != null}"]*/
                                 var userEmail = [[${session.user.email}]];
                                 if (userEmail == children.email) {
-                                    childrenList +='                                                                /&nbsp;\n' +
+                                    childrenList +='                                                                \n' +
                                         '                                                                <a href="#" class="p2 text-black-50 comment-modify-btn"\n' +
                                         '                                                                   data-comment="' + children.id + '" aria-hidden="true"\n' +
                                         '                                                                   data-toggle="tooltip" data-placement="top"\n' +
@@ -457,7 +449,6 @@
                     type : 'get',
                     url : '/board/commentCount/' + boardId,
                     success : function (result) {
-                        console.log(result);
                         $('.comment-count').text('댓글 ' + result + '개');
                     }
                 })

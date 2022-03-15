@@ -755,7 +755,7 @@
                 },
                 success: function (result) {
 
-                    console.log('paymentList');
+                    console.log('paymentList result : ' + result.dtoList);
 
                     // 결제 내역 테이블
                     $.each(result.dtoList, function (index, paymentList) {

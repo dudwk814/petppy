@@ -40,7 +40,7 @@ class CommentServiceImplTest {
                     .builder()
                     .userId(1L)
                     .content("test comment" + i)
-                    .boardId(2088L)
+                    .boardId(3122L)
                     .email("kj99658103@gmail.com")
                     .build();
             commentService.createComment(commentDTO);

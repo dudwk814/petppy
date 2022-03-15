@@ -686,7 +686,8 @@
         /* date형을 string형 yyyy-mm-dd로 변환 */
         function get_date_str(date) {
 
-            return date.substring(0,10);
+            /*return date.substring(0,10);*/
+            return date[0] + "-" + date[1] + "-" + date[2];
         }
 
         $(document).ready(function (e) {
