@@ -375,7 +375,6 @@
             let detailAddress =  $('input[name="detailAddress"]').val();
             let extraAddress =  $('input[name="extraAddress"]').val();
 
-            console.log(timeNumber);
 
             // 주소 객체
             let address = {
@@ -438,7 +437,6 @@
                     success: function (data) {
                         if (socket) {
                             let socketMsg = "예약," + email + "," + message + "," + url;
-                            /*console.log("msgmsg : " + socketMsg);*/
                             socket.send(socketMsg);
                         }
 
@@ -449,7 +447,6 @@
                 })
             }).always(function (reserveResult) {
 
-                console.log(reserveResult);
 
                 if (reserveResult.reserveType === "RESERVE") {
                     // 예약 완료 메시지

@@ -519,7 +519,6 @@
                         let url = "#";
                         if(socket){
                             let socketMsg = "결제," + targetEmail +","+ message +","+ url;
-                            /*console.log("msgmsg : " + socketMsg);*/
                             socket.send(socketMsg);
                         }
                     }
@@ -553,9 +552,6 @@
                     url: '/payment/accessToken/' + imp_uid,
                     type : 'post'
                 }).done(function (token) {
-                    console.log(paymentData);
-                    console.log(token);
-                    console.log(token.response.token);
 
                     $.ajax({ // 토큰 획득 후 아임포트 서버에 결제 취소 요청
                         url : "/payment/cancel/" + imp_uid,
@@ -579,13 +575,11 @@
                                 let url = "/user/userPage";
                                 if(socket){
                                     let socketMsg = "결제," + targetEmail +","+ message +","+ url;
-                                    /*console.log("msgmsg : " + socketMsg);*/
                                     socket.send(socketMsg);
                                 }
                             }
 
                         }).always(function () { // 결제 취소 결과 alert
-                            console.log(getCancelData);
                             if (getCancelData.code == 0) {
                                 swal("결제 취소", "결제가 취소되었습니다.");
                             } else {
@@ -625,7 +619,6 @@
 
             sock.onmessage = function(evt) {
                 let data = evt.data;
-                /*console.log("ReceivMessage : " + data + "\n");*/
 
                 let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
                 toast += "<div class='toast-header'><i class='fa fa-bell-o mr-2'></i><strong class='mr-auto'>알림</strong>";
@@ -703,7 +696,6 @@
             });
 
             // 레이어 팝업 show
-            console.log(getCookie('popupModalCookie'));
             if (getCookie('popupModalCookie') == "Y") {
                 $("#popupModal").modal("hide");
             } else {

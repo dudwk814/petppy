@@ -61,8 +61,6 @@ public class PaymentController {
     @PostMapping("/complete")
     public ResponseEntity<String> createPaymentInfo(@RequestBody PaymentDTO paymentDTO) {
 
-        System.out.println("paymentDTO : " + paymentDTO);
-
         paymentService.createPaymentInfo(paymentDTO);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
@@ -72,7 +70,6 @@ public class PaymentController {
     @RequestMapping("/accessToken/{imp_uid}")
     public IamportResponse<AccessToken> getAccessToken(@PathVariable("imp_uid") String imp_uid) throws IamportResponseException, IOException {
 
-        System.out.println("imp_uid = " + imp_uid);
         return client.getAuth();
     }
 

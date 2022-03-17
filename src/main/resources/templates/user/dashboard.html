@@ -247,7 +247,6 @@
 
             let currentRating = [[${session.user.membershipDTO.rating}]];
 
-           console.log(currentRating);
 
            swal("멤버십을 취소하시겠습니까?", {
                buttons: {
@@ -315,7 +314,6 @@
                 type : 'get',
                 success : function (result) {
 
-                    console.log('notifyList');
 
                    $.each(result.dtoList, function (index, notify) {
 
@@ -393,7 +391,6 @@
                dataType: 'json',
                success : function (result) {
 
-                   console.log('boardList');
 
                    let boardList = "";
                    let pagination = "";
@@ -471,7 +468,6 @@
 
             let type = $(this).data("type");
 
-            console.log(page);
 
             if (type == "board") {
                 boardList(page);
@@ -545,7 +541,6 @@
                dataType: 'json',
                success : function (result) {
 
-                   console.log('commentList');
 
                    let commentList = "";
 
@@ -667,7 +662,6 @@
                        contentType: 'application/json; charset=utf-8',
                        dataType: 'text',
                        success: function (result) {
-                           console.log(result);
 
                            self.location.reload();
                        }
@@ -681,7 +675,6 @@
 
                let parentId = $(this).data('comment');
 
-               console.log(parentId);
 
                $.ajax({
                    url : '/comment/' + parentId,
@@ -695,7 +688,6 @@
                        } else {
                            let childrenList = '<ul class="children">';
 
-                           console.log(result);
 
                            $.each(result, function (index, children) {
 
@@ -755,14 +747,11 @@
                 },
                 success: function (result) {
 
-                    console.log('paymentList result : ' + result.dtoList);
-
                     // 결제 내역 테이블
                     $.each(result.dtoList, function (index, paymentList) {
 
                         let service = "";
 
-                        console.log(result);
 
                         if (paymentList.price == 27000) {
                             service = "PERSONAL";

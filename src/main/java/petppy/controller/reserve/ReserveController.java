@@ -72,8 +72,6 @@ public class ReserveController {
 
         LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(date.substring(0, 4)), Integer.parseInt(date.substring(5, 7)), Integer.parseInt(date.substring(8, 10)), 0, 0);
 
-        System.out.println("dateTime = " + dateTime);
-
         return new ResponseEntity<>(reserveService.findTimeNumberByDate(dateTime, servicesType), HttpStatus.OK);
     }
 

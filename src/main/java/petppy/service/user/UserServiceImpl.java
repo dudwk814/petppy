@@ -232,10 +232,6 @@ public class UserServiceImpl implements UserService {
     public boolean checkEmailExist(String email) {
         Optional<User> findMember = userRepository.findByEmail(email);
 
-        if (findMember.isPresent()) {
-            System.out.println("findMember.get() = " + findMember.get());
-        }
-
         return findMember.isPresent();
     }
 

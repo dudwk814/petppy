@@ -1,6 +1,7 @@
 package petppy.controller.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ import static petppy.domain.user.Type.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -150,7 +152,7 @@ public class UserController {
     @PostMapping("/modifyUserAddress")
     public ResponseEntity<Boolean> modifyUserAddress(@RequestBody UserDTO userDTO) {
 
-        System.out.println("userDTO = " + userDTO);
+        log.info("userDTO = " + userDTO);
 
         return new ResponseEntity<>(userService.ModifyUserAddress(userDTO), HttpStatus.OK);
     }

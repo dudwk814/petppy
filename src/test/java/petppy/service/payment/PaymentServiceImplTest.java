@@ -29,8 +29,6 @@ class PaymentServiceImplTest {
 
         List<PaymentDTO> content = result.getDtoList();
 
-        for (PaymentDTO dto : content) {
-            System.out.println("dto = " + dto);
-        }
+
     }
 }

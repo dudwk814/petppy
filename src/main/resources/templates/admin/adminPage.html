@@ -901,7 +901,7 @@
                     'reserveType' : reserveType
                 },
                 success: function (result) {
-                    console.log("reserveList")
+
                     if (result.totalElements == 0){
                         swal('예약 검색', '조건에 맞는 예약이 없습니다.');
                         return false;
@@ -1291,7 +1291,7 @@
 
             let type = $(this).data("type");
 
-            console.log(page);
+
 
 
             if (type == "user") {

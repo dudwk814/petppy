@@ -390,7 +390,6 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'text',
                     success : function(result){
-                        console.log(result + "번 댓글이 등록되었습니다.");
 
                         $('.main-input').val("");
 
@@ -429,7 +428,6 @@
                     success : function(data){
                         if(socket){
                             let socketMsg = "댓글," + targetEmail +","+ message +","+ url;
-                            /*console.log("msgmsg : " + socketMsg);*/
                             socket.send(socketMsg);
                         }
 
@@ -539,7 +537,6 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'text',
                     success: function (result) {
-                        console.log(result);
 
                         self.location.reload();
                     }
@@ -593,7 +590,6 @@
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'text',
                     success: function (result) {
-                        console.log(result + "번 댓글이 수정되었습니다.");
 
                         self.location.reload();
                     }
